@@ -1,0 +1,44 @@
+{
+	"name": "taipei-city-dashboard-open-source",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"start": "vite",
+		"dev": "vite",
+		"build": "eslint --fix --ext .js,.vue . && vite build",
+		"lint": "eslint --fix --ext .js,.vue . && cd public && tar zcfv mapData.tar.gz mapData && cd .",
+		"test": "vitest run --dom",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@vueuse/core": "^10.1.2",
+		"apexcharts": "^3.40.0",
+		"axios": "^1.4.0",
+		"dayjs": "^1.11.7",
+		"happy-dom": "^6.0.4",
+		"mapbox-gl": "^2.14.1",
+		"pinia": "^2.0.35",
+		"threebox-plugin": "^2.2.7",
+		"uuid": "^9.0.0",
+		"vue": "^3.2.47",
+		"vue-router": "^4.1.6",
+		"vue3-apexcharts": "^1.4.1"
+	},
+	"devDependencies": {
+		"@pinia/testing": "^0.1.2",
+		"@vitejs/plugin-vue": "^4.1.0",
+		"@vue/test-utils": "^2.4.0",
+		"eslint-plugin-vue": "^9.15.1",
+		"sass": "^1.63.6",
+		"vite": "^4.3.2",
+		"vite-plugin-compression": "^0.5.1",
+		"vitest": "^0.33.0"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not dead",
+		"not ie 11"
+	]
+}
