@@ -1,6 +1,12 @@
 {
 	"data": [
 		{
+			"name": "test-宜居城市",
+			"index": "living",
+			"components": ["3000"],
+			"icon": "pedal_bike"
+		},
+		{
 			"name": "YouBike研究",
 			"index": "youbike",
 			"components": ["60", "142", "143", "144", "145", "146", "147"],
@@ -45,7 +51,7 @@
 		{
 			"name": "測試組件",
 			"index": "testing",
-			"components": ["3000", "117", "118", "61", "74"],
+			"components": ["117", "118", "61", "74"],
 			"icon": "bug_report"
 		},
 		{
