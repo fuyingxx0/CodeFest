@@ -3,6 +3,9 @@ import { computed, ref, onMounted } from 'vue'
 import { useMapStore } from '../../store/mapStore';
 import '../../assets/styles/globalStyles.css';
 
+// const colors = ['#833ab4', '#8e3978', '#ae445a', '#8b3552', '#ca695a', '#e1875a', '#f39f5a'];
+const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+
 // register the four required props
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
 const mapStore = useMapStore()
@@ -76,7 +79,6 @@ let hei = 100 / totalMax;
 let spcx = 20;
 let spcy = 6;
 let rad = 15;
-const colors = [ '#2E4374', '#4B527E', '#7C81AD', 'E5C3A6', 'blue'];
 let totalLen = [];
 for(let i = 0; i < sortedData.length; i++){
 	totalLen = [...totalLen, ynum * 2 * rad + (ynum - 1) * spcy + total[i] * hei];
@@ -243,6 +245,7 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	overflow: auto;
 }
 .chartoutline {
 	display: flex;
@@ -252,6 +255,7 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	box-sizing: border-box;
 	margin-top: 2.2vh;
 	height: 100%;
+	overflow: auto;
 	// border: 1px solid red;
 }
 .textwrapper {
@@ -280,8 +284,9 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 }
 .svg-container {
   /* Additional styles for the SVG container if needed */
-	min-height: 240px;
+	min-height: 280px;
 	width: 100%;
+	overflow: auto;
 	// border: 1px solid blue;
 }
 

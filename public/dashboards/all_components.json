@@ -3493,7 +3493,7 @@
 			"map_config": null,
 			"history_data": true,
 			"chart_config": {
-				"types": ["BumpChart", "TimelineSeparateChart", "TimelineStackedChart"],
+				"types": ["TimelineSeparateChart", "TimelineStackedChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "件"
 			},
@@ -4076,6 +4076,29 @@
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
 			],
+			"contributors": ["tuic"]
+		},
+		"3000": {
+			"id": 3000,
+			"index": "building_license_2",
+			"map_config": null,
+			"history_data": false,
+			"chart_config": {
+				"types": ["BumpChart"],
+				"color": ["#4dd97a", "#0a85f4"],
+				"unit": "件"
+			},
+			"name": "建照使照發照量",
+			"source": "都發局建管處",
+			"time_from": "2023-01-01T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "顯示今年一月開始台北市使照與建照的發照量",
+			"long_desc": "顯示今年一月開始台北市使照與建照的發照量，資料來源為台北市都發局建管處開放資料，每月更新",
+			"use_case": "藉由這些圖表數據，我們可以追蹤使照與建照的變化趨勢，並進一步分析相關因素對於發照量的影響，以助於對都市發展和建設進行更明確的規劃與評估",
+			"links": null,
+			"tags": [],
 			"contributors": ["tuic"]
 		}
 	}
