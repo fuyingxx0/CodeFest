@@ -3493,7 +3493,7 @@
 			"map_config": null,
 			"history_data": true,
 			"chart_config": {
-				"types": ["TimelineSeparateChart", "TimelineStackedChart"],
+				"types": ["BumpChart", "TimelineSeparateChart", "TimelineStackedChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "件"
 			},
