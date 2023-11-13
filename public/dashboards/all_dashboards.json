@@ -3,7 +3,7 @@
 		{
 			"name": "test-宜居城市",
 			"index": "living",
-			"components": ["3000"],
+			"components": ["3000", "83" ,"42"],
 			"icon": "pedal_bike"
 		},
 		{

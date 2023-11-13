@@ -166,6 +166,25 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 // 	chartoutline.value = document.querySelector('.chartoutline');
 // });
 
+const tooltip = ref({
+	show: false,
+	x: 0,
+	y: 0,
+	contentX: '',
+	contentValue: ''
+});
+const showTooltip = (rect, index) => {
+	tooltip.value = {
+		show: true,
+		x: rect.x + rect.width / 2,
+		y: rect.y - 5,
+		contentX: sortedData[index%xnum].x,
+		contentValue: rect.number
+	};
+};
+const hideTooltip = () => {
+	tooltip.value.show = false;
+};
 </script>
 
 <template>
@@ -182,7 +201,18 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 				</div>
 			</div>
 			<svg class="svg-container">
+				<line v-for="(line, index) in lines"
+					:key="'line-' + index"
+					:x1="line.x1"
+					:y1="line.y1"
+					:x2="line.x2"
+					:y2="line.y2"
+					:stroke="line.stroke"
+					stroke-width="3"
+					stroke-linecap="round"
+				/>
 				<rect v-for="(rect, index) in rectangles"
+					class="datapoint"
 					:key="index" 
 					:x="rect.x"
 					:y="rect.y" 
@@ -204,16 +234,57 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 				>
 					{{ rect.number }}
 				</text>
-				<line v-for="(line, index) in lines"
-					:key="'line-' + index"
-					:x1="line.x1"
-					:y1="line.y1"
-					:x2="line.x2"
-					:y2="line.y2"
-					:stroke="line.stroke"
-					stroke-width="3"
-					stroke-linecap="round"
+				<rect v-for="(rect, index) in rectangles"
+					class="datapoint-front"
+					:key="index" 
+					:x="rect.x"
+					:y="rect.y" 
+					:width="rect.width" 
+					:height="rect.height" 
+					:rx="rect.rx" 
+					:ry="rect.ry" 
+					:fill="rect.fill" 
+					stroke="none"
+					@mouseover="showTooltip(rect, index)"
+					@mouseout="hideTooltip()"
 				/>
+				<!-- <g
+					v-if="tooltip.show" 
+					class="tooltip"
+					:x="tooltip.x" 
+					:y="tooltip.y"
+					style="border: 1px solid pink;"
+				>
+					<rect 
+						:x="tooltip.x - 20" 
+						:y="tooltip.y - 80" 
+						:width="80"
+						:height="70"
+						rx="10"
+						ry="10"
+						fill="rgba(5, 5, 5, 0.94)"
+					/>
+					<text 
+						:x="tooltip.x + 15 - 20" 
+						:y="tooltip.y + 30 - 80" 
+						fill="#888787"
+						font-size="15"
+						text-anchor="left" 
+						alignment-baseline="bottom"
+					>
+						{{ tooltip.contentX }}
+					</text>
+					<text 
+						:x="tooltip.x + 16 - 20" 
+						:y="tooltip.y + 55 - 80" 
+						fill="#888787"
+						font-size="13"
+						text-anchor="left" 
+						alignment-baseline="bottom"
+					>
+						{{ tooltip.contentValue }}
+					</text>
+				</g>				 -->
 				<line 
 					x1="0" 
 					:y1="totalLenMax + 12" 
@@ -233,7 +304,7 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 				>
 					{{ label.text }}
 				</text>
-			</svg>
+			</svg>	
 		</div>
 	</div>
 </template>
@@ -248,12 +319,13 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	overflow: auto;
 }
 .chartoutline {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	box-sizing: border-box;
-	margin-top: 2.2vh;
+	margin-top: 1vh;
 	height: 100%;
 	overflow: auto;
 	// border: 1px solid red;
@@ -283,11 +355,17 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	// border: 1px solid red;
 }
 .svg-container {
-  /* Additional styles for the SVG container if needed */
 	min-height: 280px;
 	width: 100%;
 	overflow: auto;
 	// border: 1px solid blue;
+}
+.datapoint-front {
+	fill: rgba(255, 255, 255, 0);
+	transition: fill 0.3s ease;
+}
+.datapoint-front:hover {
+	fill: rgba(255, 255, 255, .25);
 }
 
 /* Animation styles aren't required but recommended */
