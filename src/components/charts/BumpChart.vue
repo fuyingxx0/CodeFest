@@ -10,14 +10,6 @@ const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
 const mapStore = useMapStore()
 
-// Optional
-// Required for charts that support map filtering
-const selectedIndex = ref(null)
-
-function handleDataSelection(index) {
-	// Refer to the codebase for the complete function
-}
-
 // Convert time to month
 // const convertedData = props.series.map(category => {
 // 	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -76,7 +68,7 @@ const ynum = sortedData[0].data.length;
 
 // characteristics of the chart
 let hei = 100 / totalMax;
-let spcx = 20;
+let spcx = 140 / xnum;
 let spcy = 6;
 let rad = 15;
 let totalLen = [];
@@ -160,12 +152,39 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	};
 });
 
-// const chartoutline = ref(null);
-// onMounted(() => {
-// 	// Access the DOM element after the component is mounted
-// 	chartoutline.value = document.querySelector('.chartoutline');
-// });
+const tooltipPosition = computed(() => {
+	return { 'left': `${mousePosition.value.x - 10}px`, 'top': `${mousePosition.value.y - 54}px` };
+});
+const targetRect = ref(null);
+const mousePosition = ref({ x: null, y: null });
+function toggleActive(i) {
+	// console.log('toggleActive called, ', i);
+	targetRect.value = i;
+}
+function toggleActiveToNull() {
+	// console.log('toggleActiveToNull called, ');
+	targetRect.value = null;
+}
+function updateMouseLocation(e) {
+	mousePosition.value.x = e.pageX;
+	mousePosition.value.y = e.pageY;
+}
 
+// Optional
+// Required for charts that support map filtering
+const selectedIndex = ref(null)
+function handleDataSelection(index) {
+	if (!props.chart_config.map_filter) {
+		return;
+	}
+	if (index !== selectedIndex.value) {
+		// mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
+		selectedIndex.value = index;
+	} else {
+		// mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		selectedIndex.value = null;
+	}
+}
 </script>
 
 <template>
@@ -181,10 +200,24 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 					<div color="#888787"> {{ legend.text }} </div>
 				</div>
 			</div>
-			<svg class="svg-container">
+			<svg class="svg-container"
+				:width="xnum * (2 * rad + spcx)"
+				:height="totalLenMax + 35"
+			>
+				<line v-for="(line, index) in lines"
+					:key="'line-' + index"
+					:x1="line.x1 + spcx / 2"
+					:y1="line.y1"
+					:x2="line.x2 + spcx / 2"
+					:y2="line.y2"
+					:stroke="line.stroke"
+					stroke-width="3"
+					stroke-linecap="round"
+				/>
 				<rect v-for="(rect, index) in rectangles"
+					:class="{ [`initial-animation-${index}`]: true, 'datapoint': true }"
 					:key="index" 
-					:x="rect.x"
+					:x="rect.x + spcx / 2"
 					:y="rect.y" 
 					:width="rect.width" 
 					:height="rect.height" 
@@ -195,24 +228,26 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 				/>
 				<text v-for="(rect, index) in rectangles"
 					:key="'text-' + index" 
-					:x="rect.x + rect.width / 2" 
+					:x="rect.x + rect.width / 2 + spcx / 2" 
 					:y="rect.y + rect.height / 2" 
 					text-anchor="middle" 
 					alignment-baseline="middle" 
 					fill="white" 
-					font-size="10"
+					font-size="12"
 				>
 					{{ rect.number }}
 				</text>
-				<line v-for="(line, index) in lines"
-					:key="'line-' + index"
-					:x1="line.x1"
-					:y1="line.y1"
-					:x2="line.x2"
-					:y2="line.y2"
-					:stroke="line.stroke"
-					stroke-width="3"
-					stroke-linecap="round"
+				<rect v-for="(rect, index) in rectangles"
+					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${index}`]: true, 'datapoint-front': true }"
+					:key="index" 
+					:x="rect.x + spcx / 2"
+					:y="rect.y" 
+					:width="rect.width" 
+					:height="rect.height" 
+					:rx="rect.rx" 
+					:ry="rect.ry" 
+					@mouseenter="toggleActive(index)" @mousemove="updateMouseLocation" @mouseleave="toggleActiveToNull"
+					@click="handleDataSelection(index)"
 				/>
 				<line 
 					x1="0" 
@@ -224,7 +259,7 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 				/>
 				<text v-for="(label, index) in labels"
 					:key="'text-' + index" 
-					:x="label.x"
+					:x="label.x + spcx / 2"
 					:y="label.y"
 					text-anchor="middle" 
 					alignment-baseline="top" 
@@ -236,8 +271,15 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 			</svg>
 		</div>
 	</div>
+	<Teleport to="body">
+		<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+		<div v-if="targetRect !== null" class="bumpchart-chart-info chart-tooltip" :style="tooltipPosition">
+			<h6>{{ sortedData[0].data[targetRect % ynum].name }}</h6>
+			<span>{{ sortedData[(targetRect / ynum) | 0].x }} 排名第 {{ targetRect % ynum + 1 }}</span>
+		</div>
+	</Teleport>
 </template>
-  
+
 
 <style scoped lang="scss">
 .bumpchart {
@@ -245,27 +287,53 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	overflow: auto;
+	overflow: scroll;
+	&-chart {
+		display: flex;
+		justify-content: center;
+		svg {
+			width: 50%;
+			path {
+				transition: transform 0.2s;
+				opacity: 0;
+			}
+		}
+		&-info {
+			position: fixed;
+			z-index: 20;
+		}
+	}
 }
 .chartoutline {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	box-sizing: border-box;
-	margin-top: 2.2vh;
+	margin-top: .8vh;
 	height: 100%;
-	overflow: auto;
 	// border: 1px solid red;
 }
 .textwrapper {
-	width: 100%;
-	height: 25px;
+	width: 80%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 14px;
+	padding: 8px;
+	justify-content: center;
+	align-items: center;
+	align-content: flex-start;
+	// border: 1px solid green;
+}
+.legends {
+	height: 15px;
 	display: flex;
 	justify-content: center;
-	gap: 14px;
 	align-items: center;
-	// border: 1px solid green;
+	font-size: small;
+	gap: 6px;
+	// border: 1px solid red;
 }
 .svg-legend {
 	display: flex;
@@ -273,22 +341,35 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	align-items: center;
 	// border: 1px solid blue;
 }
-.legends {
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: small;
-	gap: 8px;
-	// border: 1px solid red;
-}
 .svg-container {
-  /* Additional styles for the SVG container if needed */
-	min-height: 280px;
-	width: 100%;
-	overflow: auto;
+	overflow: scroll;
 	// border: 1px solid blue;
 }
+.datapoint-front {
+	fill: rgba(255, 255, 255, 0);
+	transition: fill 0.4s ease;
+}
+.datapoint-front:hover {
+	fill: rgba(255, 255, 255, .25);
+}
 
+@keyframes ease-in {
+	0% {
+		opacity: 0
+	}
+	;
+	100% {
+		opacity: 1
+	}
+}
+// @for $i from 1 through 12 {
+// 	.initial-animation-#{$i} {
+// 		animation-name: ease-in;
+// 		animation-duration: 0.2s;
+// 		animation-delay: 0.05s * ($i - 1);
+// 		animation-timing-function: linear;
+// 		animation-fill-mode: forwards;
+// 	}
+// }
 /* Animation styles aren't required but recommended */
 </style>

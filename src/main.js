@@ -35,6 +35,7 @@ import MapLegend from "./components/charts/MapLegend.vue";
 import MetroChart from "./components/charts/MetroChart.vue";
 import HeatmapChart from "./components/charts/HeatmapChart.vue";
 import BumpChart from "./components/charts/BumpChart.vue";
+import BoxChart from "./components/charts/BoxChart.vue";
 
 const app = createApp(App);
 
@@ -58,5 +59,6 @@ app.component("MapLegend", MapLegend);
 app.component("MetroChart", MetroChart);
 app.component("HeatmapChart", HeatmapChart);
 app.component("BumpChart", BumpChart);
+app.component("BoxChart", BoxChart);
 
 app.mount("#app");

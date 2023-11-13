@@ -167,7 +167,7 @@ function handleDataSelection(index) {
 				</div>
 			</Teleport>
 		</div>
-	</div>
+	</div>s
 </template>
 
 <style scoped lang="scss">
