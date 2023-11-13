@@ -3,20 +3,12 @@ import { computed, ref } from 'vue'
 import { useMapStore } from '../../store/mapStore';
 import { transform } from '@vue/compiler-core';
 
-const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+const colors = ['#537188', '#7c8e97', '#CBB279', '#E1D4BB', '#EEEEEE'];
+// rectfillbottom, rectfilltop, verticalline, horizontalline, rectborder
 
 // register the four required props
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
 const mapStore = useMapStore()
-
-// Optional
-// Required for charts that support map filtering
-const selectedIndex = ref(null)
-
-function handleDataSelection(index) {
-	// Refer to the codebase for the complete function
-    
-}
 
 let sortedData = props.series.map(series => ({
 	...series,
@@ -58,18 +50,52 @@ for(let k = 0; k < 5; k++){
 }
 // console.log(percentiles);
 
-let unitHeight = 2.4;
+let totalHeight = 215;
+let unitHeight = totalHeight / (max - min);
 let wid = 35;
+let shr = 6;
 const boxes = Array.from({ length: xnum }, (_, index) => {	
 	return {
-		p100: (max - percentiles[0][index]) * unitHeight,
-		p75: (max - percentiles[1][index]) * unitHeight,
-		p50: (max - percentiles[2][index]) * unitHeight,
-		p25: (max - percentiles[3][index]) * unitHeight,
-		p0: (max - percentiles[4][index]) * unitHeight,
+		p100: (max - percentiles[0][index]) * unitHeight + 3,
+		p75: (max - percentiles[1][index]) * unitHeight + 3,
+		p50: (max - percentiles[2][index]) * unitHeight + 3,
+		p25: (max - percentiles[3][index]) * unitHeight + 3,
+		p0: (max - percentiles[4][index]) * unitHeight + 3,
 	};
 });
 
+const tooltipPosition = computed(() => {
+	return { 'left': `${mousePosition.value.x + 10}px`, 'top': `${mousePosition.value.y - 140}px` };
+});
+const targetBox = ref(null);
+const mousePosition = ref({ x: null, y: null });
+function toggleActive(i) {
+	// console.log('toggleActive called, ', i);
+	targetBox.value = i;
+}
+function toggleActiveToNull() {
+	// console.log('toggleActiveToNull called, ');
+	targetBox.value = null;
+}
+function updateMouseLocation(e) {
+	mousePosition.value.x = e.pageX;
+	mousePosition.value.y = e.pageY;
+}
+// Optional
+// Required for charts that support map filtering
+const selectedIndex = ref(null)
+function handleDataSelection(index) {
+	if (!props.chart_config.map_filter) {
+		return;
+	}
+	if (index !== selectedIndex.value) {
+		// mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
+		selectedIndex.value = index;
+	} else {
+		// mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		selectedIndex.value = null;
+	}
+}
 </script>
 
 <template>
@@ -78,10 +104,15 @@ const boxes = Array.from({ length: xnum }, (_, index) => {
         <!-- The layout of the chart Vue component -->
         <!-- Utilize the @click event listener to enable map filtering by data selection -->
 		<div class="boxesoutline">
-			<div class="box" v-for="(box, index) in boxes"
+			<div v-for="(box, index) in boxes"
+				:class="{ 'active-box': targetBox === index || selectedIndex === index, [`initial-animation-${index}`]: true, 'box': true }"
 				:key="index"
+				@mouseenter="toggleActive(index)" 
+				@mousemove="updateMouseLocation" 
+				@mouseleave="toggleActiveToNull"
+				@click="handleDataSelection(index)"
 			>
-				<svg class="svgoutline" :width="wid">
+				<svg class="svgoutline" :width="wid" :height="totalHeight">
 					<line
 						:x1="wid / 2"
 						:x2="wid / 2"
@@ -89,55 +120,53 @@ const boxes = Array.from({ length: xnum }, (_, index) => {
 						:y2="box.p75"
 						stroke-linecap="round"
 						stroke-width="2"
-						:stroke="colors[0]"
+						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[1]"
 					/>
-					<line
+					<line						
 						:x1="wid / 2"
 						:x2="wid / 2"
 						:y1="box.p25"
 						:y2="box.p0"
 						stroke-linecap="round"
 						stroke-width="2"
-						:stroke="colors[0]"
+						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[1]"
 					/>
 					<line
-						x1="0"
-						:x2="wid"
+						:x1="0 + shr"
+						:x2="wid - shr"
 						:y1="box.p100"
 						:y2="box.p100"
 						stroke-linecap="round"
-						stroke-width="2"
-						:stroke="colors[2]"
+						stroke-width="3"
+						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[2]"
 					/>
 					<line
-						x1="0"
-						:x2="wid"
-						:y1="box.p50"
-						:y2="box.p50"
-						stroke-linecap="round"
-						stroke-width="2"
-						:stroke="colors[1]"
-					/>
-					<line
-						x1="0"
-						:x2="wid"
+						:x1="0 + shr"
+						:x2="wid - shr"
 						:y1="box.p0"
 						:y2="box.p0"
 						stroke-linecap="round"
 						stroke-width="2"
-						:stroke="colors[2]"
+						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[2]"
 					/>
 					<rect 
-						x="0"
-						:width="wid"
+						x="2"
+						:width="wid - 4"
 						:y="box.p75"
 						:height="box.p25 - box.p75"
-						rx="5"
-						ry="5"
-						fill="none"
 						fill-opacity="0.5"
 						stroke-width="2"
-						:stroke="colors[5]"
+						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[3]"
+						:fill="(targetBox === index || selectedIndex === index) ? colors[2] : colors[0]"
+					/>
+					<line
+						:x1="0 + 3.5"
+						:x2="wid - 3.5"
+						:y1="box.p50"
+						:y2="box.p50"
+						stroke-linecap="round"
+						stroke-width="2"
+						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[2]"
 					/>
 					<text 
 						:x="wid/2"
@@ -151,19 +180,17 @@ const boxes = Array.from({ length: xnum }, (_, index) => {
 				</svg>
 			</div>		
 		</div>
-		<div style="overflow: visible;">
-			<svg style="overflow: visible;">
-				<line
-					:transform="`translate(${0}, ${-42})`"
-					:x1="0"
-					:x2="300"
-					y1="0"
-					y2="0"
-					stroke-linecap="round"
-					stroke="#888787"
-				/>
-			</svg>	
-		</div>
+		<Teleport to="body">
+			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+			<div v-if="targetBox !== null" class="boxchart-chart-info chart-tooltip" :style="tooltipPosition">
+				<h6>{{ sortedData[targetBox].name }}</h6>
+				<span>最大值： {{ percentiles[0][targetBox] }}<br></span>
+				<span>第三四分位數： {{ percentiles[1][targetBox] }}<br></span>
+				<span>中位數： {{ percentiles[2][targetBox] }}<br></span>
+				<span>第一四分位數： {{ percentiles[3][targetBox] }}<br></span>
+				<span>最小值： {{ percentiles[4][targetBox] }}</span>
+			</div>
+		</Teleport>
     </div>
 </template>
 
@@ -175,8 +202,24 @@ const boxes = Array.from({ length: xnum }, (_, index) => {
 	align-items: center;
 	flex-direction: column;
 	overflow: auto;
+	&-chart {
+		display: flex;
+		justify-content: center;
+		svg {
+			width: 50%;
+			path {
+				transition: transform 0.2s;
+				opacity: 0;
+			}
+		}
+		&-info {
+			position: fixed;
+			z-index: 20;
+		}
+	}
 }
 .boxesoutline {
+	margin: 8px;
 	display: flex;
 	gap: 7px;
 	justify-content: center;
@@ -188,13 +231,15 @@ const boxes = Array.from({ length: xnum }, (_, index) => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	overflow: visible;
 	// border: 1px solid red;
 }
 .svgoutline {
-	padding: 10px;
-	min-height: 260px;
-	overflow: auto;
-	// border: 1px solid blue
+	padding: 5px;
+	min-height: 240px;
+	overflow: visible;
+	// border: 1px solid blue;
 }
+
 /* Animation styles aren't required but recommended */
 </style>

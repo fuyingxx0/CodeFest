@@ -4084,11 +4084,34 @@
 			"map_config": null,
 			"history_data": false,
 			"chart_config": {
-				"types": ["BumpChart", "BoxChart", "BarChart"],
+				"types": ["BumpChart", "BoxChart", "ColumnChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "件"
 			},
 			"name": "3000",
+			"source": "資訊局",
+			"time_from": "2023-01-01T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "",
+			"long_desc": "Bump Chart",
+			"use_case": "動了好多檔案",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"3001": {
+			"id": 3001,
+			"index": "building_license_2",
+			"map_config": null,
+			"history_data": false,
+			"chart_config": {
+				"types": ["BumpChart", "ColumnChart", "BoxChart"],
+				"color": ["#4dd97a", "#0a85f4"],
+				"unit": "件"
+			},
+			"name": "3001",
 			"source": "資訊局",
 			"time_from": "2023-01-01T00:00:00+08:00",
 			"time_to": "2023-06-01T00:00:00+08:00",

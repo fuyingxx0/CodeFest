@@ -10,10 +10,6 @@ const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
 const mapStore = useMapStore()
 
-// Optional
-// Required for charts that support map filtering
-const selectedIndex = ref(null)
-
 // Convert time to month
 // const convertedData = props.series.map(category => {
 // 	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -72,7 +68,7 @@ const ynum = sortedData[0].data.length;
 
 // characteristics of the chart
 let hei = 100 / totalMax;
-let spcx = 20;
+let spcx = 140 / xnum;
 let spcy = 6;
 let rad = 15;
 let totalLen = [];
@@ -174,6 +170,9 @@ function updateMouseLocation(e) {
 	mousePosition.value.y = e.pageY;
 }
 
+// Optional
+// Required for charts that support map filtering
+const selectedIndex = ref(null)
 function handleDataSelection(index) {
 	if (!props.chart_config.map_filter) {
 		return;
@@ -201,21 +200,24 @@ function handleDataSelection(index) {
 					<div color="#888787"> {{ legend.text }} </div>
 				</div>
 			</div>
-			<svg class="svg-container">
+			<svg class="svg-container"
+				:width="xnum * (2 * rad + spcx)"
+				:height="totalLenMax + 35"
+			>
 				<line v-for="(line, index) in lines"
 					:key="'line-' + index"
-					:x1="line.x1"
+					:x1="line.x1 + spcx / 2"
 					:y1="line.y1"
-					:x2="line.x2"
+					:x2="line.x2 + spcx / 2"
 					:y2="line.y2"
 					:stroke="line.stroke"
 					stroke-width="3"
 					stroke-linecap="round"
 				/>
 				<rect v-for="(rect, index) in rectangles"
-					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${index}`]: true, 'datapoint': true }"
+					:class="{ [`initial-animation-${index}`]: true, 'datapoint': true }"
 					:key="index" 
-					:x="rect.x"
+					:x="rect.x + spcx / 2"
 					:y="rect.y" 
 					:width="rect.width" 
 					:height="rect.height" 
@@ -226,26 +228,24 @@ function handleDataSelection(index) {
 				/>
 				<text v-for="(rect, index) in rectangles"
 					:key="'text-' + index" 
-					:x="rect.x + rect.width / 2" 
+					:x="rect.x + rect.width / 2 + spcx / 2" 
 					:y="rect.y + rect.height / 2" 
 					text-anchor="middle" 
 					alignment-baseline="middle" 
 					fill="white" 
-					font-size="10"
+					font-size="12"
 				>
 					{{ rect.number }}
 				</text>
 				<rect v-for="(rect, index) in rectangles"
 					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${index}`]: true, 'datapoint-front': true }"
 					:key="index" 
-					:x="rect.x"
+					:x="rect.x + spcx / 2"
 					:y="rect.y" 
 					:width="rect.width" 
 					:height="rect.height" 
 					:rx="rect.rx" 
 					:ry="rect.ry" 
-					:fill="rect.fill" 
-					stroke="none"
 					@mouseenter="toggleActive(index)" @mousemove="updateMouseLocation" @mouseleave="toggleActiveToNull"
 					@click="handleDataSelection(index)"
 				/>
@@ -259,7 +259,7 @@ function handleDataSelection(index) {
 				/>
 				<text v-for="(label, index) in labels"
 					:key="'text-' + index" 
-					:x="label.x"
+					:x="label.x + spcx / 2"
 					:y="label.y"
 					text-anchor="middle" 
 					alignment-baseline="top" 
@@ -273,10 +273,9 @@ function handleDataSelection(index) {
 	</div>
 	<Teleport to="body">
 		<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
-		<div v-if="targetRect" class="bumpchart-chart-info chart-tooltip" :style="tooltipPosition">
-			<span>{{ targetRect }}</span>
-			<h6>{{ targetRect }}</h6>
-			<!-- <span>{{ districtData[targetDistrict] }} {{ chart_config.unit }}</span> -->
+		<div v-if="targetRect !== null" class="bumpchart-chart-info chart-tooltip" :style="tooltipPosition">
+			<h6>{{ sortedData[0].data[targetRect % ynum].name }}</h6>
+			<span>{{ sortedData[(targetRect / ynum) | 0].x }} 排名第 {{ targetRect % ynum + 1 }}</span>
 		</div>
 	</Teleport>
 </template>
@@ -288,20 +287,17 @@ function handleDataSelection(index) {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	overflow: auto;
+	overflow: scroll;
 	&-chart {
 		display: flex;
 		justify-content: center;
-
 		svg {
 			width: 50%;
-
 			path {
 				transition: transform 0.2s;
 				opacity: 0;
 			}
 		}
-
 		&-info {
 			position: fixed;
 			z-index: 20;
@@ -315,19 +311,29 @@ function handleDataSelection(index) {
 	justify-content: center;
 	align-items: center;
 	box-sizing: border-box;
-	margin-top: 1vh;
+	margin-top: .8vh;
 	height: 100%;
-	overflow: auto;
 	// border: 1px solid red;
 }
 .textwrapper {
-	width: 100%;
-	height: 25px;
+	width: 80%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 14px;
+	padding: 8px;
+	justify-content: center;
+	align-items: center;
+	align-content: flex-start;
+	// border: 1px solid green;
+}
+.legends {
+	height: 15px;
 	display: flex;
 	justify-content: center;
-	gap: 14px;
 	align-items: center;
-	// border: 1px solid green;
+	font-size: small;
+	gap: 6px;
+	// border: 1px solid red;
 }
 .svg-legend {
 	display: flex;
@@ -335,19 +341,8 @@ function handleDataSelection(index) {
 	align-items: center;
 	// border: 1px solid blue;
 }
-.legends {
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: small;
-	gap: 8px;
-	// border: 1px solid red;
-}
 .svg-container {
-	min-height: 280px;
-	width: 100%;
-	overflow: auto;
+	overflow: scroll;
 	// border: 1px solid blue;
 }
 .datapoint-front {
