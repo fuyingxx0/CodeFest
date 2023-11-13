@@ -56,7 +56,7 @@ for(let k = 0; k < 5; k++){
 		percentiles[k] = [...percentiles[k], percentile(sortedData[i].data, points[k])];
 	}
 }
-console.log(percentiles);
+// console.log(percentiles);
 
 let unitHeight = 2.4;
 let wid = 35;

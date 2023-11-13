@@ -14,10 +14,6 @@ const mapStore = useMapStore()
 // Required for charts that support map filtering
 const selectedIndex = ref(null)
 
-function handleDataSelection(index) {
-	// Refer to the codebase for the complete function
-}
-
 // Convert time to month
 // const convertedData = props.series.map(category => {
 // 	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -160,31 +156,36 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	};
 });
 
-// const chartoutline = ref(null);
-// onMounted(() => {
-// 	// Access the DOM element after the component is mounted
-// 	chartoutline.value = document.querySelector('.chartoutline');
-// });
-
-const tooltip = ref({
-	show: false,
-	x: 0,
-	y: 0,
-	contentX: '',
-	contentValue: ''
+const tooltipPosition = computed(() => {
+	return { 'left': `${mousePosition.value.x - 10}px`, 'top': `${mousePosition.value.y - 54}px` };
 });
-const showTooltip = (rect, index) => {
-	tooltip.value = {
-		show: true,
-		x: rect.x + rect.width / 2,
-		y: rect.y - 5,
-		contentX: sortedData[index%xnum].x,
-		contentValue: rect.number
-	};
-};
-const hideTooltip = () => {
-	tooltip.value.show = false;
-};
+const targetRect = ref(null);
+const mousePosition = ref({ x: null, y: null });
+function toggleActive(i) {
+	// console.log('toggleActive called, ', i);
+	targetRect.value = i;
+}
+function toggleActiveToNull() {
+	// console.log('toggleActiveToNull called, ');
+	targetRect.value = null;
+}
+function updateMouseLocation(e) {
+	mousePosition.value.x = e.pageX;
+	mousePosition.value.y = e.pageY;
+}
+
+function handleDataSelection(index) {
+	if (!props.chart_config.map_filter) {
+		return;
+	}
+	if (index !== selectedIndex.value) {
+		// mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
+		selectedIndex.value = index;
+	} else {
+		// mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		selectedIndex.value = null;
+	}
+}
 </script>
 
 <template>
@@ -212,7 +213,7 @@ const hideTooltip = () => {
 					stroke-linecap="round"
 				/>
 				<rect v-for="(rect, index) in rectangles"
-					class="datapoint"
+					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${index}`]: true, 'datapoint': true }"
 					:key="index" 
 					:x="rect.x"
 					:y="rect.y" 
@@ -235,7 +236,7 @@ const hideTooltip = () => {
 					{{ rect.number }}
 				</text>
 				<rect v-for="(rect, index) in rectangles"
-					class="datapoint-front"
+					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${index}`]: true, 'datapoint-front': true }"
 					:key="index" 
 					:x="rect.x"
 					:y="rect.y" 
@@ -245,46 +246,9 @@ const hideTooltip = () => {
 					:ry="rect.ry" 
 					:fill="rect.fill" 
 					stroke="none"
-					@mouseover="showTooltip(rect, index)"
-					@mouseout="hideTooltip()"
+					@mouseenter="toggleActive(index)" @mousemove="updateMouseLocation" @mouseleave="toggleActiveToNull"
+					@click="handleDataSelection(index)"
 				/>
-				<!-- <g
-					v-if="tooltip.show" 
-					class="tooltip"
-					:x="tooltip.x" 
-					:y="tooltip.y"
-					style="border: 1px solid pink;"
-				>
-					<rect 
-						:x="tooltip.x - 20" 
-						:y="tooltip.y - 80" 
-						:width="80"
-						:height="70"
-						rx="10"
-						ry="10"
-						fill="rgba(5, 5, 5, 0.94)"
-					/>
-					<text 
-						:x="tooltip.x + 15 - 20" 
-						:y="tooltip.y + 30 - 80" 
-						fill="#888787"
-						font-size="15"
-						text-anchor="left" 
-						alignment-baseline="bottom"
-					>
-						{{ tooltip.contentX }}
-					</text>
-					<text 
-						:x="tooltip.x + 16 - 20" 
-						:y="tooltip.y + 55 - 80" 
-						fill="#888787"
-						font-size="13"
-						text-anchor="left" 
-						alignment-baseline="bottom"
-					>
-						{{ tooltip.contentValue }}
-					</text>
-				</g>				 -->
 				<line 
 					x1="0" 
 					:y1="totalLenMax + 12" 
@@ -304,11 +268,19 @@ const hideTooltip = () => {
 				>
 					{{ label.text }}
 				</text>
-			</svg>	
+			</svg>
 		</div>
 	</div>
+	<Teleport to="body">
+		<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+		<div v-if="targetRect" class="bumpchart-chart-info chart-tooltip" :style="tooltipPosition">
+			<span>{{ targetRect }}</span>
+			<h6>{{ targetRect }}</h6>
+			<!-- <span>{{ districtData[targetDistrict] }} {{ chart_config.unit }}</span> -->
+		</div>
+	</Teleport>
 </template>
-  
+
 
 <style scoped lang="scss">
 .bumpchart {
@@ -317,6 +289,24 @@ const hideTooltip = () => {
 	justify-content: center;
 	align-items: center;
 	overflow: auto;
+	&-chart {
+		display: flex;
+		justify-content: center;
+
+		svg {
+			width: 50%;
+
+			path {
+				transition: transform 0.2s;
+				opacity: 0;
+			}
+		}
+
+		&-info {
+			position: fixed;
+			z-index: 20;
+		}
+	}
 }
 .chartoutline {
 	position: relative;
@@ -362,11 +352,29 @@ const hideTooltip = () => {
 }
 .datapoint-front {
 	fill: rgba(255, 255, 255, 0);
-	transition: fill 0.3s ease;
+	transition: fill 0.4s ease;
 }
 .datapoint-front:hover {
 	fill: rgba(255, 255, 255, .25);
 }
 
+@keyframes ease-in {
+	0% {
+		opacity: 0
+	}
+	;
+	100% {
+		opacity: 1
+	}
+}
+// @for $i from 1 through 12 {
+// 	.initial-animation-#{$i} {
+// 		animation-name: ease-in;
+// 		animation-duration: 0.2s;
+// 		animation-delay: 0.05s * ($i - 1);
+// 		animation-timing-function: linear;
+// 		animation-fill-mode: forwards;
+// 	}
+// }
 /* Animation styles aren't required but recommended */
 </style>
