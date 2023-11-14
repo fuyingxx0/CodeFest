@@ -80,6 +80,8 @@ function handleDataSelection(e, chartContext, config) {
 	if (!props.chart_config.map_filter) {
 		return;
 	}
+
+	// TODO: modify here (and many other charts) so that filter works on more than one map_config
 	if (config.dataPointIndex !== selectedIndex.value) {
 		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][config.dataPointIndex]);
 		selectedIndex.value = config.dataPointIndex;

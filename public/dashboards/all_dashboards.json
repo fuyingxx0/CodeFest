@@ -45,7 +45,7 @@
 		{
 			"name": "社會福利",
 			"index": "welfare",
-			"components": ["90", "82", "29"],
+			"components": ["90", "82", "4444", "29"],
 			"icon": "handshake"
 		},
 		{
