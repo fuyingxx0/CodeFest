@@ -13,4 +13,5 @@ export const chartTypes = {
 	HeatmapChart: "熱力圖",
 	BumpChart: "凹凸圖",
 	BoxChart: "箱形圖",
+	CircularDendrogram: "環形樹狀圖"
 };

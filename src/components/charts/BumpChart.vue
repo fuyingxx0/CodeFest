@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { useMapStore } from '../../store/mapStore';
+// import { useMapStore } from '../../store/mapStore';
 import '../../assets/styles/globalStyles.css';
 
 // const colors = ['#833ab4', '#8e3978', '#ae445a', '#8b3552', '#ca695a', '#e1875a', '#f39f5a'];
@@ -8,7 +8,7 @@ const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'
 
 // register the four required props
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
-const mapStore = useMapStore()
+// const mapStore = useMapStore()
 
 // Convert time to month
 // const convertedData = props.series.map(category => {
@@ -97,7 +97,10 @@ const rectangles = Array.from({ length: xnum * ynum }, (_, index) => {
 		rx: rad, 
 		ry: rad, 
 		fill: colors[sortedData[i].data[j].index],
-		number: sortedData[i].data[j].y
+		number: sortedData[i].data[j].y,
+		i: i,
+		j: j,
+		k: sortedData[i].data[j].index
 	};
 });
 // console.log(rectangles);
@@ -126,12 +129,14 @@ const lines = Array.from({ length: xnum * ynum }, (_, index) => {
 		y1: startPos[i][j].y + rad + hei * sortedData[i].data[j].y / 2,
 		x2: startPos[i+1][ind].x + 3,
 		y2: startPos[i+1][ind].y + rad + hei * sortedData[i+1].data[ind].y / 2,
-		stroke: colors[sortedData[i].data[j].index]
+		stroke: colors[sortedData[i].data[j].index],
+		i: i,
+		j: j,
+		k: sortedData[i].data[j].index
 	};
 });
 
 const labels = Array.from({ length: xnum }, (_, index) => {	
-	// console.log(startPos[index][0].x, sortedData[index].x);
 	return {
 		x: startPos[index][0].x + rad,
 		y: totalLenMax + 30,
@@ -145,7 +150,7 @@ onMounted(() => {
 	textwrapper.value = document.querySelector('.textwrapper');
 });
 const legends = Array.from({ length: ynum }, (_, index) => {
-	const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
+	// const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
 	return {
 		color: colors[index],
 		text: props.series[index].name,
@@ -185,6 +190,7 @@ function handleDataSelection(index) {
 		selectedIndex.value = null;
 	}
 }
+
 </script>
 
 <template>
@@ -205,6 +211,7 @@ function handleDataSelection(index) {
 				:height="totalLenMax + 35"
 			>
 				<line v-for="(line, index) in lines"
+				:class="{ [`initial-animation-line-${line.k}-${line.i}`]: true }"
 					:key="'line-' + index"
 					:x1="line.x1 + spcx / 2"
 					:y1="line.y1"
@@ -215,7 +222,7 @@ function handleDataSelection(index) {
 					stroke-linecap="round"
 				/>
 				<rect v-for="(rect, index) in rectangles"
-					:class="{ [`initial-animation-${index}`]: true, 'datapoint': true }"
+					:class="{ [`initial-animation-rect-${rect.k}-${rect.i}`]: true, 'datapoint': true }"
 					:key="index" 
 					:x="rect.x + spcx / 2"
 					:y="rect.y" 
@@ -227,6 +234,7 @@ function handleDataSelection(index) {
 					stroke="none" 
 				/>
 				<text v-for="(rect, index) in rectangles"
+					:class="{ [`initial-animation-text-${rect.k}-${rect.i}`]: true, 'datapoint': true }"
 					:key="'text-' + index" 
 					:x="rect.x + rect.width / 2 + spcx / 2" 
 					:y="rect.y + rect.height / 2" 
@@ -238,7 +246,7 @@ function handleDataSelection(index) {
 					{{ rect.number }}
 				</text>
 				<rect v-for="(rect, index) in rectangles"
-					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${index}`]: true, 'datapoint-front': true }"
+					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${rect.i}-${rect.j}`]: true, 'datapoint-front': true }"
 					:key="index" 
 					:x="rect.x + spcx / 2"
 					:y="rect.y" 
@@ -246,7 +254,9 @@ function handleDataSelection(index) {
 					:height="rect.height" 
 					:rx="rect.rx" 
 					:ry="rect.ry" 
-					@mouseenter="toggleActive(index)" @mousemove="updateMouseLocation" @mouseleave="toggleActiveToNull"
+					@mouseenter="toggleActive(index)" 
+					@mousemove="updateMouseLocation" 
+					@mouseleave="toggleActiveToNull"
 					@click="handleDataSelection(index)"
 				/>
 				<line 
@@ -350,7 +360,7 @@ function handleDataSelection(index) {
 	transition: fill 0.4s ease;
 }
 .datapoint-front:hover {
-	fill: rgba(255, 255, 255, .25);
+	fill: rgba(255, 255, 255, .35);
 }
 
 @keyframes ease-in {
@@ -362,14 +372,33 @@ function handleDataSelection(index) {
 		opacity: 1
 	}
 }
-// @for $i from 1 through 12 {
-// 	.initial-animation-#{$i} {
-// 		animation-name: ease-in;
-// 		animation-duration: 0.2s;
-// 		animation-delay: 0.05s * ($i - 1);
-// 		animation-timing-function: linear;
-// 		animation-fill-mode: forwards;
-// 	}
-// }
-/* Animation styles aren't required but recommended */
+@for $y from 0 through 100 {
+  @for $x from 0 through 100 {
+    .initial-animation-rect-#{$y}-#{$x} {
+		animation-name: ease-in;
+		animation-duration: 0.2s;
+		animation-delay: 0.01s * ($y * 35 + $x * 7);
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		opacity: 0;
+	}
+	.initial-animation-text-#{$y}-#{$x} {
+		animation-name: ease-in;
+		animation-duration: 0.2s;
+		animation-delay: 0.01s * ($y * 35 + $x * 7);
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		opacity: 0;
+	}
+	.initial-animation-line-#{$y}-#{$x} {
+		animation-name: ease-in;
+		animation-duration: 0.2s;
+		animation-delay: 0.01s * ($y * 35 + $x * 7) + 0.08s;
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		opacity: 0;
+	}
+  }
+}
+
 </style>
