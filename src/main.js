@@ -36,6 +36,7 @@ import MetroChart from "./components/charts/MetroChart.vue";
 import HeatmapChart from "./components/charts/HeatmapChart.vue";
 import BumpChart from "./components/charts/BumpChart.vue";
 import BoxChart from "./components/charts/BoxChart.vue";
+import CircularDendrogram from "./components/charts/CircularDendrogram.vue";
 
 const app = createApp(App);
 
@@ -60,5 +61,6 @@ app.component("MetroChart", MetroChart);
 app.component("HeatmapChart", HeatmapChart);
 app.component("BumpChart", BumpChart);
 app.component("BoxChart", BoxChart);
+app.component("CircularDendrogram", CircularDendrogram);
 
 app.mount("#app");

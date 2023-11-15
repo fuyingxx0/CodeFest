@@ -1,14 +1,12 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { useMapStore } from '../../store/mapStore';
-import { transform } from '@vue/compiler-core';
+// import { useMapStore } from '../../store/mapStore';
 
 const colors = ['#537188', '#7c8e97', '#CBB279', '#E1D4BB', '#EEEEEE'];
-// rectfillbottom, rectfilltop, verticalline, horizontalline, rectborder
 
 // register the four required props
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
-const mapStore = useMapStore()
+// const mapStore = useMapStore()
 
 let sortedData = props.series.map(series => ({
 	...series,
@@ -114,6 +112,7 @@ function handleDataSelection(index) {
 			>
 				<svg class="svgoutline" :width="wid" :height="totalHeight">
 					<line
+						:class="{ 'easein': true, [`initial-animation-${index}`]: true }"
 						:x1="wid / 2"
 						:x2="wid / 2"
 						:y1="box.p100"
@@ -122,7 +121,8 @@ function handleDataSelection(index) {
 						stroke-width="2"
 						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[1]"
 					/>
-					<line						
+					<line
+						:class="{ 'easein': true, [`initial-animation-${index}`]: true }"
 						:x1="wid / 2"
 						:x2="wid / 2"
 						:y1="box.p25"
@@ -132,6 +132,7 @@ function handleDataSelection(index) {
 						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[1]"
 					/>
 					<line
+						:class="{ 'easein': true, [`initial-animation-${index}`]: true }"
 						:x1="0 + shr"
 						:x2="wid - shr"
 						:y1="box.p100"
@@ -141,6 +142,7 @@ function handleDataSelection(index) {
 						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[2]"
 					/>
 					<line
+						:class="{ 'easein': true, [`initial-animation-${index}`]: true }"
 						:x1="0 + shr"
 						:x2="wid - shr"
 						:y1="box.p0"
@@ -150,6 +152,7 @@ function handleDataSelection(index) {
 						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[2]"
 					/>
 					<rect 
+						:class="{ 'easein': true, [`initial-animation-${index}`]: true }"
 						x="2"
 						:width="wid - 4"
 						:y="box.p75"
@@ -160,6 +163,7 @@ function handleDataSelection(index) {
 						:fill="(targetBox === index || selectedIndex === index) ? colors[2] : colors[0]"
 					/>
 					<line
+						:class="{ 'easein': true, [`initial-animation-${index}`]: true }"
 						:x1="0 + 3.5"
 						:x2="wid - 3.5"
 						:y1="box.p50"
@@ -240,6 +244,28 @@ function handleDataSelection(index) {
 	overflow: visible;
 	// border: 1px solid blue;
 }
-
+.easein{
+	transition: fill 0.3s ease;
+}
 /* Animation styles aren't required but recommended */
+@keyframes ease-in {
+	0% {
+		opacity: 0
+	}
+	;
+	100% {
+		opacity: 1
+	}
+}
+@for $i from 0 through 20 {
+	.initial-animation-#{$i} {
+		animation-name: ease-in;
+		animation-duration: 0.3s;
+		animation-delay: 0.1s * $i;
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		opacity: 0;
+	}
+}
+
 </style>
