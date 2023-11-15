@@ -2229,7 +2229,7 @@
 				{
 					"index": "socl_welfare_organization_plc",
 					"paint": {
-						"circle-color": [
+						"fill-color": [
 							"match",
 							["get", "main_type"],
 							"銀髮族服務",
@@ -2247,7 +2247,8 @@
 							"保護性服務",
 							"#60819C",
 							"#2F8AB1"
-						]
+						],
+						"fill-outline-color": "#FFFFFF"
 					},
 					"property": [
 						{
@@ -2269,52 +2270,9 @@
 					],
 					"type": "voronoi",
 					"size": "big",
-					"title": "社福機構（區塊）"
-				},
-				{
-					"index": "socl_welfare_organization_plc",
-					"paint": {
-						"circle-color": [
-							"match",
-							["get", "main_type"],
-							"銀髮族服務",
-							"#F65658",
-							"身障機構",
-							"#F49F36",
-							"兒童與少年服務",
-							"#F5C860",
-							"社區服務、NPO",
-							"#9AC17C",
-							"婦女服務",
-							"#4CB495",
-							"貧困危機家庭服務",
-							"#569C9A",
-							"保護性服務",
-							"#60819C",
-							"#2F8AB1"
-						]
-					},
-					"property": [
-						{
-							"key": "main_type",
-							"name": "主要類別"
-						},
-						{
-							"key": "sub_type",
-							"name": "次要分類"
-						},
-						{
-							"key": "name",
-							"name": "名稱"
-						},
-						{
-							"key": "address",
-							"name": "地址"
-						}
-					],
-					"type": "circle",
-					"size": "big",
-					"title": "社福機構（點）"
+					"title": "社福機構（區塊）",
+
+					"filter_key": "main_type"
 				}
 			],
 			"chart_config": {

@@ -29,6 +29,8 @@ import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
 import { calculateGradientSteps } from "../assets/configs/mapbox/arcGradient";
 import MapPopup from "../components/map/MapPopup.vue";
 
+import { voronoi } from "../algorithms/voronoi.js";
+
 const { BASE_URL } = import.meta.env;
 
 export const useMapStore = defineStore("map", {
@@ -172,61 +174,17 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Add the layer data as a source in mapbox
 		addMapLayerSource(map_config, data) {
-
-			if(map_config.type !== "voronoi") {
-
-			this.map.addSource(`${map_config.layerId}-source`, {
-				type: "geojson",
-				data: { ...data },
-			});
-
+			if (map_config.type !== "voronoi") {
+				this.map.addSource(`${map_config.layerId}-source`, {
+					type: "geojson",
+					data: { ...data },
+				});
 			}
 
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
 			} else if (map_config.type === "voronoi") {
-
-				// TODO: Insert voronoi algorithm here to calculate cell border data.
-				let test_fill_data = {
-					"type": "FeatureCollection",
-					"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-					"features": [{ "type": "Feature", "properties": { "main_type": "保護性服務" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 121.5033841, 25.1363031 ], [ 121.5033831, 25.1360774 ], [ 121.5028873, 25.1360791 ], [ 121.5028808, 25.1344992 ], [ 121.5026329, 25.1345001 ], [ 121.5026319, 25.1342744 ], [ 121.502384, 25.1342752 ], [ 121.5023831, 25.1340495 ], [ 121.5021351, 25.1340504 ], [ 121.5021342, 25.1338247 ], [ 121.5018863, 25.1338255 ], [ 121.5018854, 25.1335998 ], [ 121.5016374, 25.1336007 ], [ 121.5016365, 25.133375 ], [ 121.5011407, 25.1333766 ], [ 121.5011397, 25.1331509 ], [ 121.5003959, 25.1331535 ], [ 121.500395, 25.1329278 ], [ 121.4998992, 25.1329294 ], [ 121.4999001, 25.1331551 ], [ 121.4996522, 25.133156 ], [ 121.4996531, 25.1333817 ], [ 121.4994051, 25.1333825 ], [ 121.499407, 25.1338339 ], [ 121.499159, 25.1338347 ], [ 121.49916, 25.1340604 ], [ 121.498912, 25.1340613 ], [ 121.4989129, 25.134287 ], [ 121.498665, 25.1342878 ], [ 121.4986659, 25.1345135 ], [ 121.498418, 25.1345143 ], [ 121.4984189, 25.13474 ], [ 121.497923, 25.1347417 ], [ 121.4979249, 25.1351931 ], [ 121.4976769, 25.1351939 ], [ 121.4976788, 25.1356453 ], [ 121.4979267, 25.1356445 ], [ 121.4979276, 25.1358702 ], [ 121.4984235, 25.1358685 ], [ 121.4984244, 25.1360942 ], [ 121.4989203, 25.1360925 ], [ 121.4989212, 25.1363182 ], [ 121.4999129, 25.1363149 ], [ 121.4999139, 25.1365406 ], [ 121.5006577, 25.1365381 ], [ 121.5006586, 25.1367638 ], [ 121.5014024, 25.1367613 ], [ 121.5014033, 25.136987 ], [ 121.502643, 25.1369828 ], [ 121.5026421, 25.1367571 ], [ 121.503138, 25.1367554 ], [ 121.5031361, 25.136304 ], [ 121.5033841, 25.1363031 ] ] ] ] } }]
-				}
-
-				this.map.addSource(`${map_config.layerId}-source`, {
-					type: "geojson",
-					data: { ...test_fill_data },
-				});
-
-				// TODO: Original 'voronoi' type data should be written in 'circle' format. Change it to 'line' type config here.
-				let new_map_config = {
-					"index": "work_soil_liquefaction",
-					"layerId": `${map_config.layerId}`,
-					"paint": {
-						"fill-color": [
-							"match",
-							["get", "class"],
-							"保護性服務",
-							"#c87a74",
-							"中",
-							"#c8b974",
-							"低",
-							"#9bc874",
-							"#9c967f"
-						]
-					},
-					"property": [
-						{
-							"key": "main_type",
-							"name": "潛勢分級"
-						}
-					],
-					"type": "fill",
-					"title": "土壤液化潛勢"
-				}
-
-				this.addMapLayer(new_map_config);
-
+				this.AddVoronoiMapLayer(map_config, data);
 			} else {
 				this.addMapLayer(map_config);
 			}
@@ -375,6 +333,76 @@ export const useMapStore = defineStore("map", {
 					(el) => el !== map_config.layerId
 				);
 			}, delay);
+		},
+
+		AddVoronoiMapLayer(map_config, data) {
+			// Feed data into Voronoi algorithm
+			let seenKeys = [];
+
+			let voronoi_source = {
+				type: data.type,
+				crs: data.crs,
+				features: [],
+			};
+
+			// iterate through all data
+			data.features.forEach((location) => {
+				let key = location.properties[map_config.filter_key];
+
+				// found new category
+				if (!seenKeys.includes(key)) {
+					seenKeys.push(key);
+
+					// get all the data within the category
+					let cat1 = data.features.filter((item) => {
+						return item.properties[map_config.filter_key] === key;
+					});
+
+					// remove duplicate coordinates (so that it wont't cause problems in the Voronoi algorithm...)
+					cat1 = cat1.filter((val, ind) => {
+						return (
+							cat1.findIndex((item) => {
+								return (
+									item.geometry.coordinates[0] ===
+										val.geometry.coordinates[0] &&
+									item.geometry.coordinates[1] ===
+										val.geometry.coordinates[1]
+								);
+							}) === ind
+						);
+					});
+
+					// get coordnates alone
+					let cat2 = cat1.map((item) => {
+						return item.geometry.coordinates;
+					});
+
+					// calculate cell for each coordinate
+					let cells = voronoi(cat2);
+
+					// push to source data
+					for (let i = 0; i < cells.length; i++) {
+						voronoi_source.features.push({
+							type: cat1[i].type,
+							properties: cat1[i].properties,
+							geometry: {
+								type: "MultiPolygon",
+								coordinates: [[cells[i]]],
+							},
+						});
+					}
+				}
+			});
+
+			this.map.addSource(`${map_config.layerId}-source`, {
+				type: "geojson",
+				data: { ...voronoi_source },
+			});
+
+			let new_map_config = { ...map_config };
+			new_map_config.type = "fill";
+
+			this.addMapLayer(new_map_config);
 		},
 		//  5. Turn on the visibility for a exisiting map layer
 		turnOnMapLayerVisibility(mapLayerId) {
