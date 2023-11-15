@@ -136,7 +136,7 @@ ang = ang.sort((a, b) => a.index - b.index);
 
 // calculate radius
 let rad = [];
-let radFac = 28 / data['value'];
+let radFac = 34 / data['value'];
 let radMin = 12;
 function radCalc(node) {
 	rad = [...rad, {
@@ -242,7 +242,7 @@ function updateMouseLocation(e) {
 					text-anchor="middle"
 					alignment-baseline="middle" 
 					fill="white"
-					font-size="8"
+					font-size="11"
 				>
 					{{ props.series[index].name }}
 					<!-- {{ props.series[index].data[3] }} -->
