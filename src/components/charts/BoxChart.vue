@@ -240,7 +240,7 @@ function handleDataSelection(index) {
 }
 .svgoutline {
 	padding: 5px;
-	min-height: 240px;
+	min-height: 260px;
 	overflow: visible;
 	// border: 1px solid blue;
 }
