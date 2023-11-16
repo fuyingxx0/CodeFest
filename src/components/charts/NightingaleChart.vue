@@ -2,7 +2,9 @@
 import { computed, ref } from 'vue'
 import { useMapStore } from '../../store/mapStore';
 
-const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+const colors = ['#219c90', '#8eab55', '#f39f5a', '#e9b824', '#e77727', '#d83f31'];
+// const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+// const colors = ['#ffffff', '#ff0000', '#00ff00', '#0000ff']
 const colorBG = '#282A2C';
 
 // register the four required props
@@ -37,6 +39,15 @@ const showedData = ref(data);
 const showedMax = ref(dataMax);
 const rShow = ref(Array(data[0].data.length).fill(true));
 const aHovered = ref(-1);
+
+function printShowData(){
+	for(let a = 0; a < showedData.value.length; a++){
+		console.log(a, showedData.value[a].a)
+		for(let r = 0; r < showedData.value[a].data.length; r++){
+			console.log('   ', r, showedData.value[a].data[r].r, showedData.value[a].data[r].value, data[a].data[r].r, data[a].data[r].value)
+		}
+	}
+}
 
 const mousePosition = ref({ x: null, y: null });
 function toggleActive(i) {
@@ -78,16 +89,22 @@ function handleLegendSelection(index){
 			'data': []
 		}]
 		for(let r = 0; r < data[a].data.length; r++){
-			if(rShow.value[r]){
+			let index = -1;
+			for(let i = 0; i < props.series.length; i++){
+				if(showedData.value[a].data[r].r === props.series[i].name){
+					index = i;
+				}
+			}
+			if(rShow.value[index]){
 				newData[a]['data'] = [...newData[a]['data'], {
-					'r': r,
-					'value': data[a].data[r].value
+					'r': props.series[index].name,
+					'value': props.series[index].data[a]
 				}]
 				if(newMax < data[a].data[r].value) newMax = data[a].data[r].value;
 			}
 			else {
 				newData[a]['data'] = [...newData[a]['data'], {
-					'r': r,
+					'r': props.series[index].name,
 					'value': 0
 				}]
 			}		
@@ -95,24 +112,44 @@ function handleLegendSelection(index){
 	}
 	showedMax.value = newMax;
 	showedData.value = newData;
+	// printShowData()
 }
 
-const aspc = 8 * Math.PI * 2 / 180;
-const rmin = 70;
-const cr = 30;
-const rmax = 70;
-const rselected = 90;
+const rtext = 125;
+const aspc = 4 * Math.PI / 180;
+const agap = 5.5 * Math.PI / 180;
+const cr = 25;
+const rmin = 46;
+const rmax = 50;
+const rselected = 60;
 const cx = 180;
-const cy = 130;
+const cy = 150;
+
+// index: a
+const labels = Array.from({ length: anumTotal }, (_, index) => {
+	return {
+		name: data[index].a,
+		x: cx + rtext * Math.sin((index + .5) * 2 * Math.PI / anumTotal),
+		y: cy - rtext * Math.cos((index + .5) * 2 * Math.PI / anumTotal)
+	};
+});
+
 // max: showedMax.value, return {radius, startAngle, endAngle}
 function calcSector(a, r) {
-	let awid = (Math.PI * 2 / anum.value - aspc) * (rnum.value / (rnum.value + 1));
-	// let astart = a * Math.PI * 2 / anum.value + aspc / 2 + r / (rnum.value + 1);
-	let astart = a * Math.PI * 2 / anum.value + aspc / 2 + r * .1;
+	let awid = (Math.PI * 2 / anum.value - aspc) - (rnum.value - 1) * agap;
+	let astart = a * Math.PI * 2 / anum.value + aspc / 2 + r * agap;
 	let aend = astart + awid;
 	let rend = aHovered.value === a ? ((showedData.value[a].data[r].value / showedData.value[a].data[0].value) * rselected + rmin) : ((showedData.value[a].data[r].value / showedMax.value) * rmax + rmin);
+	for(let i = 0; i < props.series.length; i++){
+		if(props.series[i].name === showedData.value[a].data[r].r){
+			if(!rShow.value[i]){
+				rend = 0;
+				break;
+			}
+		}
+	}
 	return ({
-		'radius': rShow.value[r] === true ? rend : 0,
+		'radius': rend,
 		'startAngle': astart,
 		'endAngle': aend
 	})
@@ -129,13 +166,19 @@ function getSectorPath(cx, cy, radius, startAngle, endAngle){
 const sectors = Array.from({ length: anumTotal * rnumTotal }, (_, index) => {
 	const a = index % anum.value;
 	const r = (index / anum.value) | 0;
+	let rname = -1;
+	for(let i = 0; i < props.series.length; i++){
+		if(showedData.value[a].data[r].r === props.series[i].name){
+			rname = i;
+		}
+	}
 	return {
 		show: true,
 		r: r,
 		a: a,
-		fill: colors[r],
+		fill: colors[rname],
 		stroke: colorBG,
-		stroke_width: 2
+		stroke_width: 1.2
 	};
 });
 
@@ -187,6 +230,18 @@ const legends = Array.from({ length: rnum.value }, (_, index) => {
 					@click="handleDataSelection(index)"
 				/>
 			</g>
+			<g v-for="(label, index) in labels" :key="index">
+				<text
+					:x="label.x"
+					:y="label.y"
+					text-anchor="middle" 
+					alignment-baseline="middle" 
+					fill="#888787" 
+					font-size="12"
+				>
+					{{ label.name }}
+				</text>
+			</g>
 			<circle
 				:cx="cx"
 				:cy="cy"
@@ -236,7 +291,8 @@ const legends = Array.from({ length: rnum.value }, (_, index) => {
 	// border: 1px solid red;
 }
 .sector {
-  transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	cursor: pointer;
 }
 
 @keyframes ease-in {

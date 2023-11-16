@@ -4184,6 +4184,115 @@
 			"links": null,
 			"tags": [],
 			"contributors": ["tuic"]
+		},
+		"3004": {
+			"id": 3004,
+			"index": "garbage_truck",
+			"map_config": [
+				{
+					"index": "garbage_truck",
+					"paint": {
+						"circle-color": [
+							"case",
+							["<=", ["get", "arrive_time"], 1700],
+							"#E6DF44",
+							["<=", ["get", "arrive_time"], 1900],
+							"#F4633C",
+							["<=", ["get", "arrive_time"], 2100],
+							"#D63940",
+							"#9C2A4B"
+						]
+					},
+					"property": [
+						{
+							"key": "dist",
+							"name": "行政區"
+						},
+						{
+							"key": "vil",
+							"name": "里名"
+						},
+						{
+							"key": "brigade",
+							"name": "清潔隊名稱"
+						},
+						{
+							"key": "license_plate",
+							"name": "車牌"
+						},
+						{
+							"key": "route",
+							"name": "路線"
+						},
+						{
+							"key": "arrive_time",
+							"name": "抵達時間"
+						},
+						{
+							"key": "leave_time",
+							"name": "離開時間"
+						},
+						{
+							"key": "address",
+							"name": "地址"
+						}
+					],
+					"title": "垃圾車收運點位",
+					"type": "circle",
+					"size": null,
+					"icon": null
+				}
+			],
+			"history_data": false,
+			"chart_config": {
+				"categories": [
+					"北投區",
+					"士林區",
+					"內湖區",
+					"南港區",
+					"松山區",
+					"信義區",
+					"中山區",
+					"大同區",
+					"中正區",
+					"萬華區",
+					"大安區",
+					"文山區"
+				],
+				"types": ["NightingaleChart", "ColumnChart", "RadarChart", "DistrictChart"],
+				"color": ["#E6DF44", "#F4633C", "#D63940", "#9C2A4B"],
+				"unit": "點",
+				"map_filter": [
+					"dist",
+					[
+						"北投區",
+						"士林區",
+						"內湖區",
+						"南港區",
+						"松山區",
+						"信義區",
+						"中山區",
+						"大同區",
+						"中正區",
+						"萬華區",
+						"大安區",
+						"文山區"
+					]
+				]
+			},
+			"name": "垃圾車收運點位",
+			"source": "環保局",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"update_freq": null,
+			"update_freq_unit": null,
+			"short_desc": "顯示台北市所有垃圾車收運的點位。",
+			"long_desc": "顯示顯示台北市所有垃圾車收運的點位，資料來源為台北市環保局開放資料，不定期更新。",
+			"use_case": "透過這些點位資訊，我們可以更有效地安排垃圾車的收運路線，提升垃圾處理的效率，同時也能了解垃圾處理設施的分佈情況，並根據需求進行相應的環保政策調整。",
+			"links": [
+				"https://data.taipei/dataset/detail?id=6bb3304b-4f46-4bb0-8cd1-60c66dcd1cae"
+			],
+			"tags": [],
+			"contributors": ["tuic"]
 		}
 	}
 }
