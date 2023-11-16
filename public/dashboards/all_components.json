@@ -2229,7 +2229,7 @@
 				{
 					"index": "socl_welfare_organization_plc",
 					"paint": {
-						"fill-color": [
+						"line-color": [
 							"match",
 							["get", "main_type"],
 							"銀髮族服務",
@@ -2247,8 +2247,7 @@
 							"保護性服務",
 							"#60819C",
 							"#2F8AB1"
-						],
-						"fill-outline-color": "#FFFFFF"
+						]
 					},
 					"property": [
 						{
@@ -2269,7 +2268,6 @@
 						}
 					],
 					"type": "voronoi",
-					"size": "big",
 					"title": "社福機構（區塊）",
 
 					"filter_key": "main_type"
@@ -4226,9 +4224,7 @@
 				"color": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
 				"types": ["CircularDendrogram", "BarChart"],
 				"unit": "個",
-				"categories": [
-					"index", "layer", "parent", "value"
-				]
+				"categories": ["index", "layer", "parent", "value"]
 			},
 			"name": "全市屋齡分布",
 			"source": "都發局/消防局",

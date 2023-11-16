@@ -345,6 +345,15 @@ export const useMapStore = defineStore("map", {
 				features: [],
 			};
 
+			let pointSize = 0.0001;
+			let numOfSides = 10;
+			let angles = [...Array(numOfSides + 1).keys()].map((i) => {
+				return [
+					pointSize * Math.cos(2 * Math.PI * (i / numOfSides)),
+					pointSize * Math.sin(2 * Math.PI * (i / numOfSides)),
+				];
+			});
+
 			// iterate through all data
 			data.features.forEach((location) => {
 				let key = location.properties[map_config.filter_key];
@@ -357,6 +366,25 @@ export const useMapStore = defineStore("map", {
 					let cat1 = data.features.filter((item) => {
 						return item.properties[map_config.filter_key] === key;
 					});
+
+					// push to source data (points)
+					for (let i = 0; i < cat1.length; i++) {
+						voronoi_source.features.push({
+							type: cat1[i].type,
+							properties: cat1[i].properties,
+							geometry: {
+								type: "LineString",
+								coordinates: angles.map((angle) => {
+									return [
+										cat1[i].geometry.coordinates[0] +
+											angle[0],
+										cat1[i].geometry.coordinates[1] +
+											angle[1],
+									];
+								}),
+							},
+						});
+					}
 
 					// remove duplicate coordinates (so that it wont't cause problems in the Voronoi algorithm...)
 					cat1 = cat1.filter((val, ind) => {
@@ -380,14 +408,14 @@ export const useMapStore = defineStore("map", {
 					// calculate cell for each coordinate
 					let cells = voronoi(cat2);
 
-					// push to source data
+					// push to source data (cells)
 					for (let i = 0; i < cells.length; i++) {
 						voronoi_source.features.push({
 							type: cat1[i].type,
 							properties: cat1[i].properties,
 							geometry: {
-								type: "MultiPolygon",
-								coordinates: [[cells[i]]],
+								type: "LineString",
+								coordinates: cells[i],
 							},
 						});
 					}
@@ -400,7 +428,7 @@ export const useMapStore = defineStore("map", {
 			});
 
 			let new_map_config = { ...map_config };
-			new_map_config.type = "fill";
+			new_map_config.type = "line";
 
 			this.addMapLayer(new_map_config);
 		},
