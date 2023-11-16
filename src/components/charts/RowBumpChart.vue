@@ -149,7 +149,6 @@ onMounted(() => {
 	// Access the DOM element after the component is mounted
 	textwrapper.value = document.querySelector('.textwrapper');
 });
-
 const legends = Array.from({ length: ynum }, (_, index) => {
 	// const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
 	return {
@@ -212,7 +211,7 @@ function handleDataSelection(index) {
 				:height="totalLenMax + 35"
 			>
 				<line v-for="(line, index) in lines"
-					:class="{ [`initial-animation-line-${line.k}-${line.i}`]: true }"
+				:class="{ [`initial-animation-line-${line.k}-${line.i}`]: true }"
 					:key="'line-' + index"
 					:x1="line.x1 + spcx / 2"
 					:y1="line.y1"
@@ -344,7 +343,6 @@ function handleDataSelection(index) {
 	align-items: center;
 	font-size: small;
 	gap: 6px;
-	cursor: pointer;
 	// border: 1px solid red;
 }
 .svg-legend {
@@ -375,32 +373,32 @@ function handleDataSelection(index) {
 	}
 }
 @for $y from 0 through 100 {
-	@for $x from 0 through 100 {
-		.initial-animation-rect-#{$y}-#{$x} {
-			animation-name: ease-in;
-			animation-duration: 0.2s;
-			animation-delay: 0.01s * ($y * 35 + $x * 7);
-			animation-timing-function: linear;
-			animation-fill-mode: forwards;
-			opacity: 0;
-		}
-		.initial-animation-text-#{$y}-#{$x} {
-			animation-name: ease-in;
-			animation-duration: 0.2s;
-			animation-delay: 0.01s * ($y * 35 + $x * 7);
-			animation-timing-function: linear;
-			animation-fill-mode: forwards;
-			opacity: 0;
-		}
-		.initial-animation-line-#{$y}-#{$x} {
-			animation-name: ease-in;
-			animation-duration: 0.2s;
-			animation-delay: 0.01s * ($y * 35 + $x * 7) + 0.08s;
-			animation-timing-function: linear;
-			animation-fill-mode: forwards;
-			opacity: 0;
-		}
+  @for $x from 0 through 100 {
+    .initial-animation-rect-#{$y}-#{$x} {
+		animation-name: ease-in;
+		animation-duration: 0.2s;
+		animation-delay: 0.01s * ($y * 35 + $x * 7);
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		opacity: 0;
 	}
+	.initial-animation-text-#{$y}-#{$x} {
+		animation-name: ease-in;
+		animation-duration: 0.2s;
+		animation-delay: 0.01s * ($y * 35 + $x * 7);
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		opacity: 0;
+	}
+	.initial-animation-line-#{$y}-#{$x} {
+		animation-name: ease-in;
+		animation-duration: 0.2s;
+		animation-delay: 0.01s * ($y * 35 + $x * 7) + 0.08s;
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		opacity: 0;
+	}
+  }
 }
 
 </style>
