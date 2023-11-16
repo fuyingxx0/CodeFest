@@ -62,6 +62,7 @@ app.component("MapLegend", MapLegend);
 app.component("MetroChart", MetroChart);
 app.component("HeatmapChart", HeatmapChart);
 app.component("BumpChart", BumpChart);
+app.component("RowBumpChart", RowBumpChart);
 app.component("BoxChart", BoxChart);
 app.component("NightingaleChart", NightingaleChart);
 app.component("CircularDendrogram", CircularDendrogram);

@@ -10,21 +10,6 @@ const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
 // const mapStore = useMapStore()
 
-// Convert time to month
-// const convertedData = props.series.map(category => {
-// 	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-// 	const convertedCategory = {
-// 		name: category.name,
-// 		data: category.data.map(item => {
-// 			const date = new Date(item.x);
-// 			const monthAbbreviation = monthNames[date.getMonth()];
-// 			return { y: item.y, x: monthAbbreviation };
-// 		})
-// 	};
-// 	return convertedCategory;
-// });
-// console.log(convertedData);
-
 let sortedData = [];
 let max = props.series[0].data[0].y;
 let min = props.series[0].data[0].y;
@@ -46,6 +31,11 @@ for(let x = 0; x < sortedData.length; x++){
 }
 // console.log(sortedData);
 
+const showedLegend = ref(Array(sortedData[0].data.length).fill(true));
+const activeLegend = ref(null);
+// console.log(showedLegend.value)
+
+//compute totalMax and totalMin
 let total = [0];
 for(let j = 0; j < sortedData[0].data.length; j++){
 	total[0] += sortedData[0].data[j].y;
@@ -71,27 +61,88 @@ let hei = 100 / totalMax;
 let spcx = 140 / xnum;
 let spcy = 6;
 let rad = 15;
-let totalLen = [];
-for(let i = 0; i < sortedData.length; i++){
-	totalLen = [...totalLen, ynum * 2 * rad + (ynum - 1) * spcy + total[i] * hei];
-}
-const totalLenMax = ynum * 2 * rad + (ynum - 1) * spcy + totalMax * hei;
-// console.log(totalLen, totalLenMax);
-let startPos = [];
-for(let i = 0; i < xnum; i++){
-	startPos = [...startPos, []];
-	startPos[i] = [{x: i * (2 * rad + spcx), y: (totalLenMax - totalLen[i])/2}];
-	for(let j = 1; j < ynum; j++){
-		startPos[i] = [...startPos[i], {x: i * (2 * rad + spcx), y: startPos[i][j-1].y + 2 * rad + spcy + sortedData[i].data[j-1].y * hei}]
+function calcTotalLen(){
+	let total = [0];
+	for(let j = 0; j < sortedData[0].data.length; j++){
+		total[0] += sortedData[0].data[j].y;
 	}
+	let totalMax = total[0];
+	let totalMin = total[0];
+	for(let i = 1; i < sortedData.length; i++){
+		total = [...total, 0];
+		for(let j = 0; j < sortedData[i].data.length; j++){
+			if(showedLegend.value[sortedData[i].data[j].index]) total[i] +=  sortedData[i].data[j].y;
+		}
+		if(totalMax < total[i]) totalMax = total[i];
+		if(totalMin > total[i]) totalMin = total[i];
+	}
+	let totalLen = [];
+	let showedYnum = 0;
+	for(let i = 0; i < showedLegend.value.length; i++) if(showedLegend.value[i]) showedYnum++;
+	for(let i = 0; i < sortedData.length; i++){
+		totalLen = [...totalLen, showedYnum * 2 * rad + (showedYnum - 1) * spcy + total[i] * hei];
+	}
+	return totalLen;
 }
+function calcTotalLenMax(){
+	let total = [0];
+	for(let j = 0; j < sortedData[0].data.length; j++){
+		total[0] += sortedData[0].data[j].y;
+	}
+	let totalMax = total[0];
+	let totalMin = total[0];
+	for(let i = 1; i < sortedData.length; i++){
+		total = [...total, 0];
+		for(let j = 0; j < sortedData[i].data.length; j++){
+			if(showedLegend.value[sortedData[i].data[j].index]) total[i] +=  sortedData[i].data[j].y;
+		}
+		if(totalMax < total[i]) totalMax = total[i];
+		if(totalMin > total[i]) totalMin = total[i];
+	}
+	let showedYnum = 0;
+	for(let i = 0; i < showedLegend.value.length; i++) if(showedLegend.value[i]) showedYnum++;
+	const totalLenMax = showedYnum  * 2 * rad + (showedYnum - 1) * spcy + totalMax * hei;
+	// console.log(totalLenMax);
+	return totalLenMax;
+}
+const totalLenMax = ref(calcTotalLenMax());
+function calcStartPos(){
+	const totalLen = calcTotalLen();
+	const totalLenMax = calcTotalLenMax();
+	console.log(totalLen, totalLenMax)
+	let startPos = [];
+	for(let i = 0; i < xnum; i++){
+		startPos = [...startPos, []];
+		let accumulatedY = (totalLenMax - totalLen[i]) / 2;
+		if(showedLegend.value[sortedData[i].data[0].index]){
+			startPos[i] = [...startPos[i], {x: i * (2 * rad + spcx), y: accumulatedY}]
+			accumulatedY +=  2 * rad + spcy + sortedData[i].data[0].y * hei;
+		}
+		else {
+			startPos[i] = [...startPos[i], {x: -1, y: -1}]
+		}
+		for(let j = 1; j < ynum; j++){
+			if(showedLegend.value[sortedData[i].data[j].index]){
+				startPos[i] = [...startPos[i], {x: i * (2 * rad + spcx), y: accumulatedY}]
+				accumulatedY +=  2 * rad + spcy + sortedData[i].data[j].y * hei;
+			}
+			else {
+				startPos[i] = [...startPos[i], {x: -1, y: -1}]
+			}		
+		}
+	}
+	return startPos;
+}
+const showedStartPos = ref(calcStartPos());
+// console.log(showedStartPos.value)
+
 // console.log(startPos);
 const rectangles = Array.from({ length: xnum * ynum }, (_, index) => {
 	const i = (index / ynum) | 0;
 	const j = index % ynum;
 	return {
-		x: startPos[i][j].x,
-		y: startPos[i][j].y,
+		// x: showedStartPos.value[i][j].x,
+		// y: showedStartPos.value[i][j].y,
 		width: 2 * rad,
 		height: 2 * rad + hei * sortedData[i].data[j].y,
 		rx: rad, 
@@ -105,50 +156,52 @@ const rectangles = Array.from({ length: xnum * ynum }, (_, index) => {
 });
 // console.log(rectangles);
 
-const lines = Array.from({ length: xnum * ynum }, (_, index) => {
-	const i = (index / ynum) | 0;
-	const j = index % ynum;
-	if(i == xnum - 1){
-		return {
-			x1: 0,
-			y1: 0,
-			x2: 0,
-			y2: 0,
-			stroke: "none",
-		}
-	}
-	let ind = -1;
-	for(let k = 0; k < ynum; k++){
-		if(sortedData[i].data[j].index === sortedData[i+1].data[k].index){
-			ind = k;
-			break;
-		}
-	}
-	return {
-		x1: startPos[i][j].x + 2 * rad - 3,
-		y1: startPos[i][j].y + rad + hei * sortedData[i].data[j].y / 2,
-		x2: startPos[i+1][ind].x + 3,
-		y2: startPos[i+1][ind].y + rad + hei * sortedData[i+1].data[ind].y / 2,
-		stroke: colors[sortedData[i].data[j].index],
-		i: i,
-		j: j,
-		k: sortedData[i].data[j].index
-	};
-});
+// const lines = Array.from({ length: xnum * ynum }, (_, index) => {
+// 	const i = (index / ynum) | 0;
+// 	const j = index % ynum;
+// 	if(i == xnum - 1){
+// 		return {
+// 			x1: 0,
+// 			y1: 0,
+// 			x2: 0,
+// 			y2: 0,
+// 			stroke: "none",
+// 		}
+// 	}
+// 	let ind = -1;
+// 	for(let k = 0; k < ynum; k++){
+// 		if(sortedData[i].data[j].index === sortedData[i+1].data[k].index){
+// 			ind = k;
+// 			break;
+// 		}
+// 	}
+// 	return {
+// 		x1: showedStartPos.value[i][j].x + 2 * rad - 3,
+// 		y1: showedStartPos.value[i][j].y + rad + hei * sortedData[i].data[j].y / 2,
+// 		x2: showedStartPos.value[i+1][ind].x + 3,
+// 		y2: showedStartPos.value[i+1][ind].y + rad + hei * sortedData[i+1].data[ind].y / 2,
+// 		stroke: colors[sortedData[i].data[j].index],
+// 		i: i,
+// 		j: j,
+// 		k: sortedData[i].data[j].index
+// 	};
+// });
 
-const labels = Array.from({ length: xnum }, (_, index) => {	
-	return {
-		x: startPos[index][0].x + rad,
-		y: totalLenMax + 30,
-		text: sortedData[index].x
-	};
-});
+// const labels = Array.from({ length: xnum }, (_, index) => {	
+// 	return {
+// 		x: showedStartPos.value[index][0].x + rad,
+// 		// y: totalLenMax + 30,
+// 		y: 0,
+// 		text: showedStartPos.value[index].x
+// 	};
+// });
 
 const textwrapper = ref(null);
 onMounted(() => {
 	// Access the DOM element after the component is mounted
 	textwrapper.value = document.querySelector('.textwrapper');
 });
+
 const legends = Array.from({ length: ynum }, (_, index) => {
 	// const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
 	return {
@@ -191,14 +244,39 @@ function handleDataSelection(index) {
 	}
 }
 
+function toggleActiveLegend(y){
+	activeLegend.value = y;
+}
+function toggleActiveLegendToNull(){
+	activeLegend.value = null;
+}
+function handleLegendSelection(y){
+	showedLegend.value[y] = !showedLegend.value[y];
+	showedStartPos.value = calcStartPos()
+	totalLenMax.value = calcTotalLenMax()
+	// console.log(showedLegend.value, showedStartPos.value)
+}
+
+function returnshowedStartPos(index){
+	const i = (index / ynum) | 0;
+	const j = index % ynum;
+	return {
+		x: showedStartPos.value[i][j].x,
+		y: showedStartPos.value[i][j].y
+	};
+}
+
 </script>
 
 <template>
-	<div v-if="activeChart === 'BumpChart'" class="bumpchart">
+	<div v-if="activeChart === 'RowBumpChart'" class="rowbumpchart">
 		<div class="chartoutline">
 			<div class="textwrapper">
 				<div class="legends" v-for="(legend, index) in legends"
-					:key="index" 
+					:key="index"
+					@mouseenter="toggleActiveLegend(index)" 
+					@mouseleave="toggleActiveLegendToNull"
+					@click="handleLegendSelection(index)"
 				>
 					<svg class="svg-legend" style="width: 15px; height: 15px;">
 						<rect width="15" height="15" :fill="legend.color" rx="4" ry="4"/>
@@ -206,11 +284,16 @@ function handleDataSelection(index) {
 					<div color="#888787"> {{ legend.text }} </div>
 				</div>
 			</div>
-			<svg class="svg-container"
+			<!-- <svg class="svg-container"
 				:width="xnum * (2 * rad + spcx)"
 				:height="totalLenMax + 35"
+			> -->
+			<svg class="svg-container"
+				:width="xnum * (2 * rad + spcx)"
+				:height="350"
 			>
-				<line v-for="(line, index) in lines"
+				<!-- connecting lines -->
+				<!-- <line v-for="(line, index) in lines"
 				:class="{ [`initial-animation-line-${line.k}-${line.i}`]: true }"
 					:key="'line-' + index"
 					:x1="line.x1 + spcx / 2"
@@ -220,36 +303,37 @@ function handleDataSelection(index) {
 					:stroke="line.stroke"
 					stroke-width="3"
 					stroke-linecap="round"
-				/>
+				/> -->
+				<!-- solid rectangles -->
 				<rect v-for="(rect, index) in rectangles"
 					:class="{ [`initial-animation-rect-${rect.k}-${rect.i}`]: true, 'datapoint': true }"
 					:key="index" 
-					:x="rect.x + spcx / 2"
-					:y="rect.y" 
+					:x="returnshowedStartPos(index).x + spcx / 2"
+					:y="returnshowedStartPos(index).y" 
 					:width="rect.width" 
 					:height="rect.height" 
 					:rx="rect.rx" 
 					:ry="rect.ry" 
-					:fill="rect.fill" 
+					:fill="returnshowedStartPos(index).x !== -1 ? rect.fill : `rgba(255, 255, 255, 0)`" 
 					stroke="none" 
 				/>
-				<text v-for="(rect, index) in rectangles"
+				<!-- <text v-for="(rect, index) in rectangles"
 					:class="{ [`initial-animation-text-${rect.k}-${rect.i}`]: true, 'datapoint': true }"
 					:key="'text-' + index" 
-					:x="rect.x + rect.width / 2 + spcx / 2" 
-					:y="rect.y + rect.height / 2" 
+					:x="returnshowedStartPos(index).x + rect.width / 2 + spcx / 2" 
+					:y="returnshowedStartPos(index).y + rect.height / 2" 
 					text-anchor="middle" 
 					alignment-baseline="middle" 
 					fill="white" 
 					font-size="12"
 				>
 					{{ rect.number }}
-				</text>
+				</text> -->
 				<rect v-for="(rect, index) in rectangles"
 					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${rect.i}-${rect.j}`]: true, 'datapoint-front': true }"
 					:key="index" 
-					:x="rect.x + spcx / 2"
-					:y="rect.y" 
+					:x="returnshowedStartPos(index).x + spcx / 2"
+					:y="returnshowedStartPos(index).y" 
 					:width="rect.width" 
 					:height="rect.height" 
 					:rx="rect.rx" 
@@ -259,7 +343,7 @@ function handleDataSelection(index) {
 					@mouseleave="toggleActiveToNull"
 					@click="handleDataSelection(index)"
 				/>
-				<line 
+				<!-- <line 
 					x1="0" 
 					:y1="totalLenMax + 12" 
 					x2="400px" 
@@ -277,7 +361,7 @@ function handleDataSelection(index) {
 					font-size="10"
 				>
 					{{ label.text }}
-				</text>
+				</text> -->
 			</svg>
 		</div>
 	</div>
@@ -292,7 +376,7 @@ function handleDataSelection(index) {
 
 
 <style scoped lang="scss">
-.bumpchart {
+.rowbumpchart {
     /* styles for the chart Vue component */
 	display: flex;
 	justify-content: center;
@@ -343,6 +427,7 @@ function handleDataSelection(index) {
 	align-items: center;
 	font-size: small;
 	gap: 6px;
+	cursor: pointer;
 	// border: 1px solid red;
 }
 .svg-legend {
@@ -362,7 +447,10 @@ function handleDataSelection(index) {
 .datapoint-front:hover {
 	fill: rgba(255, 255, 255, .35);
 }
-
+.ease-all {
+	transition: all 0.3s ease;
+	// cursor: pointer;
+}
 @keyframes ease-in {
 	0% {
 		opacity: 0

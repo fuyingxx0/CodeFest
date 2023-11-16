@@ -4084,7 +4084,7 @@
 			"map_config": null,
 			"history_data": false,
 			"chart_config": {
-				"types": ["BumpChart", "BoxChart", "ColumnChart"],
+				"types": ["RowBumpChart", "BumpChart", "BoxChart", "ColumnChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "件"
 			},
