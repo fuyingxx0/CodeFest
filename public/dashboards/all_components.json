@@ -4293,6 +4293,98 @@
 			],
 			"tags": [],
 			"contributors": ["tuic"]
+		},
+		"4000": {
+			"id": 4000,
+			"index": "4000",
+			"map_config": null,
+			"history_data": false,
+			"chart_config": {
+				"types": ["ColumnChart"],
+				"color": ["#4dd97a", "#0a85f4"],
+				"unit": "間"
+			},
+			"name": "4000 - 婦產科統計",
+			"source": "資訊局",
+			"time_from": "2023-01-01T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "",
+			"long_desc": "新圖表-南丁格爾玫瑰圖（類型：診所、醫院），分行政區，新地圖-vonoroi diagram，支援客製圖表篩選地圖",
+			"use_case": "",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"4001": {
+			"id": 4001,
+			"index": "4001",
+			"map_config": null,
+			"history_data": false,
+			"chart_config": {
+				"types": ["ColumnChart"],
+				"color": ["#4dd97a", "#0a85f4"],
+				"unit": "人"
+			},
+			"name": "4001 - 幼兒統計",
+			"source": "資訊局",
+			"time_from": "2023-01-01T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "",
+			"long_desc": "",
+			"use_case": "",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"4002": {
+			"id": 4002,
+			"index": "4002",
+			"map_config": null,
+			"history_data": false,
+			"chart_config": {
+				"types": ["CircularDendrogram"],
+				"color": ["#4dd97a", "#0a85f4"],
+				"unit": ""
+			},
+			"name": "4002 - 育兒補助",
+			"source": "資訊局",
+			"time_from": "2023-01-01T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "",
+			"long_desc": "",
+			"use_case": "",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"4003": {
+			"id": 4003,
+			"index": "4003",
+			"map_config": null,
+			"history_data": false,
+			"chart_config": {
+				"types": ["BarChart"],
+				"color": ["#4dd97a", "#0a85f4"],
+				"unit": ""
+			},
+			"name": "4003 - 哺集乳室資訊",
+			"source": "資訊局",
+			"time_from": "2023-01-01T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "",
+			"long_desc": "",
+			"use_case": "",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
 		}
 	}
 }

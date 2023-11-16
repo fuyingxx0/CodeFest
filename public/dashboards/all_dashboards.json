@@ -1,6 +1,12 @@
 {
 	"data": [
 		{
+			"name": "test-助您好孕",
+			"index": "mom",
+			"components": ["4000", "4001", "4002", "4003"],
+			"icon": "favorite"
+		},
+		{
 			"name": "test-宜居城市",
 			"index": "living",
 			"components": ["3000", "3003", "3002", "83"],

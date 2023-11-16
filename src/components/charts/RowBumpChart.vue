@@ -109,7 +109,7 @@ const totalLenMax = ref(calcTotalLenMax());
 function calcStartPos(){
 	const totalLen = calcTotalLen();
 	const totalLenMax = calcTotalLenMax();
-	console.log(totalLen, totalLenMax)
+	// console.log(totalLen, totalLenMax)
 	let startPos = [];
 	for(let i = 0; i < xnum; i++){
 		startPos = [...startPos, []];
