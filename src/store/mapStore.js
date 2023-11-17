@@ -185,6 +185,8 @@ export const useMapStore = defineStore("map", {
 				this.AddVoronoiMapLayer(map_config, data);
 			} else if (map_config.type === "candy") {
 				this.AddCandyMapLayer(map_config, data);
+			} else if (map_config.type === "contour") {
+				//
 			} else {
 				this.addMapLayer(map_config);
 			}
@@ -550,6 +552,12 @@ export const useMapStore = defineStore("map", {
 
 			this.addMapLayer(new_map_config);
 		},
+
+		AddContourMapLayer(map_config, data) {
+			// Feed data into contour algorithm
+			
+		},
+
 		//  5. Turn on the visibility for a exisiting map layer
 		turnOnMapLayerVisibility(mapLayerId) {
 			this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
