@@ -2222,6 +2222,99 @@
 			"tags": [],
 			"contributors": ["tuic"]
 		},
+		"4444": {
+			"id": 82,
+			"index": "welfare_institutions",
+			"map_config": [
+				{
+					"index": "socl_welfare_organization_plc",
+					"paint": {
+						"line-color": [
+							"match",
+							["get", "main_type"],
+							"銀髮族服務",
+							"#F65658",
+							"身障機構",
+							"#F49F36",
+							"兒童與少年服務",
+							"#F5C860",
+							"社區服務、NPO",
+							"#9AC17C",
+							"婦女服務",
+							"#4CB495",
+							"貧困危機家庭服務",
+							"#569C9A",
+							"保護性服務",
+							"#60819C",
+							"#2F8AB1"
+						]
+					},
+					"property": [
+						{
+							"key": "main_type",
+							"name": "主要類別"
+						},
+						{
+							"key": "sub_type",
+							"name": "次要分類"
+						},
+						{
+							"key": "name",
+							"name": "名稱"
+						},
+						{
+							"key": "address",
+							"name": "地址"
+						}
+					],
+					"type": "voronoi",
+					"size": "big",
+					"title": "社福機構",
+
+					"filter_key": "main_type"
+				}
+			],
+			"chart_config": {
+				"color": [
+					"#F65658",
+					"#F49F36",
+					"#F5C860",
+					"#9AC17C",
+					"#4CB495",
+					"#569C9A",
+					"#60819C",
+					"#2F8AB1"
+				],
+				"types": ["BarChart", "DonutChart"],
+				"unit": "間",
+				"map_filter": [
+					"main_type",
+					[
+						"銀髮族服務",
+						"身障機構",
+						"兒童與少年服務",
+						"社區服務、NPO",
+						"婦女服務",
+						"貧困危機家庭服務",
+						"保護性服務"
+					]
+				]
+			},
+			"name": "社福機構（Voronoi）",
+			"source": "社會局",
+			"time_from": null,
+			"time_to": null,
+			"update_freq": null,
+			"update_freq_unit": null,
+			"short_desc": "顯示社會福利機構點位及機構類型",
+			"long_desc": "顯示社會福利機構點位及機構類型，資料來源為台北市社會局內部資料，每月15日更新。",
+			"use_case": "根據機構空間的分佈情況，檢視社會福利機構是否均勻分布，同時整合市有土地、社會住宅等潛在可使用之空間，以研擬增設位置與類型的方案。",
+			"links": [
+				"https://data.taipei/dataset/detail?id=cabdf272-e0ec-4e4e-9136-f4b8596f35d9"
+			],
+			"tags": [],
+			"contributors": ["tuic"]
+		},
 		"83": {
 			"id": 83,
 			"index": "emergency_services",

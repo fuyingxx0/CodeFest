@@ -1,5 +1,3 @@
-// Cleaned
-
 /* mapStore */
 /*
 The mapStore controls the map and includes methods to modify it.
@@ -174,11 +172,7 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Add the layer data as a source in mapbox
 		addMapLayerSource(map_config, data) {
-<<<<<<< HEAD
-			if (map_config.type !== "voronoi") {
-=======
-			if (map_config.type !== "candy") {
->>>>>>> 67428b1 (candy map)
+			if (map_config.type !== "voronoi" && map_config.type !== "candy") {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
 					data: { ...data },
@@ -187,13 +181,10 @@ export const useMapStore = defineStore("map", {
 
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
-<<<<<<< HEAD
 			} else if (map_config.type === "voronoi") {
 				this.AddVoronoiMapLayer(map_config, data);
-=======
 			} else if (map_config.type === "candy") {
 				this.AddCandyMapLayer(map_config, data);
->>>>>>> 67428b1 (candy map)
 			} else {
 				this.addMapLayer(map_config);
 			}
@@ -344,7 +335,6 @@ export const useMapStore = defineStore("map", {
 			}, delay);
 		},
 
-<<<<<<< HEAD
 		AddVoronoiMapLayer(map_config, data) {
 			// Feed data into Voronoi algorithm
 			let seenKeys = [];
@@ -430,7 +420,18 @@ export const useMapStore = defineStore("map", {
 						});
 					}
 				}
-=======
+			});
+
+			this.map.addSource(`${map_config.layerId}-source`, {
+				type: "geojson",
+				data: { ...voronoi_source },
+			});
+
+			let new_map_config = { ...map_config };
+			new_map_config.type = "line";
+			this.addMapLayer(new_map_config);
+		},
+
 		AddCandyMapLayer(map_config, data) {
 			let dotR = 0.0002;
 			let dotArrangements = [
@@ -518,18 +519,11 @@ export const useMapStore = defineStore("map", {
 						],
 					},
 				});
->>>>>>> 67428b1 (candy map)
 			});
 
 			this.map.addSource(`${map_config.layerId}-source`, {
 				type: "geojson",
-<<<<<<< HEAD
-				data: { ...voronoi_source },
-			});
 
-			let new_map_config = { ...map_config };
-			new_map_config.type = "line";
-=======
 				data: { ...new_data },
 			});
 
@@ -544,7 +538,7 @@ export const useMapStore = defineStore("map", {
 					["get", "service"],
 					"center_point",
 					zoomLv > 13 ? 0 : 5,
-					2 ** (zoomLv - 11.75),
+					2 ** (zoomLv - 11.5),
 				]);
 			}
 
@@ -553,7 +547,6 @@ export const useMapStore = defineStore("map", {
 				"circle-radius": paint,
 				"circle-opacity": 1,
 			};
->>>>>>> 67428b1 (candy map)
 
 			this.addMapLayer(new_map_config);
 		},
