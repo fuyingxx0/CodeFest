@@ -68,7 +68,7 @@ const ynum = sortedData[0].data.length;
 
 // characteristics of the chart
 let hei = 100 / totalMax;
-let spcx = 140 / xnum;
+let spcx = 90 / xnum;
 let spcy = 6;
 let rad = 15;
 let totalLen = [];

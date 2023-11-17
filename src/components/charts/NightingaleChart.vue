@@ -119,15 +119,15 @@ function handleLegendSelection(index){
 	// printShowData()
 }
 
-const rtext = 125;
+const rtext = 100;
 const aspc = 4 * Math.PI / 180;
 const agap = 5.5 * Math.PI / 180;
 const cr = 25;
-const rmin = 46;
-const rmax = 50;
-const rselected = 60;
+const rmin = 30;
+const rmax = 40;
+const rselected = 50;
 const cx = 180;
-const cy = 150;
+const cy = 115;
 
 // index: a
 const labels = Array.from({ length: anumTotal }, (_, index) => {
@@ -143,7 +143,12 @@ function calcSector(a, r) {
 	let awid = (Math.PI * 2 / anum.value - aspc) - (rnum.value - 1) * agap;
 	let astart = a * Math.PI * 2 / anum.value + aspc / 2 + r * agap;
 	let aend = astart + awid;
-	let rend = aHovered.value === a ? ((showedData.value[a].data[r].value / showedData.value[a].data[0].value) * rselected + rmin) : ((showedData.value[a].data[r].value / showedMax.value) * rmax + rmin);
+	let maxDataInR = 0;
+	for(let k = 0; k < showedData.value[a].data.length; k++){
+		if(maxDataInR < showedData.value[a].data[k].value) maxDataInR = showedData.value[a].data[k].value;
+	}
+	// console.log(a, r, maxDataInR)
+	let rend = aHovered.value === a ? ((showedData.value[a].data[r].value / maxDataInR) * rselected + rmin) : ((showedData.value[a].data[r].value / showedMax.value) * rmax + rmin);
 	for(let i = 0; i < props.series.length; i++){
 		if(props.series[i].name === showedData.value[a].data[r].r){
 			if(!rShow.value[i]){
@@ -202,7 +207,7 @@ const legends = Array.from({ length: rnum.value }, (_, index) => {
 });
 
 const tooltipPosition = computed(() => {
-	return { 'left': `${mousePosition.value.x - 10}px`, 'top': `${mousePosition.value.y - 54}px` };
+	return { 'left': `${mousePosition.value.x - 20}px`, 'top': `${mousePosition.value.y - 74}px` };
 });
 
 </script>
@@ -299,7 +304,7 @@ const tooltipPosition = computed(() => {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px 14px;
-	padding: 8px;
+	padding: 12px;
 	justify-content: center;
 	align-items: center;
 	align-content: flex-start;
@@ -316,7 +321,7 @@ const tooltipPosition = computed(() => {
 	// border: 1px solid red;
 }
 .svg-container {
-	min-height: 320px;
+	min-height: 300px;
 	width: 360px;
 	overflow: scroll;
 	// border: 1px solid red;
