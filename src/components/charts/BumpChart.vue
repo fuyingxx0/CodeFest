@@ -254,7 +254,7 @@ function handleDataSelection(index) {
 					:width="rect.width" 
 					:height="rect.height" 
 					:rx="rect.rx" 
-					:ry="rect.ry" 
+					:ry="rect.ry"
 					@mouseenter="toggleActive(index)" 
 					@mousemove="updateMouseLocation" 
 					@mouseleave="toggleActiveToNull"
@@ -344,7 +344,6 @@ function handleDataSelection(index) {
 	align-items: center;
 	font-size: small;
 	gap: 6px;
-	cursor: pointer;
 	// border: 1px solid red;
 }
 .svg-legend {
@@ -359,10 +358,13 @@ function handleDataSelection(index) {
 }
 .datapoint-front {
 	fill: rgba(255, 255, 255, 0);
-	transition: fill 0.4s ease;
+	transition: all 0.4s ease;
+	cursor: pointer;
 }
 .datapoint-front:hover {
 	fill: rgba(255, 255, 255, .35);
+	stroke: rgba(255, 255, 255, .65);
+	stroke-width: 2px;
 }
 
 @keyframes ease-in {
