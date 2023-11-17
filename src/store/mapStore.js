@@ -29,6 +29,8 @@ import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
 import { calculateGradientSteps } from "../assets/configs/mapbox/arcGradient";
 import MapPopup from "../components/map/MapPopup.vue";
 
+import { voronoi } from "../algorithms/voronoi.js";
+
 const { BASE_URL } = import.meta.env;
 
 export const useMapStore = defineStore("map", {
@@ -172,12 +174,17 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Add the layer data as a source in mapbox
 		addMapLayerSource(map_config, data) {
-			this.map.addSource(`${map_config.layerId}-source`, {
-				type: "geojson",
-				data: { ...data },
-			});
+			if (map_config.type !== "voronoi") {
+				this.map.addSource(`${map_config.layerId}-source`, {
+					type: "geojson",
+					data: { ...data },
+				});
+			}
+
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
+			} else if (map_config.type === "voronoi") {
+				this.AddVoronoiMapLayer(map_config, data);
 			} else {
 				this.addMapLayer(map_config);
 			}
@@ -326,6 +333,104 @@ export const useMapStore = defineStore("map", {
 					(el) => el !== map_config.layerId
 				);
 			}, delay);
+		},
+
+		AddVoronoiMapLayer(map_config, data) {
+			// Feed data into Voronoi algorithm
+			let seenKeys = [];
+
+			let voronoi_source = {
+				type: data.type,
+				crs: data.crs,
+				features: [],
+			};
+
+			let pointSize = 0.0001;
+			let numOfSides = 10;
+			let angles = [...Array(numOfSides + 1).keys()].map((i) => {
+				return [
+					pointSize * Math.cos(2 * Math.PI * (i / numOfSides)),
+					pointSize * Math.sin(2 * Math.PI * (i / numOfSides)),
+				];
+			});
+
+			// iterate through all data
+			data.features.forEach((location) => {
+				let key = location.properties[map_config.filter_key];
+
+				// found new category
+				if (!seenKeys.includes(key)) {
+					seenKeys.push(key);
+
+					// get all the data within the category
+					let cat1 = data.features.filter((item) => {
+						return item.properties[map_config.filter_key] === key;
+					});
+
+					// push to source data (points)
+					for (let i = 0; i < cat1.length; i++) {
+						voronoi_source.features.push({
+							type: cat1[i].type,
+							properties: cat1[i].properties,
+							geometry: {
+								type: "LineString",
+								coordinates: angles.map((angle) => {
+									return [
+										cat1[i].geometry.coordinates[0] +
+											angle[0],
+										cat1[i].geometry.coordinates[1] +
+											angle[1],
+									];
+								}),
+							},
+						});
+					}
+
+					// remove duplicate coordinates (so that it wont't cause problems in the Voronoi algorithm...)
+					cat1 = cat1.filter((val, ind) => {
+						return (
+							cat1.findIndex((item) => {
+								return (
+									item.geometry.coordinates[0] ===
+										val.geometry.coordinates[0] &&
+									item.geometry.coordinates[1] ===
+										val.geometry.coordinates[1]
+								);
+							}) === ind
+						);
+					});
+
+					// get coordnates alone
+					let cat2 = cat1.map((item) => {
+						return item.geometry.coordinates;
+					});
+
+					// calculate cell for each coordinate
+					let cells = voronoi(cat2);
+
+					// push to source data (cells)
+					for (let i = 0; i < cells.length; i++) {
+						voronoi_source.features.push({
+							type: cat1[i].type,
+							properties: cat1[i].properties,
+							geometry: {
+								type: "LineString",
+								coordinates: cells[i],
+							},
+						});
+					}
+				}
+			});
+
+			this.map.addSource(`${map_config.layerId}-source`, {
+				type: "geojson",
+				data: { ...voronoi_source },
+			});
+
+			let new_map_config = { ...map_config };
+			new_map_config.type = "line";
+
+			this.addMapLayer(new_map_config);
 		},
 		//  5. Turn on the visibility for a exisiting map layer
 		turnOnMapLayerVisibility(mapLayerId) {

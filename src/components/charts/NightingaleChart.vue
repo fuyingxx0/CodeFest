@@ -10,6 +10,7 @@ const colorBG = '#282A2C';
 // register the four required props
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
 const mapStore = useMapStore()
+const categories = props.chart_config.categories;
 
 // data
 let data = [];
@@ -39,6 +40,7 @@ const showedData = ref(data);
 const showedMax = ref(dataMax);
 const rShow = ref(Array(data[0].data.length).fill(true));
 const aHovered = ref(-1);
+const rHovered = ref(-1);
 
 function printShowData(){
 	for(let a = 0; a < showedData.value.length; a++){
@@ -53,10 +55,12 @@ const mousePosition = ref({ x: null, y: null });
 function toggleActive(i) {
 	// console.log('toggleActive called, ', i);
 	aHovered.value = i % anum.value;
+	rHovered.value = (i / anum.value) | 0;
 }
 function toggleActiveToNull() {
 	// console.log('toggleActiveToNull called, ');
 	aHovered.value = -1;
+	rHovered.value = -1;
 }
 function updateMouseLocation(e) {
 	mousePosition.value.x = e.pageX;
@@ -197,6 +201,10 @@ const legends = Array.from({ length: rnum.value }, (_, index) => {
 	};
 });
 
+const tooltipPosition = computed(() => {
+	return { 'left': `${mousePosition.value.x - 10}px`, 'top': `${mousePosition.value.y - 54}px` };
+});
+
 </script>
 
 <template>
@@ -250,6 +258,14 @@ const legends = Array.from({ length: rnum.value }, (_, index) => {
 				:fill="colorBG"
 			/>
 		</svg>
+		<Teleport to="body">
+			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+			<div v-if="aHovered !== -1" class="nigntingalechart-chart-info chart-tooltip" :style="tooltipPosition">
+				<h6>{{ categories[aHovered] }}</h6>
+				<span>{{ showedData[aHovered].data[rHovered].r }}: {{ showedData[aHovered].data[rHovered].value }}</span>
+			</div>
+			
+		</Teleport>
     </div>
 </template>
 
@@ -261,6 +277,21 @@ const legends = Array.from({ length: rnum.value }, (_, index) => {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	&-chart {
+		display: flex;
+		justify-content: center;
+		svg {
+			width: 50%;
+			path {
+				transition: transform 0.2s;
+				opacity: 0;
+			}
+		}
+		&-info {
+			position: fixed;
+			z-index: 20;
+		}
+	}
 	// border: 1px solid blue;
 }
 .textwrapper {
