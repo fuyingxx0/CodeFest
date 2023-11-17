@@ -202,7 +202,7 @@ function handleDataSelection(index) {
 					:key="index" 
 				>
 					<svg class="svg-legend" style="width: 15px; height: 15px;">
-						<rect width="15" height="15" :fill="legend.color" rx="4" ry="4"/>
+						<rect class="legends-rect" width="15" height="15" :fill="legend.color" rx="4" ry="4"/>
 					</svg>
 					<div color="#888787"> {{ legend.text }} </div>
 				</div>

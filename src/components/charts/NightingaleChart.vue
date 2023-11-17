@@ -224,6 +224,7 @@ const tooltipPosition = computed(() => {
 			>
 				<svg class="svg-legend" style="width: 15px; height: 15px;">
 					<rect width="15" height="15" :fill="legend.color" rx="4" ry="4"/>
+					<rect class="legends-rect-top" width="15" height="15" :fill="colorBG" :opacity="!rShow[index] ? 0.65 : 0" rx="4" ry="4"/>
 				</svg>
 				<span> {{ legend.text }} </span>
 			</div>
@@ -318,6 +319,9 @@ const tooltipPosition = computed(() => {
 	font-size: small;
 	gap: 6px;
 	cursor: pointer;
+	&-rect-top {
+		transition: all 0.2s ease;
+	}
 	// border: 1px solid red;
 }
 .svg-container {
