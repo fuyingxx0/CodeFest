@@ -174,7 +174,11 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Add the layer data as a source in mapbox
 		addMapLayerSource(map_config, data) {
+<<<<<<< HEAD
 			if (map_config.type !== "voronoi") {
+=======
+			if (map_config.type !== "candy") {
+>>>>>>> 67428b1 (candy map)
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
 					data: { ...data },
@@ -183,8 +187,13 @@ export const useMapStore = defineStore("map", {
 
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
+<<<<<<< HEAD
 			} else if (map_config.type === "voronoi") {
 				this.AddVoronoiMapLayer(map_config, data);
+=======
+			} else if (map_config.type === "candy") {
+				this.AddCandyMapLayer(map_config, data);
+>>>>>>> 67428b1 (candy map)
 			} else {
 				this.addMapLayer(map_config);
 			}
@@ -335,6 +344,7 @@ export const useMapStore = defineStore("map", {
 			}, delay);
 		},
 
+<<<<<<< HEAD
 		AddVoronoiMapLayer(map_config, data) {
 			// Feed data into Voronoi algorithm
 			let seenKeys = [];
@@ -420,15 +430,130 @@ export const useMapStore = defineStore("map", {
 						});
 					}
 				}
+=======
+		AddCandyMapLayer(map_config, data) {
+			let dotR = 0.0002;
+			let dotArrangements = [
+				[[0, 0]],
+				[
+					[-dotR, 0],
+					[dotR, 0],
+				],
+				[
+					[0, -1.1547 * dotR],
+					[-dotR, 0.5774 * dotR],
+					[dotR, 0.5774 * dotR],
+				],
+				[
+					[-dotR, -dotR],
+					[dotR, -dotR],
+					[-dotR, dotR],
+					[dotR, dotR],
+				],
+				[
+					[0, -1.7013 * dotR],
+					[1.618 * dotR, -0.5257 * dotR],
+					[dotR, 1.3764 * dotR],
+					[-dotR, 1.3764 * dotR],
+					[-1.618 * dotR, -0.5257 * dotR],
+				],
+				[
+					[0, -2 * dotR],
+					[1.732 * dotR, -dotR],
+					[1.732 * dotR, dotR],
+					[0, 2 * dotR],
+					[-1.732 * dotR, dotR],
+					[-1.732 * dotR, -dotR],
+				],
+				[
+					[0, -2 * dotR],
+					[1.732 * dotR, -dotR],
+					[1.732 * dotR, dotR],
+					[0, 2 * dotR],
+					[-1.732 * dotR, dotR],
+					[-1.732 * dotR, -dotR],
+					[0, 0],
+				],
+			];
+
+			let new_data = {
+				type: data.type,
+				crs: { ...data.crs },
+				features: [],
+			};
+
+			data.features.forEach((item) => {
+				let num_of_services = item.properties.services.length;
+
+				for (let i = 0; i < Math.min(num_of_services, 7); i++) {
+					new_data.features.push({
+						...item,
+						properties: {
+							...item.properties,
+							service: item.properties.services[i],
+						},
+						geometry: {
+							...item.geometry,
+							coordinates: [
+								item.geometry.coordinates[0] +
+									dotArrangements[num_of_services - 1][i][0],
+								item.geometry.coordinates[1] +
+									dotArrangements[num_of_services - 1][i][1],
+							],
+						},
+					});
+				}
+
+				new_data.features.push({
+					...item,
+					properties: {
+						...item.properties,
+						service: "center_point",
+					},
+					geometry: {
+						...item.geometry,
+						coordinates: [
+							item.geometry.coordinates[0],
+							item.geometry.coordinates[1],
+						],
+					},
+				});
+>>>>>>> 67428b1 (candy map)
 			});
 
 			this.map.addSource(`${map_config.layerId}-source`, {
 				type: "geojson",
+<<<<<<< HEAD
 				data: { ...voronoi_source },
 			});
 
 			let new_map_config = { ...map_config };
 			new_map_config.type = "line";
+=======
+				data: { ...new_data },
+			});
+
+			let new_map_config = map_config;
+			new_map_config.type = "circle";
+
+			let paint = ["interpolate", ["linear"], ["zoom"]];
+			for (let zoomLv = 11; zoomLv <= 20; zoomLv++) {
+				paint.push(zoomLv);
+				paint.push([
+					"match",
+					["get", "service"],
+					"center_point",
+					zoomLv > 13 ? 0 : 5,
+					2 ** (zoomLv - 11.75),
+				]);
+			}
+
+			new_map_config.paint = {
+				"circle-color": map_config.paint["service-color"],
+				"circle-radius": paint,
+				"circle-opacity": 1,
+			};
+>>>>>>> 67428b1 (candy map)
 
 			this.addMapLayer(new_map_config);
 		},

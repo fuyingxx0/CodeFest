@@ -4084,7 +4084,12 @@
 			"map_config": null,
 			"history_data": false,
 			"chart_config": {
-				"types": ["RowBumpChart", "BumpChart", "BoxChart", "ColumnChart"],
+				"types": [
+					"RowBumpChart",
+					"BumpChart",
+					"BoxChart",
+					"ColumnChart"
+				],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "件"
 			},
@@ -4132,9 +4137,7 @@
 				"color": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
 				"types": ["CircularDendrogram", "BarChart"],
 				"unit": "個",
-				"categories": [
-					"index", "layer", "parent", "value"
-				]
+				"categories": ["index", "layer", "parent", "value"]
 			},
 			"name": "3002",
 			"source": "都發局/消防局",
@@ -4259,7 +4262,12 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["NightingaleChart", "ColumnChart", "RadarChart", "DistrictChart"],
+				"types": [
+					"NightingaleChart",
+					"ColumnChart",
+					"RadarChart",
+					"DistrictChart"
+				],
 				"color": ["#E6DF44", "#F4633C", "#D63940", "#9C2A4B"],
 				"unit": "點",
 				"map_filter": [
@@ -4408,7 +4416,52 @@
 		"4003": {
 			"id": 4003,
 			"index": "4003",
-			"map_config": null,
+			"map_config": [
+				{
+					"index": "4003_test_data",
+					"paint": {
+						"service-color": [
+							"match",
+							["get", "service"],
+							"service 0",
+							"#F65658",
+							"service 1",
+							"#F49F36",
+							"service 2",
+							"#F5C860",
+							"service 3",
+							"#9AC17C",
+							"service 4",
+							"#4CB495",
+							"service 5",
+							"#569C9A",
+							"service 6",
+							"#60819C",
+							"service 7",
+							"#2F8AB1",
+							"#FFC0CB"
+						]
+					},
+					"property": [
+						{
+							"key": "address",
+							"name": "地址"
+						},
+						{
+							"key": "name",
+							"name": "名稱"
+						},
+						{
+							"key": "services",
+							"name": "服務"
+						}
+					],
+					"title": "哺集乳室分佈與提供服務",
+					"type": "candy",
+					"size": "big",
+					"icon": null
+				}
+			],
 			"history_data": false,
 			"chart_config": {
 				"categories": [
