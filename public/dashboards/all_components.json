@@ -4587,6 +4587,38 @@
 			"links": null,
 			"tags": [],
 			"contributors": ["tuic"]
+		},
+		"4005": {
+			"id": 4005,
+			"index": "building_age2",
+			"map_config": null,
+			"chart_config": {
+				"color": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
+				"types": ["NightingaleChart", "BarPercentChart", "ColumnChart"],
+				"unit": "棟",
+				"categories": ["育齡婦女一般生育率", 
+							   "育齡婦女總生育率",
+							   "育齡婦女年齡別生育率/15～19歲", 
+							   "育齡婦女年齡別生育率/20～24歲",
+							   "育齡婦女年齡別生育率/25～29歲", 
+							   "育齡婦女年齡別生育率/30～34歲", 
+							   "育齡婦女年齡別生育率/35～39歲",
+							   "育齡婦女年齡別生育率/40～44歲", 
+							   "育齡婦女年齡別生育率/45～49歲", 
+							   "有偶婦女一般生育率"]
+			},
+			"name": "4005",
+			"source": "都發局/消防局",
+			"time_from": "2023-06-02T00:00:00+08:00",
+			"time_to": null,
+			"update_freq": null,
+			"update_freq_unit": null,
+			"short_desc": "顯示當前全市建築屋齡分佈情況",
+			"long_desc": "顯示當前全市建築屋齡分佈情況，資料來源為台北市都發局及消防局，不定期更新。",
+			"use_case": "屋齡的計算基準是以建物使用執照生效年份起算，這可以作為了解台北市建築屋齡分佈情況的參考依據。",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
 		}
 	}
 }
