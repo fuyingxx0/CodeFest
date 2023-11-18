@@ -29,7 +29,7 @@ for(let i = 0; i < xnum; i++){
 	sortedData[i] = {name: sortedData[i].name, data: sortedData[i].data, max: maxs[i]};
 }
 sortedData = sortedData.sort((a, b)=>b.max - a.max);
-console.log(sortedData)
+// console.log(sortedData)
 
 function percentile(arr, percentile) {
 	let index = (percentile / 100) * (arr.length - 1);

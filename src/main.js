@@ -40,6 +40,7 @@ import BoxChart from "./components/charts/BoxChart.vue";
 import NightingaleChart from "./components/charts/NightingaleChart.vue";
 import CircularDendrogram from "./components/charts/CircularDendrogram.vue";
 import TreeChart from "./components/charts/TreeChart.vue";
+import MoonChart from "./components/charts/MoonChart.vue";
 
 const app = createApp(App);
 
@@ -68,5 +69,6 @@ app.component("BoxChart", BoxChart);
 app.component("NightingaleChart", NightingaleChart);
 app.component("CircularDendrogram", CircularDendrogram);
 app.component("TreeChart", TreeChart);
+app.component("MoonChart", MoonChart);
 
 app.mount("#app");

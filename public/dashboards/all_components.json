@@ -4472,7 +4472,7 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["NightingaleChart", "ColumnChart"],
+				"types": ["MoonChart", "NightingaleChart", "ColumnChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "間"
 			},
