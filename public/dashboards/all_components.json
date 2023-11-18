@@ -4402,7 +4402,8 @@
 				{
 					"index": "4000",
 					"paint": {
-						"line-color": "#888787"
+						"line-color": "#F57B47",
+						"line-opacity": 0.4
 					},
 					"property": [
 						{
@@ -4679,7 +4680,7 @@
 					"type": "fill"
 				}
 			],
-			"history_data": "false",
+			"history_data": true,
 			"chart_config": {
 				"categories": [
 					"北投區",

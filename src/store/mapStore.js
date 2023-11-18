@@ -553,6 +553,10 @@ export const useMapStore = defineStore("map", {
 			this.addMapLayer(new_map_config);
 		},
 
+		// AddCandyMapLayer2(map_config, data){
+
+		// },
+
 		AddContourMapLayer(map_config, data) {
 			// Feed data into contour algorithm
 		},
