@@ -1,232 +1,213 @@
 {
     "data": [
-        {
-            "name": "中正",
-            "data": [
-                18,
-				67
-            ],
-			"for_algorithm":{
-				"x":121.5164194,
-				"y":25.0361194,
-				"value": 67
-			}
-        },
 		{
-            "name": "大直",
-            "data": [
-                21,
-				69
-            ],
-			"for_algorithm":{
-				"x":121.5469861,
-				"y":25.0815805,
+			"type":"feature",
+			"properties":{
+				"name": "中正",
+				"value": 67
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5164194, 25.0361194]
+			}
+		},
+		{
+			"type":"feature",
+			"properties":{
+				"name": "大直",
 				"value": 69
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5469861, 25.0815805]
 			}
-        },
+		},
 		{
-            "name": "信義",
-            "data": [
-                18,
-				66
-            ],
-			"for_algorithm":{
-				"x":121.5718027,
-				"y":25.0362361,
+			"type":"feature",
+			"properties":{
+				"name": "信義",
 				"value": 66
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5718027, 25.0362361]
 			}
-        },
+		},
 		{
-            "name": "南港",
-            "data": [
-                15,
-				68
-            ],
-			"for_algorithm":{
-				"x":121.6075555,
-				"y":25.0559666,
+			"type":"feature",
+			"properties":{
+				"name": "南港",
 				"value": 68
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.6075555, 25.0559666]
 			}
-        },
+		},
 		{
-            "name": "內湖",
-            "data": [
-                15,
-				71
-            ],
-			"for_algorithm":{
-				"x":121.5900555,
-				"y":25.0674944,
+			"type":"feature",
+			"properties":{
+				"name": "內湖",
 				"value": 71
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5900555, 25.0674944]
 			}
-        },
+		},
 		{
-            "name": "木柵",
-            "data": [
-                9,
-				49
-            ],
-			"for_algorithm":{
-				"x":121.6075555,
-				"y":25.0559666,
+			"type":"feature",
+			"properties":{
+				"name": "木柵",
 				"value": 49
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.57555, 24.9873611]
 			}
-        },
+		},
 		{
-            "name": "大安",
-            "data": [
-                22,
-				76
-            ],
-			"for_algorithm":{
-				"x":121.5405555,
-				"y":25.0401666,
+			"type":"feature",
+			"properties":{
+				"name": "大安",
 				"value": 76
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5405555, 25.0401666]
 			}
-        },
+		},
 		{
-            "name": "天母",
-            "data": [
-                17,
-				60
-            ],
-			"for_algorithm":{
-				"x":121.535,
-				"y":25.1027694,
+			"type":"feature",
+			"properties":{
+				"name": "天母",
 				"value": 60
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.535, 25.1027694]
 			}
-        },
+		},
 		{
-            "name": "延平",
-            "data": [
-                7,
-				78
-            ],
-			"for_algorithm":{
-				"x":121.51305,
-				"y":25.0744388,
+			"type":"feature",
+			"properties":{
+				"name": "延平",
 				"value": 78
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.51305, 25.0744388]
 			}
-        },
+		},
 		{
-            "name": "承德",
-            "data": [
-                13,
-				67
-            ],	
-			"for_algorithm":{
-				"x":121.5164944,
-				"y":25.0913444,
+			"type":"feature",
+			"properties":{
+				"name": "承德",
 				"value": 67
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5164944, 25.0913444]
 			}
-        },
+		},
 		{
-            "name": "中北",
-            "data": [
-                10,
-				70
-            ],	
-			"for_algorithm":{
-				"x":121.5226888,
-				"y":25.0520527,
+			"type":"feature",
+			"properties":{
+				"name": "中北",
 				"value": 70
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5226888, 25.0520527]
 			}
-        },
+		},
 		{
-            "name": "向陽",
-            "data": [
-                19,
-				75
-            ],	
-			"for_algorithm":{
-				"x":121.5957333,
-				"y":25.0517277,
+			"type":"feature",
+			"properties":{
+				"name": "向陽",
 				"value": 75
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5957333, 25.0517277]
 			}
-        },
+		},
 		{
-            "name": "士林",
-            "data": [
-                20,
-				59
-            ],	
-			"for_algorithm":{
-				"x":121.5166666,
-				"y":25.0103333,
+			"type":"feature",
+			"properties":{
+				"name": "士林",
 				"value": 59
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5166666, 25.0103333]
 			}
-        },
+		},
 		{
-            "name": "大同",
-            "data": [
-                23,
-				71
-            ],	
-			"for_algorithm":{
-				"x":121.5134166,
-				"y":25.0633055,
+			"type":"feature",
+			"properties":{
+				"name": "大同",
 				"value": 71
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5134166, 25.0633055]
 			}
-        },
+		},
 		{
-            "name": "中山",
-            "data": [
-                12,
-				58
-            ],	
-			"for_algorithm":{
-				"x":121.5265277,
-				"y":25.0623611,
+			"type":"feature",
+			"properties":{
+				"name": "中山",
 				"value": 58
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5265277, 25.0623611]
 			}
-        },
+		},
 		{
-            "name": "古亭",
-            "data": [
-                19,
-				64
-            ],	
-			"for_algorithm":{
-				"x":121.5957333,
-				"y":25.0529555,
+			"type":"feature",
+			"properties":{
+				"name": "古亭",
 				"value": 64
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5957333, 25.0529555]
 			}
-        },
+		},
 		{
-            "name": "松山",
-            "data": [
-                18,
-				67
-            ],	
-			"for_algorithm":{
-				"x":121.5786111,
-				"y":25.05,
+			"type":"feature",
+			"properties":{
+				"name": "松山",
 				"value": 67
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5786111, 25.05]
 			}
-        },
+		},
 		{
-            "name": "陽明",
-            "data": [
-                21,
-				40
-            ],	
-			"for_algorithm":{
-				"x":121.5295833,
-				"y":25.1827222,
+			"type":"feature",
+			"properties":{
+				"name": "陽明",
 				"value": 40
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5295833, 25.1827222]
 			}
-        },
+		},
 		{
-            "name": "萬華",
-            "data": [
-                26,
-				65
-            ],	
-			"for_algorithm":{
-				"x":121.5079722,
-				"y":25.0465,
+			"type":"feature",
+			"properties":{
+				"name": "萬華",
 				"value": 65
+			},
+			"geometry":{
+				"type":"point",
+				"coordinates":[121.5079722, 25.0465]
 			}
-        }
+		}
     ]
 }

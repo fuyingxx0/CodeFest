@@ -4867,7 +4867,41 @@
 		"4006": {
 			"id": 4006,
 			"index": "4006",
-			"map_config": null,
+			"map_config": [
+				{
+					"index": "4005",
+					"paint": {
+						"line-color": "#888888"
+					},
+					"property": [
+						{
+							"key": "value",
+							"name": "推測值"
+						}
+					],
+					"type": "isoline",
+					"title": "空氣品質等值圖"
+				},
+				{
+					"index": "4005",
+					"paint": {
+						"circle-color": "#A8A811"
+					},
+					"property": [
+						{
+							"key": "name",
+							"name": "測站名"
+						},
+						{
+							"key": "value",
+							"name": "測量值"
+						}
+					],
+					"type": "circle",
+					"size": "big",
+					"title": "空氣品質等值圖"
+				}
+			],
 			"history_data": false,
 			"chart_config": {
 				"color": [
@@ -4883,6 +4917,71 @@
 				"unit": "μg/m³"
 			},
 			"name": "臺北市PM10測量數據",
+			"source": "",
+			"time_from": "2023-05-28T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "day",
+			"short_desc": "顯示近一週從週一起臺北市陳情系統所接收到的陳情案件",
+			"long_desc": "顯示近一週從週一起臺北市陳情系統所接收到的陳情案件，資料來源為臺北市陳情系統內部資料，每天更新，並提供一年內每個月的陳情案件總數資料。",
+			"use_case": "透過陳情案件的統計資訊，我們可以追蹤近一週內台北市各行政區收到的陳情案件，也可了解一年內每個月的陳情案件總數變化。",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"4007": {
+			"id": 4007,
+			"index": "4007",
+			"map_config": [
+				{
+					"index": "4005",
+					"paint": {
+						"line-color": "#888888"
+					},
+					"property": [
+						{
+							"key": "value",
+							"name": "推測值"
+						}
+					],
+					"type": "isoline3D",
+					"title": "空氣品質等值圖"
+				},
+				{
+					"index": "4005",
+					"paint": {
+						"circle-color": "#A8A811"
+					},
+					"property": [
+						{
+							"key": "name",
+							"name": "測站名"
+						},
+						{
+							"key": "value",
+							"name": "測量值"
+						}
+					],
+					"type": "circle",
+					"size": "big",
+					"title": "空氣品質等值圖"
+				}
+			],
+			"history_data": false,
+			"chart_config": {
+				"color": [
+					"#C5E1A5",
+					"#ADED64",
+					"#7BB661",
+					"#479562",
+					"#357664",
+					"#00563F",
+					"#04432C"
+				],
+				"types": ["RadarChart", "BarChart"],
+				"unit": "μg/m³"
+			},
+			"name": "臺北市PM10測量數據（3D）",
 			"source": "",
 			"time_from": "2023-05-28T00:00:00+08:00",
 			"time_to": "2023-06-01T00:00:00+08:00",

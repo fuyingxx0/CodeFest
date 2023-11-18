@@ -28,6 +28,8 @@ import { calculateGradientSteps } from "../assets/configs/mapbox/arcGradient";
 import MapPopup from "../components/map/MapPopup.vue";
 
 import { voronoi } from "../algorithms/voronoi.js";
+import { interpolation } from "../algorithms/contour_reciprocal.js";
+import { marchingSquare } from "../algorithms/marching_square.js";
 
 const { BASE_URL } = import.meta.env;
 
@@ -172,7 +174,12 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Add the layer data as a source in mapbox
 		addMapLayerSource(map_config, data) {
-			if (map_config.type !== "voronoi" && map_config.type !== "candy") {
+			if (
+				map_config.type !== "voronoi" &&
+				map_config.type !== "candy" &&
+				map_config.type !== "isoline" &&
+				map_config.type !== "isoline3D"
+			) {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
 					data: { ...data },
@@ -185,6 +192,10 @@ export const useMapStore = defineStore("map", {
 				this.AddVoronoiMapLayer(map_config, data);
 			} else if (map_config.type === "candy") {
 				this.AddCandyMapLayer(map_config, data);
+			} else if (map_config.type === "isoline") {
+				this.AddIsolineMapLayer(map_config, data);
+			} else if (map_config.type === "isoline3D") {
+				this.AddIsolineMap3DLayer(map_config, data);
 			} else if (map_config.type === "contour") {
 				//
 			} else {
@@ -553,12 +564,254 @@ export const useMapStore = defineStore("map", {
 			this.addMapLayer(new_map_config);
 		},
 
-		// AddCandyMapLayer2(map_config, data){
+		AddIsolineMapLayer(map_config, data) {
+			// console.log("hi");
+			let dataPoints = data.features.map((item) => {
+				return {
+					x: item.geometry.coordinates[0],
+					y: item.geometry.coordinates[1],
+					value: item.properties.value,
+				};
+			});
 
-		// },
+			let targetPoints = [];
+			let gridSize = 0.001;
 
-		AddContourMapLayer(map_config, data) {
-			// Feed data into contour algorithm
+			let rowN = 0;
+			let columnN = 0;
+			for (let i = 24.946791; i <= 25.2181139; i += gridSize, rowN += 1) {
+				columnN = 0;
+				for (
+					let j = 121.4395508;
+					j <= 121.6735101;
+					j += gridSize, columnN += 1
+				) {
+					targetPoints.push({ x: j, y: i });
+				}
+			}
+
+			// console.log(targetPoints);
+
+			let interpolationResult = interpolation(dataPoints, targetPoints);
+
+			// console.log(interpolationResult);
+			// console.log(interpolationResult.length);
+
+			let discreteData = [];
+			for (let y = 0; y < rowN; y++) {
+				discreteData.push([]);
+				for (let x = 0; x < columnN; x++) {
+					// discreteData[y].push(noise(x / 10, y / 10 + 20));
+					discreteData[y].push(interpolationResult[y * columnN + x]);
+				}
+			}
+
+			// marchingSquare(squareMatrix, discreteData, allLines, 100, gridSize);
+
+			let isoline_data = {
+				type: "FeatureCollection",
+				crs: {
+					type: "name",
+					properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+				},
+				features: [],
+			};
+
+			let squareMatrix = [];
+			let allLines = [];
+
+			for (let i = 40; i <= 75.01; i += 2.5) {
+				allLines = [];
+				squareMatrix = [];
+				marchingSquare(
+					squareMatrix,
+					discreteData,
+					allLines,
+					i,
+					gridSize
+				);
+
+				isoline_data.features = isoline_data.features.concat(
+					allLines.map((line) => {
+						return {
+							type: "Feature",
+							properties: { value: i },
+							geometry: { type: "LineString", coordinates: line },
+						};
+					})
+				);
+			}
+
+			// squareMatrix = [];
+			// marchingSquare(squareMatrix, discreteData, allLines, 90, gridSize);
+
+			// squareMatrix = [];
+			// marchingSquare(squareMatrix, discreteData, allLines, 80, gridSize);
+
+			// console.log(squareMatrix.length);
+			// console.log(squareMatrix[0].length);
+
+			// let isoline_data = {
+			// 	type: "FeatureCollection",
+			// 	crs: {
+			// 		type: "name",
+			// 		properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+			// 	},
+			// 	features: [
+			// 		{
+			// 			type: "Feature",
+			// 			properties: {},
+			// 			geometry: {
+			// 				type: "Polygon",
+			// 				coordinates: [
+			// 					[
+			// 						[121.4395508, 24.946791],
+			// 						[121.6735101, 25.2181139],
+			// 					],
+			// 				],
+			// 			},
+			// 		},
+			// 	],
+			// };
+
+			// console.log(allLines);
+
+			// console.log(isoline_data);
+
+			this.map.addSource(`${map_config.layerId}-source`, {
+				type: "geojson",
+
+				data: { ...isoline_data },
+			});
+
+			let new_map_config = map_config;
+			new_map_config.type = "line";
+
+			this.addMapLayer(new_map_config);
+		},
+
+		AddIsolineMap3DLayer(map_config, data) {
+			const authStore = useAuthStore();
+			const lines = [...JSON.parse(JSON.stringify(data.features))];
+			const arcInterval = 20;
+
+			let dataPoints = data.features.map((item) => {
+				return {
+					x: item.geometry.coordinates[0],
+					y: item.geometry.coordinates[1],
+					value: item.properties.value,
+				};
+			});
+
+			let targetPoints = [];
+			let gridSize = 0.001;
+
+			let rowN = 0;
+			let columnN = 0;
+			for (let i = 24.946791; i <= 25.2181139; i += gridSize, rowN += 1) {
+				columnN = 0;
+				for (
+					let j = 121.4395508;
+					j <= 121.6735101;
+					j += gridSize, columnN += 1
+				) {
+					targetPoints.push({ x: j, y: i });
+				}
+			}
+
+			let interpolationResult = interpolation(dataPoints, targetPoints);
+
+			let discreteData = [];
+			for (let y = 0; y < rowN; y++) {
+				discreteData.push([]);
+				for (let x = 0; x < columnN; x++) {
+					discreteData[y].push(interpolationResult[y * columnN + x]);
+				}
+			}
+
+			let isoline_data = {
+				type: "FeatureCollection",
+				crs: {
+					type: "name",
+					properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+				},
+				features: [],
+			};
+
+			let squareMatrix = [];
+			let allLines = [];
+			let newLines = [];
+
+			for (let i = 40; i <= 76; i += 2) {
+				newLines = [];
+				squareMatrix = [];
+				marchingSquare(
+					squareMatrix,
+					discreteData,
+					newLines,
+					i,
+					gridSize
+				);
+
+				allLines = allLines.concat(
+					newLines.map((line) => {
+						return line.map((point) => {
+							return [...point, (i - 40) * 60];
+						});
+					})
+				);
+			}
+
+			this.loadingLayers.push("rendering");
+
+			const tb = (window.tb = new Threebox(
+				this.map,
+				this.map.getCanvas().getContext("webgl"), //get the context from the map canvas
+				{ defaultLights: true }
+			));
+
+			const delay = authStore.isMobileDevice ? 2000 : 500;
+
+			setTimeout(() => {
+				this.map.addLayer({
+					id: map_config.layerId,
+					type: "custom",
+					renderingMode: "3d",
+					onAdd: function () {
+						// const paintSettings = map_config.paint;
+						// const gradientSteps = calculateGradientSteps(
+						// 	paintSettings["arc-color"][0],
+						// 	paintSettings["arc-color"][1]
+						// 		? paintSettings["arc-color"][1]
+						// 		: paintSettings["arc-color"][0],
+						// 	arcInterval + 1
+						// );
+						for (let line of allLines) {
+							let lineOptions = {
+								geometry: line,
+								color: 0xffffff,
+								width: 3,
+								opacity: 0.9,
+							};
+
+							let lineMesh = tb.line(lineOptions);
+							// lineMesh.geometry.setColors(gradientSteps);
+							// lineMesh.material.vertexColors = true;
+
+							tb.add(lineMesh);
+						}
+					},
+					render: function () {
+						tb.update(); //update Threebox scene
+					},
+				});
+				this.currentLayers.push(map_config.layerId);
+				this.mapConfigs[map_config.layerId] = map_config;
+				this.currentVisibleLayers.push(map_config.layerId);
+				this.loadingLayers = this.loadingLayers.filter(
+					(el) => el !== map_config.layerId
+				);
+			}, delay);
 		},
 
 		//  5. Turn on the visibility for a exisiting map layer
