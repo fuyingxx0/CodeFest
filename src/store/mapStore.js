@@ -446,7 +446,7 @@ export const useMapStore = defineStore("map", {
 		},
 
 		AddCandyMapLayer(map_config, data) {
-			let dotR = 0.0002;
+			let dotR = 0.00015;
 			let dotArrangements = [
 				[[0, 0]],
 				[
@@ -551,7 +551,7 @@ export const useMapStore = defineStore("map", {
 					["get", "service"],
 					"center_point",
 					zoomLv > 13 ? 0 : 5,
-					2 ** (zoomLv - 11.5),
+					2 ** (zoomLv - 12),
 				]);
 			}
 
