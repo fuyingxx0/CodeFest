@@ -77,7 +77,7 @@ const trileft = 5;
 const spcy = 13;
 const spcx = 18;
 function calcPos(data) {
-	console.log('calcPos called', data);
+	// console.log('calcPos called', data);
 	let pos = [{
 		"index": 0,
 		"x": 0,
@@ -344,7 +344,7 @@ function toggleTriangle(clickedIndex) {
 	}
 }
 .svg-container {
-	min-height: 3000px;
+	min-height: 2000px;
 	overflow: scroll;
 }
 // .rectangles {

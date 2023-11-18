@@ -64,7 +64,7 @@ let rad = 15;
 function calcTotalLen(){
 	let total = [0];
 	for(let j = 0; j < sortedData[0].data.length; j++){
-		total[0] += sortedData[0].data[j].y;
+		if(showedLegend.value[sortedData[0].data[j].index]) total[0] += sortedData[0].data[j].y;
 	}
 	let totalMax = total[0];
 	let totalMin = total[0];
@@ -114,6 +114,7 @@ function calcStartPos(){
 	for(let i = 0; i < xnum; i++){
 		startPos = [...startPos, []];
 		let accumulatedY = (totalLenMax - totalLen[i]) / 2;
+		// j = 0
 		if(showedLegend.value[sortedData[i].data[0].index]){
 			startPos[i] = [...startPos[i], {x: i * (2 * rad + spcx), y: accumulatedY}]
 			accumulatedY +=  2 * rad + spcy + sortedData[i].data[0].y * hei;
@@ -121,6 +122,7 @@ function calcStartPos(){
 		else {
 			startPos[i] = [...startPos[i], {x: -1, y: -1}]
 		}
+		// j > 0
 		for(let j = 1; j < ynum; j++){
 			if(showedLegend.value[sortedData[i].data[j].index]){
 				startPos[i] = [...startPos[i], {x: i * (2 * rad + spcx), y: accumulatedY}]
@@ -131,15 +133,47 @@ function calcStartPos(){
 			}		
 		}
 	}
+	// console.log(startPos)
 	return startPos;
 }
 const showedStartPos = ref(calcStartPos());
 // console.log(showedStartPos.value)
 
 // console.log(startPos);
-const rectangles = Array.from({ length: xnum * ynum }, (_, index) => {
+function returnLinePos(index) {
 	const i = (index / ynum) | 0;
 	const j = index % ynum;
+	if(returnshowedStartPos(index).x === -1) return {
+		x1: -1,
+		x2: -1,
+		x3: -1,
+		x4: -1
+	}
+	let x1 = returnshowedStartPos(0).x + spcx / 2 + rad;
+	let x2 = returnshowedStartPos(0).x + spcx / 2 + rad;
+	let y1 = returnshowedStartPos(0).y + rad;
+	let y2 = returnshowedStartPos(0).y + rad;
+	if(i !== 0){
+		for(let l = 0; l < ynum; l++){
+			if(sortedData[i].data[j].index === sortedData[i-1].data[l].index){
+				x1 = returnshowedStartPos((i-1) * ynum + l).x + spcx / 2 + rad;
+				x2 = returnshowedStartPos(index).x + spcx / 2 + rad;
+				y1 = returnshowedStartPos((i-1) * ynum + l).y + (2 * rad + hei * sortedData[i-1].data[l].y) / 2;
+				y2 = returnshowedStartPos(index).y + (2 * rad + hei * sortedData[i].data[j].y) / 2;
+				break;
+			}
+		}
+	}
+	return {
+		x1: x1,
+		x2: x2,
+		y1: y1,
+		y2: y2
+	}
+}
+const rectangles = Array.from({ length: xnum * ynum }, (_, index) => {
+	const i = (index / ynum) | 0;
+	const j = index % ynum;	
 	return {
 		// x: showedStartPos.value[i][j].x,
 		// y: showedStartPos.value[i][j].y,
@@ -151,50 +185,18 @@ const rectangles = Array.from({ length: xnum * ynum }, (_, index) => {
 		number: sortedData[i].data[j].y,
 		i: i,
 		j: j,
-		k: sortedData[i].data[j].index
+		k: sortedData[i].data[j].index,		
 	};
 });
 // console.log(rectangles);
 
-// const lines = Array.from({ length: xnum * ynum }, (_, index) => {
-// 	const i = (index / ynum) | 0;
-// 	const j = index % ynum;
-// 	if(i == xnum - 1){
-// 		return {
-// 			x1: 0,
-// 			y1: 0,
-// 			x2: 0,
-// 			y2: 0,
-// 			stroke: "none",
-// 		}
-// 	}
-// 	let ind = -1;
-// 	for(let k = 0; k < ynum; k++){
-// 		if(sortedData[i].data[j].index === sortedData[i+1].data[k].index){
-// 			ind = k;
-// 			break;
-// 		}
-// 	}
-// 	return {
-// 		x1: showedStartPos.value[i][j].x + 2 * rad - 3,
-// 		y1: showedStartPos.value[i][j].y + rad + hei * sortedData[i].data[j].y / 2,
-// 		x2: showedStartPos.value[i+1][ind].x + 3,
-// 		y2: showedStartPos.value[i+1][ind].y + rad + hei * sortedData[i+1].data[ind].y / 2,
-// 		stroke: colors[sortedData[i].data[j].index],
-// 		i: i,
-// 		j: j,
-// 		k: sortedData[i].data[j].index
-// 	};
-// });
-
-// const labels = Array.from({ length: xnum }, (_, index) => {	
-// 	return {
-// 		x: showedStartPos.value[index][0].x + rad,
-// 		// y: totalLenMax + 30,
-// 		y: 0,
-// 		text: showedStartPos.value[index].x
-// 	};
-// });
+const labels = Array.from({ length: xnum }, (_, index) => {	
+	let pos = calcStartPos();
+	return {
+		x: pos[index][0].x + rad,
+		text: sortedData[index].x
+	};
+});
 
 const textwrapper = ref(null);
 onMounted(() => {
@@ -210,9 +212,6 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	};
 });
 
-const tooltipPosition = computed(() => {
-	return { 'left': `${mousePosition.value.x - 10}px`, 'top': `${mousePosition.value.y - 54}px` };
-});
 const targetRect = ref(null);
 const mousePosition = ref({ x: null, y: null });
 function toggleActive(i) {
@@ -227,6 +226,11 @@ function updateMouseLocation(e) {
 	mousePosition.value.x = e.pageX;
 	mousePosition.value.y = e.pageY;
 }
+
+const tooltipPosition = computed(() => {
+	return { 'left': `${mousePosition.value.x - 10}px`, 'top': `${mousePosition.value.y - 54}px` };
+});
+
 
 // Optional
 // Required for charts that support map filtering
@@ -262,7 +266,8 @@ function returnshowedStartPos(index){
 	const j = index % ynum;
 	return {
 		x: showedStartPos.value[i][j].x,
-		y: showedStartPos.value[i][j].y
+		y: showedStartPos.value[i][j].y,
+		k: sortedData[i].data[j].index
 	};
 }
 
@@ -280,6 +285,7 @@ function returnshowedStartPos(index){
 				>
 					<svg class="svg-legend" style="width: 15px; height: 15px;">
 						<rect width="15" height="15" :fill="legend.color" rx="4" ry="4"/>
+						<rect class="legends-rect-top" width="15" height="15" :fill="colorBG" :opacity="!showedLegend[index] ? 0.45 : 0" rx="4" ry="4"/>
 					</svg>
 					<div color="#888787"> {{ legend.text }} </div>
 				</div>
@@ -293,20 +299,21 @@ function returnshowedStartPos(index){
 				:height="350"
 			>
 				<!-- connecting lines -->
-				<!-- <line v-for="(line, index) in lines"
-				:class="{ [`initial-animation-line-${line.k}-${line.i}`]: true }"
+				<line v-for="(rect, index) in rectangles"
+				:class="{ [`initial-animation-line-${rect.k}-${rect.i}`]: true, [`datapoint-${rect.k}`]: true }"
 					:key="'line-' + index"
-					:x1="line.x1 + spcx / 2"
-					:y1="line.y1"
-					:x2="line.x2 + spcx / 2"
-					:y2="line.y2"
-					:stroke="line.stroke"
+					:x1="returnLinePos(index).x1"
+					:y1="returnLinePos(index).y1"
+					:x2="returnLinePos(index).x2"
+					:y2="returnLinePos(index).y2"
+					:stroke="(((index / ynum) | 0) !== 0 || returnLinePos(index).x1 === -1) ? rect.fill : 'rgba(255, 255, 255, 0)'"
+					:opacity="(((index / ynum) | 0) !== 0 || returnLinePos(index).x1 === -1) ? 1 : 0"
 					stroke-width="3"
 					stroke-linecap="round"
-				/> -->
+				/>
 				<!-- solid rectangles -->
 				<rect v-for="(rect, index) in rectangles"
-					:class="{ [`initial-animation-rect-${rect.k}-${rect.i}`]: true, 'datapoint': true }"
+					:class="{ [`initial-animation-rect-${rect.k}-${rect.i}`]: true, [`datapoint-${rect.k}`]: true }"
 					:key="index" 
 					:x="returnshowedStartPos(index).x + spcx / 2"
 					:y="returnshowedStartPos(index).y" 
@@ -314,23 +321,26 @@ function returnshowedStartPos(index){
 					:height="rect.height" 
 					:rx="rect.rx" 
 					:ry="rect.ry" 
-					:fill="returnshowedStartPos(index).x !== -1 ? rect.fill : `rgba(255, 255, 255, 0)`" 
+					:fill="returnshowedStartPos(index).x !== -1 ? rect.fill : `rgba(255, 255, 255, 0)`"
+					:opacity="returnshowedStartPos(index).x !== -1 ? 1 : 0"
 					stroke="none" 
 				/>
-				<!-- <text v-for="(rect, index) in rectangles"
-					:class="{ [`initial-animation-text-${rect.k}-${rect.i}`]: true, 'datapoint': true }"
+				<text v-for="(rect, index) in rectangles"
+					:class="{ [`initial-animation-text-${rect.k}-${rect.i}`]: true, [`datapoint-${rect.k}`]: true }"
 					:key="'text-' + index" 
 					:x="returnshowedStartPos(index).x + rect.width / 2 + spcx / 2" 
 					:y="returnshowedStartPos(index).y + rect.height / 2" 
 					text-anchor="middle" 
-					alignment-baseline="middle" 
-					fill="white" 
+					alignment-baseline="middle"
+					:fill="returnshowedStartPos(index).x !== -1 ? '#ffffff' : 'rgba(255, 255, 255, 0)'" 
+					:opacity="returnshowedStartPos(index).x !== -1 ? 1 : 0"
 					font-size="12"
 				>
 					{{ rect.number }}
-				</text> -->
+					<!-- {{ index }} -->
+				</text>
 				<rect v-for="(rect, index) in rectangles"
-					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${rect.i}-${rect.j}`]: true, 'datapoint-front': true }"
+					:class="{ 'active-rect': targetRect === index || selectedIndex === index, [`initial-animation-${rect.i}-${rect.j}`]: true, 'datapoint-front': returnshowedStartPos(index).x !== -1, 'datapoint-front-hidden': returnshowedStartPos(index).x === -1 }"
 					:key="index" 
 					:x="returnshowedStartPos(index).x + spcx / 2"
 					:y="returnshowedStartPos(index).y" 
@@ -338,12 +348,12 @@ function returnshowedStartPos(index){
 					:height="rect.height" 
 					:rx="rect.rx" 
 					:ry="rect.ry" 
-					@mouseenter="toggleActive(index)" 
+					@mouseenter="(returnshowedStartPos(index).x !== -1 ? toggleActive(index) : ()=>{})"
 					@mousemove="updateMouseLocation" 
-					@mouseleave="toggleActiveToNull"
-					@click="handleDataSelection(index)"
+					@mouseleave="(returnshowedStartPos(index).x !== -1 ? toggleActiveToNull() : ()=>{})"
+					@click="(returnshowedStartPos(index).x !== -1 ? handleDataSelection(index) : ()=>{})"
 				/>
-				<!-- <line 
+				<line 
 					x1="0" 
 					:y1="totalLenMax + 12" 
 					x2="400px" 
@@ -354,20 +364,21 @@ function returnshowedStartPos(index){
 				<text v-for="(label, index) in labels"
 					:key="'text-' + index" 
 					:x="label.x + spcx / 2"
-					:y="label.y"
+					:y="totalLenMax + 30"
 					text-anchor="middle" 
 					alignment-baseline="top" 
 					fill="#888787"
 					font-size="10"
 				>
 					{{ label.text }}
-				</text> -->
+				</text>
 			</svg>
 		</div>
 	</div>
 	<Teleport to="body">
 		<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
-		<div v-if="targetRect !== null" class="bumpchart-chart-info chart-tooltip" :style="tooltipPosition">
+		<span>{{ targetRect }}</span>
+		<div v-if="targetRect !== null" class="rowbumpchart-chart-info chart-tooltip" :style="tooltipPosition">
 			<h6>{{ sortedData[0].data[targetRect % ynum].name }}</h6>
 			<span>{{ sortedData[(targetRect / ynum) | 0].x }} 排名第 {{ targetRect % ynum + 1 }}</span>
 		</div>
@@ -377,7 +388,6 @@ function returnshowedStartPos(index){
 
 <style scoped lang="scss">
 .rowbumpchart {
-    /* styles for the chart Vue component */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -428,6 +438,9 @@ function returnshowedStartPos(index){
 	font-size: small;
 	gap: 6px;
 	cursor: pointer;
+	&-rect-top {
+		transition: all 0.2s ease;
+	}
 	// border: 1px solid red;
 }
 .svg-legend {
@@ -440,13 +453,26 @@ function returnshowedStartPos(index){
 	overflow: scroll;
 	// border: 1px solid blue;
 }
+// @for $k from 0 through 100 {
+// 	.datapoint-#{$k} {
+// 		transition-property: x, y, x1, x2, y1, y2, opacity;
+// 		transition-duration: 0.2s, 0.2s, 0.2s, 0.2s, 0.2s, 0.2s, 0.1s;
+// 		transition-timing-function: ease, ease, ease, ease, ease, ease, ease;
+// 		transition-delay: 0.1s, 0.1s, 0.1s, 0.1s, 0.1s, 0.1s, 0s;
+// 	}
+// }
 .datapoint-front {
 	fill: rgba(255, 255, 255, 0);
 	transition: fill 0.4s ease;
+	&-hidden {
+		z-index: -10;
+		fill: rgba(255, 255, 255, 0);
+	}
 }
 .datapoint-front:hover {
 	fill: rgba(255, 255, 255, .35);
 }
+
 .ease-all {
 	transition: all 0.3s ease;
 	// cursor: pointer;
