@@ -37,7 +37,7 @@ function matrixInverse(matrix) {
 	}
 	// 檢查矩陣是否為方陣
 	if (matrix.length !== matrix[0].length) {
-		throw new Error('矩陣不是方陣，無法計算逆矩陣');
+		throw new Error("矩陣不是方陣，無法計算逆矩陣");
 	}
 	const n = matrix.length;
 	const identityMatrix = createIdentityMatrix(n);
@@ -68,25 +68,35 @@ function matrixInverse(matrix) {
 }
 
 function krige(points, unknownPoint) {
-
 	const nugget = 0.1; // 均勻性
-	const sill = 0.5;   // 變異數
-	const range = 10;   // 空間相依性範圍
-	
-	const n = points.length
+	const sill = 0.5; // 變異數
+	const range = 10; // 空間相依性範圍
 
-	const semivariance = (h) => nugget + sill * (1 - Math.exp(-(h ** 2 / range)));
+	const n = points.length;
+
+	const semivariance = (h) =>
+		nugget + sill * (1 - Math.exp(-(h ** 2 / range)));
 
 	let A = Array(n + 1).fill(Array(n + 1).fill(0));
 	console.log(A);
 	let B = Array(n + 1).fill(1);
-	for(let i = 0; i < n; i++){
-		for(let j = 0; j < n; j++){
-			A[i][j] = semivariance(Math.sqrt((points[i].x - points[j].x) ** 2 + (points[i].y - points[j].y) ** 2));
+	for (let i = 0; i < n; i++) {
+		for (let j = 0; j < n; j++) {
+			A[i][j] = semivariance(
+				Math.sqrt(
+					(points[i].x - points[j].x) ** 2 +
+						(points[i].y - points[j].y) ** 2
+				)
+			);
 		}
 		A[i][n] = 1;
 		A[n][i] = 1;
-		B[i] = semivariance(Math.sqrt((points[i].x - unknownPoint.x) ** 2 + (points[i].y - unknownPoint.y) ** 2));
+		B[i] = semivariance(
+			Math.sqrt(
+				(points[i].x - unknownPoint.x) ** 2 +
+					(points[i].y - unknownPoint.y) ** 2
+			)
+		);
 	}
 	console.log(A);
 	A[n][n] = 0;
@@ -99,7 +109,6 @@ function krige(points, unknownPoint) {
 	// }
 
 	// return interpolatedValue;
-
 }
 
 const knownPoints = [
@@ -110,7 +119,7 @@ const knownPoints = [
 ];
 const unknownPoint = { x: 1, y: 1 };
 
-krige(knownPoints, unknownPoint)
+krige(knownPoints, unknownPoint);
 // const result = krige(knownPoints, unknownPoint);
 // console.log(result);
 
