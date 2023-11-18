@@ -1,12 +1,12 @@
 <script setup>
 import { computed, ref } from 'vue'
-// import { useMapStore } from '../../store/mapStore';
+import { useMapStore } from '../../store/mapStore';
 
 const colors = ['#dead5d', '#474747', '#5F5F5F', '#747373', '#888787'];
 
 // register the four required props
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
-// const mapStore = useMapStore()
+const mapStore = useMapStore()
 
 let max = -1;
 for(let i = 0; i < 12; i++){
@@ -81,10 +81,10 @@ function handleDataSelection(index) {
 		return;
 	}
 	if (index !== selectedIndex.value) {
-		// mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
+		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
 		selectedIndex.value = index;
 	} else {
-		// mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
 		selectedIndex.value = null;
 	}
 }
@@ -131,9 +131,11 @@ function handleDataSelection(index) {
 						:fill="`rgba(0, 0, 0, 0)`"
 						:stroke="colors[3]"
 						stroke-width="3"
+						cursor="pointer"
 						@mouseenter="toggleActive(index)"
 						@mousemove="updateMouseLocation"
 						@mouseleave="toggleActiveToNull"
+						@click="handleDataSelection(index)"
 					/>
 					<text
 						class="label"
