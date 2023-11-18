@@ -1,16 +1,21 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { useMapStore } from '../../store/mapStore';
+import { computed, ref } from "vue";
+import { useMapStore } from "../../store/mapStore";
 
-const colors = ['#dead5d', '#474747', '#5F5F5F', '#747373', '#888787'];
+const colors = ["#dead5d", "#474747", "#5F5F5F", "#747373", "#888787"];
 
 // register the four required props
-const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
-const mapStore = useMapStore()
+const props = defineProps([
+	"chart_config",
+	"activeChart",
+	"series",
+	"map_config",
+]);
+const mapStore = useMapStore();
 
 let max = -1;
-for(let i = 0; i < 12; i++){
-	if(max < props.series[0].data[i]) max = props.series[0].data[i];
+for (let i = 0; i < 12; i++) {
+	if (max < props.series[0].data[i]) max = props.series[0].data[i];
 }
 // console.log(max)
 
@@ -18,16 +23,17 @@ const R = 54;
 const r = 18;
 const centerx = 200;
 const centery = 140;
-let posCircle =[];
-for(let i = 0; i < 12; i++) posCircle = [...posCircle, {x: centerx, y: centery}]
+let posCircle = [];
+for (let i = 0; i < 12; i++)
+	posCircle = [...posCircle, { x: centerx, y: centery }];
 // console.log(posCircle)
-for(let i = 0; i < 6; i++){
-	const ang1 = Math.PI / 6 + i * Math.PI / 3;
+for (let i = 0; i < 6; i++) {
+	const ang1 = Math.PI / 6 + (i * Math.PI) / 3;
 	posCircle[i].x += R * Math.cos(ang1);
 	posCircle[i].y += R * Math.sin(ang1);
-	const ang2 = i * Math.PI / 3;
-	posCircle[i+6].x += Math.sqrt(3) * R * Math.cos(ang2);
-	posCircle[i+6].y += Math.sqrt(3) * R * Math.sin(ang2);
+	const ang2 = (i * Math.PI) / 3;
+	posCircle[i + 6].x += Math.sqrt(3) * R * Math.cos(ang2);
+	posCircle[i + 6].y += Math.sqrt(3) * R * Math.sin(ang2);
 }
 // console.log(posCircle)
 const circles = Array.from({ length: 12 }, (_, index) => {
@@ -42,22 +48,25 @@ const circles = Array.from({ length: 12 }, (_, index) => {
 	};
 });
 const textMove = [
-	{x: 38, y: 20},
-	{x: 0, y: 32},
-	{x: -38, y: 20},
-	{x: -38, y: -20},
-	{x: 0, y: -32},
-	{x: 38, y: -20},
-	{x: 43, y: 0},
-	{x: 43, y: 5},
-	{x: -43, y: 5},
-	{x: -43, y: 0},
-	{x: -43, y: -5},
-	{x: 43, y: -5}
+	{ x: 38, y: 20 },
+	{ x: 0, y: 32 },
+	{ x: -38, y: 20 },
+	{ x: -38, y: -20 },
+	{ x: 0, y: -32 },
+	{ x: 38, y: -20 },
+	{ x: 43, y: 0 },
+	{ x: 43, y: 5 },
+	{ x: -43, y: 5 },
+	{ x: -43, y: 0 },
+	{ x: -43, y: -5 },
+	{ x: 43, y: -5 },
 ];
 
 const tooltipPosition = computed(() => {
-	return { 'left': `${mousePosition.value.x + 10}px`, 'top': `${mousePosition.value.y - 30}px` };
+	return {
+		left: `${mousePosition.value.x + 10}px`,
+		top: `${mousePosition.value.y - 30}px`,
+	};
 });
 const targetMoon = ref(null);
 const mousePosition = ref({ x: null, y: null });
@@ -75,30 +84,37 @@ function updateMouseLocation(e) {
 }
 // Optional
 // Required for charts that support map filtering
-const selectedIndex = ref(null)
+const selectedIndex = ref(null);
 function handleDataSelection(index) {
+	console.log(index);
 	if (!props.chart_config.map_filter) {
 		return;
 	}
 	if (index !== selectedIndex.value) {
-		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
+		mapStore.addLayerFilter(
+			`${props.map_config[0].index}-${props.map_config[0].type}`,
+			props.chart_config.map_filter[0],
+			props.chart_config.map_filter[1][index]
+		);
 		selectedIndex.value = index;
 	} else {
-		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		mapStore.clearLayerFilter(
+			`${props.map_config[0].index}-${props.map_config[0].type}`
+		);
 		selectedIndex.value = null;
 	}
 }
 </script>
 
 <template>
-    <!-- conditionally render the chart -->
-    <div v-if="activeChart === 'MoonChart'" class="moonchart">
-        <!-- The layout of the chart Vue component -->
-        <!-- Utilize the @click event listener to enable map filtering by data selection -->
+	<!-- conditionally render the chart -->
+	<div v-if="activeChart === 'MoonChart'" class="moonchart">
+		<!-- The layout of the chart Vue component -->
+		<!-- Utilize the @click event listener to enable map filtering by data selection -->
 		<div class="boxesoutline">
 			<svg class="svg-wrapper">
 				<g v-for="(circle, index) in circles">
-					<line 
+					<line
 						:x1="circle.cx"
 						:y1="circle.cy"
 						:x2="centerx"
@@ -106,24 +122,21 @@ function handleDataSelection(index) {
 						:stroke="colors[3]"
 						stroke-width="2"
 					/>
-					<circle 
+					<circle
 						:cx="circle.cx"
 						:cy="circle.cy"
 						:r="circle.r"
 						:fill="colors[0]"
 					/>
-					<path
-						:d="circle.d"
-						:fill="colors[1]"
-					/>
-					<ellipse 
+					<path :d="circle.d" :fill="colors[1]" />
+					<ellipse
 						:cx="circle.cx"
 						:cy="circle.cy"
 						:rx="circle.rx"
 						:ry="circle.r"
 						:fill="circle.overHalf ? colors[0] : colors[1]"
 					/>
-					<circle 
+					<circle
 						class="circle-top"
 						:cx="circle.cx"
 						:cy="circle.cy"
@@ -149,7 +162,7 @@ function handleDataSelection(index) {
 						{{ props.chart_config.categories[index] }}
 					</text>
 				</g>
-				<circle 
+				<circle
 					:cx="centerx"
 					:cy="centery"
 					:r="8"
@@ -161,16 +174,23 @@ function handleDataSelection(index) {
 		</div>
 		<Teleport to="body">
 			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
-			<div v-if="targetMoon !== null" class="moonchart-chart-info chart-tooltip" :style="tooltipPosition">
-				<h6>{{ props.series[0].data[targetMoon] }} {{ props.chart_config.unit }}</h6>
+			<div
+				v-if="targetMoon !== null"
+				class="moonchart-chart-info chart-tooltip"
+				:style="tooltipPosition"
+			>
+				<h6>
+					{{ props.series[0].data[targetMoon] }}
+					{{ props.chart_config.unit }}
+				</h6>
 			</div>
 		</Teleport>
-    </div>
+	</div>
 </template>
 
 <style scoped lang="scss">
 .moonchart {
-    /* styles for the chart Vue component */
+	/* styles for the chart Vue component */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -207,11 +227,10 @@ function handleDataSelection(index) {
 /* Animation styles aren't required but recommended */
 @keyframes ease-in {
 	0% {
-		opacity: 0
+		opacity: 0;
 	}
-	;
 	100% {
-		opacity: 1
+		opacity: 1;
 	}
 }
 @for $i from 0 through 20 {
@@ -224,5 +243,4 @@ function handleDataSelection(index) {
 		opacity: 0;
 	}
 }
-
 </style>
