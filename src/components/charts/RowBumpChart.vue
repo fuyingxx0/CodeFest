@@ -4,7 +4,8 @@ import { computed, ref, onMounted } from 'vue'
 import '../../assets/styles/globalStyles.css';
 
 // const colors = ['#833ab4', '#8e3978', '#ae445a', '#8b3552', '#ca695a', '#e1875a', '#f39f5a'];
-const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+const colorBG = '#090909'
 
 // register the four required props
 const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
@@ -451,6 +452,7 @@ function returnshowedStartPos(index){
 }
 .svg-container {
 	overflow: scroll;
+	min-height: 1000px;
 	// border: 1px solid blue;
 }
 // @for $k from 0 through 100 {

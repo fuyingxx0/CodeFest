@@ -345,7 +345,7 @@ function toggleTriangle(clickedIndex) {
 	overflow: scroll;
 }
 .svg-container {
-	padding: 10px;
+	padding: 20px;
 	min-height: 1500px;
 	overflow: scroll;
 }

@@ -18,13 +18,18 @@ const xnum = sortedData.length;
 const ynum = sortedData[0].data.length;
 
 let max = sortedData[0].data[0].y;
+let maxs = Array(xnum).fill(-1);
 let min = sortedData[0].data[0].y;
 for(let i = 0; i < xnum; i++){
 	for(let j = 0; j < ynum; j++){
 		if(max < sortedData[i].data[j].y) max = sortedData[i].data[j].y;
 		if(min > sortedData[i].data[j].y) min = sortedData[i].data[j].y;
+		if(maxs[i] < sortedData[i].data[j].y) maxs[i] = sortedData[i].data[j].y
 	}
+	sortedData[i] = {name: sortedData[i].name, data: sortedData[i].data, max: maxs[i]};
 }
+sortedData = sortedData.sort((a, b)=>b.max - a.max);
+console.log(sortedData)
 
 function percentile(arr, percentile) {
 	let index = (percentile / 100) * (arr.length - 1);
@@ -48,10 +53,10 @@ for(let k = 0; k < 5; k++){
 }
 // console.log(percentiles);
 
-let totalHeight = 215;
+let totalHeight = 195;
 let unitHeight = totalHeight / (max - min);
-let wid = 35;
-let shr = 6;
+let wid = 18;
+let shr = 5;
 const boxes = Array.from({ length: xnum }, (_, index) => {	
 	return {
 		p100: (max - percentiles[0][index]) * unitHeight + 3,
@@ -110,7 +115,7 @@ function handleDataSelection(index) {
 				@mouseleave="toggleActiveToNull"
 				@click="handleDataSelection(index)"
 			>
-				<svg class="svgoutline" :width="wid" :height="totalHeight">
+				<svg class="svgoutline" :width="wid" :height="totalHeight"  xmlns="http://www.w3.org/2000/svg">
 					<line
 						:class="{ 'easein': true, [`initial-animation-${index}`]: true }"
 						:x1="wid / 2"
@@ -172,12 +177,20 @@ function handleDataSelection(index) {
 						stroke-width="2"
 						:stroke="(targetBox === index || selectedIndex === index) ? colors[3] : colors[2]"
 					/>
+					<rect 
+						:class="{ 'hoverbox': true }"
+						x="0"
+						:width="wid"
+						:y="0"
+						:height="205"
+					/>
 					<text 
 						:x="wid/2"
-						:y="max * unitHeight + 20"
+						:y="max * unitHeight - 40"
 						fill="#888787" 
 						font-size="13"
 						text-anchor="middle"
+						style="writing-mode: vertical-rl; glyph-orientation-vertical: 0; font-size: 12px;"
 					>
 						{{ sortedData[index].name }}
 					</text>
@@ -223,9 +236,9 @@ function handleDataSelection(index) {
 	}
 }
 .boxesoutline {
-	margin: 8px;
+	margin: 17px;
 	display: flex;
-	gap: 7px;
+	gap: 2px;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
@@ -236,11 +249,22 @@ function handleDataSelection(index) {
 	justify-content: center;
 	align-items: center;
 	overflow: visible;
-	// border: 1px solid red;
+}
+.hoverbox {
+	rx: 5px;
+	ry: 5px;
+	transition: all 0.3s ease;
+	fill: rgba(255, 255, 255, 0);
+	opacity: 0;
+}
+.hoverbox:hover {
+	fill: rgba(255, 255, 255, 0.35);
+	opacity: 1;
 }
 .svgoutline {
-	padding: 5px;
-	min-height: 260px;
+	border-radius: 4px;
+	padding: 2px;
+	min-height: 300px;
 	overflow: visible;
 	// border: 1px solid blue;
 }
