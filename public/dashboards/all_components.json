@@ -4435,7 +4435,8 @@
 							"醫院",
 							"#F49F36",
 							"#2F8AB1"
-						]
+						],
+						"circle-radius": 3
 					},
 					"property": [
 						{
@@ -4452,8 +4453,7 @@
 						}
 					],
 					"type": "circle",
-					"title": "婦產科分布",
-					"size": "big"
+					"title": "婦產科分布"
 				}
 			],
 			"history_data": false,
@@ -4871,7 +4871,28 @@
 				{
 					"index": "4005",
 					"paint": {
-						"line-color": "#888888"
+						"line-color": [
+							"case",
+							["<=", ["get", "value"], 45],
+							"#8AC926",
+							["<=", ["get", "value"], 49],
+							"#A8CA2B",
+							["<=", ["get", "value"], 53],
+							"#C5CA30",
+							["<=", ["get", "value"], 57],
+							"#E2CA35",
+							["<=", ["get", "value"], 61],
+							"#FFCA3A",
+							["<=", ["get", "value"], 65],
+							"#FFBC3F",
+							["<=", ["get", "value"], 69],
+							"#FFAE43",
+							["<=", ["get", "value"], 73],
+							"#FF924C",
+							["<=", ["get", "value"], 77],
+							"#FF7655",
+							"#FF595E"
+						]
 					},
 					"property": [
 						{
@@ -4885,7 +4906,7 @@
 				{
 					"index": "4005",
 					"paint": {
-						"circle-color": "#A8A811"
+						"circle-color": "#EEEEEE"
 					},
 					"property": [
 						{
@@ -4936,7 +4957,18 @@
 				{
 					"index": "4005",
 					"paint": {
-						"line-color": "#888888"
+						"line-color": [
+							"#8AC926",
+							"#A8CA2B",
+							"#C5CA30",
+							"#E2CA35",
+							"#FFCA3A",
+							"#FFBC3F",
+							"#FFAE43",
+							"#FF924C",
+							"#FF7655",
+							"#FF595E"
+						]
 					},
 					"property": [
 						{
@@ -4950,7 +4982,7 @@
 				{
 					"index": "4005",
 					"paint": {
-						"circle-color": "#A8A811"
+						"circle-color": "#EEEEEE"
 					},
 					"property": [
 						{

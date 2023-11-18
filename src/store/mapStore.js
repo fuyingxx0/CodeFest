@@ -620,7 +620,7 @@ export const useMapStore = defineStore("map", {
 			let squareMatrix = [];
 			let allLines = [];
 
-			for (let i = 40; i <= 75.01; i += 2.5) {
+			for (let i = 40; i <= 75.01; i += 2) {
 				allLines = [];
 				squareMatrix = [];
 				marchingSquare(
@@ -641,42 +641,6 @@ export const useMapStore = defineStore("map", {
 					})
 				);
 			}
-
-			// squareMatrix = [];
-			// marchingSquare(squareMatrix, discreteData, allLines, 90, gridSize);
-
-			// squareMatrix = [];
-			// marchingSquare(squareMatrix, discreteData, allLines, 80, gridSize);
-
-			// console.log(squareMatrix.length);
-			// console.log(squareMatrix[0].length);
-
-			// let isoline_data = {
-			// 	type: "FeatureCollection",
-			// 	crs: {
-			// 		type: "name",
-			// 		properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
-			// 	},
-			// 	features: [
-			// 		{
-			// 			type: "Feature",
-			// 			properties: {},
-			// 			geometry: {
-			// 				type: "Polygon",
-			// 				coordinates: [
-			// 					[
-			// 						[121.4395508, 24.946791],
-			// 						[121.6735101, 25.2181139],
-			// 					],
-			// 				],
-			// 			},
-			// 		},
-			// 	],
-			// };
-
-			// console.log(allLines);
-
-			// console.log(isoline_data);
 
 			this.map.addSource(`${map_config.layerId}-source`, {
 				type: "geojson",
@@ -756,7 +720,7 @@ export const useMapStore = defineStore("map", {
 				allLines = allLines.concat(
 					newLines.map((line) => {
 						return line.map((point) => {
-							return [...point, (i - 40) * 60];
+							return [...point, (i - 30) * 60];
 						});
 					})
 				);
@@ -778,19 +742,14 @@ export const useMapStore = defineStore("map", {
 					type: "custom",
 					renderingMode: "3d",
 					onAdd: function () {
-						// const paintSettings = map_config.paint;
-						// const gradientSteps = calculateGradientSteps(
-						// 	paintSettings["arc-color"][0],
-						// 	paintSettings["arc-color"][1]
-						// 		? paintSettings["arc-color"][1]
-						// 		: paintSettings["arc-color"][0],
-						// 	arcInterval + 1
-						// );
+						const paintSettings = map_config.paint;
 						for (let line of allLines) {
 							let lineOptions = {
 								geometry: line,
-								color: 0xffffff,
-								width: 3,
+								color: paintSettings["line-color"][
+									Math.floor((line[0][2] / 60 + 30 - 45) / 3)
+								],
+								width: 2,
 								opacity: 0.9,
 							};
 

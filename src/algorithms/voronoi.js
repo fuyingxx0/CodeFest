@@ -252,10 +252,10 @@ class Point {
 function BowyerWatson(points) {
 	// covers all of Taipei
 	let cornerPoints = [
-		new Point(121.31436232805348, 25.272604303072),
-		new Point(121.78230215337008, 25.272604303072),
-		new Point(121.78230215337008, 24.939016012761282),
-		new Point(121.31436232805348, 24.939016012761282),
+		new Point(121.1, 25.272604303072),
+		new Point(122, 25.272604303072),
+		new Point(122, 24.939016012761282),
+		new Point(121.1, 24.939016012761282),
 	];
 	let superTriangle1 = new Triangle(
 		cornerPoints[0],
