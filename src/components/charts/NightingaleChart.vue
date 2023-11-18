@@ -97,16 +97,17 @@ function updateMouseLocation(e) {
 // Required for charts that support map filtering
 const selectedIndex = ref(null);
 function handleDataSelection(index) {
-	const a = index % anum.value;
+	// const a = index % anum.value;
+	const a = (index / anum.value) | 0;
 	console.log(a);
 	if (!props.chart_config.map_filter) {
 		return;
 	}
 	if (a !== selectedIndex.value) {
-		mapStore.addLayerFilter(`${props.map_config[0].a}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][r]);
+		// mapStore.addLayerFilter(`${props.map_config[0].a}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][a]);
 		selectedIndex.value = r;
 	} else {
-		mapStore.clearLayerFilter(`${props.map_config[0].a}-${props.map_config[0].type}`);
+		// mapStore.clearLayerFilter(`${props.map_config[0].a}-${props.map_config[0].type}`);
 		selectedIndex.value = null;
 	}
 }
