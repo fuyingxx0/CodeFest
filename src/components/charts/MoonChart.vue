@@ -37,7 +37,7 @@ const circles = Array.from({ length: 12 }, (_, index) => {
 		cy: posCircle[index].y,
 		r: r,
 		d: `M ${posCircle[index].x} ${posCircle[index].y + r} A ${r} ${r} 0 0 1 ${posCircle[index].x} ${posCircle[index].y - r}`,
-		rx: r * props.series[0].data[index] / max,
+		rx: Math.abs(props.series[0].data[index] - max / 2) * 2 * r / max,
 		overHalf: props.series[0].data[index] > max / 2
 	};
 });
