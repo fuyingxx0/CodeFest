@@ -4489,7 +4489,7 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["CircularDendrogram"],
+				"types": ["TreeChart", "CircularDendrogram"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": ""
 			},

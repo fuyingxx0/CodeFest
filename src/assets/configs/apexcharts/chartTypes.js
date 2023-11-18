@@ -15,5 +15,6 @@ export const chartTypes = {
 	RowBumpChart: "橫向凹凸圖",
 	BoxChart: "箱形圖",
 	NightingaleChart: "南丁格爾玫瑰圖",
-	CircularDendrogram: "環形樹狀圖"
+	CircularDendrogram: "環形樹狀圖",
+	TreeChart: "樹狀圖"
 };

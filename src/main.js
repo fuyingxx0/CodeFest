@@ -39,6 +39,7 @@ import RowBumpChart from "./components/charts/RowBumpChart.vue";
 import BoxChart from "./components/charts/BoxChart.vue";
 import NightingaleChart from "./components/charts/NightingaleChart.vue";
 import CircularDendrogram from "./components/charts/CircularDendrogram.vue";
+import TreeChart from "./components/charts/TreeChart.vue";
 
 const app = createApp(App);
 
@@ -66,5 +67,6 @@ app.component("RowBumpChart", RowBumpChart);
 app.component("BoxChart", BoxChart);
 app.component("NightingaleChart", NightingaleChart);
 app.component("CircularDendrogram", CircularDendrogram);
+app.component("TreeChart", TreeChart);
 
 app.mount("#app");
