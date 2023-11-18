@@ -4698,28 +4698,28 @@
 			"index": "4003",
 			"map_config": [
 				{
-					"index": "4003_test_data",
+					"index": "4003",
 					"paint": {
 						"service-color": [
 							"match",
 							["get", "service"],
-							"service 0",
+							"輪椅",
 							"#F65658",
-							"service 1",
+							"飲水服務",
 							"#F49F36",
-							"service 2",
+							"尿布台",
 							"#F5C860",
-							"service 3",
+							"母乳專用冰箱",
 							"#9AC17C",
-							"service 4",
+							"免費衛生用品",
 							"#4CB495",
-							"service 5",
+							"置物空間",
 							"#569C9A",
-							"service 6",
+							"嬰兒車停放空間",
 							"#60819C",
-							"service 7",
-							"#2F8AB1",
-							"#FFC0CB"
+							"center_point",
+							"#FFC0CB",
+							"#FFFFFF"
 						]
 					},
 					"property": [
@@ -4781,22 +4781,20 @@
 			"map_config": null,
 			"chart_config": {
 				"color": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
-				"types": ["NightingaleChart", "BarPercentChart", "ColumnChart"],
-				"unit": "棟",
+				"types": ["HeatmapChart"],
+				"unit": "人",
 				"categories": [
-					"育齡婦女一般生育率",
-					"育齡婦女總生育率",
-					"育齡婦女年齡別生育率/15～19歲",
-					"育齡婦女年齡別生育率/20～24歲",
-					"育齡婦女年齡別生育率/25～29歲",
-					"育齡婦女年齡別生育率/30～34歲",
-					"育齡婦女年齡別生育率/35～39歲",
-					"育齡婦女年齡別生育率/40～44歲",
-					"育齡婦女年齡別生育率/45～49歲",
-					"有偶婦女一般生育率"
+					"15-19歲",
+					"20-24歲",
+					"25-29歲",
+					"30-34歲",
+					"35-39歲",
+					"40-44歲",
+					"45-49歲"
 				]
 			},
-			"name": "4005",
+			"history_data": true,
+			"name": "4005 - 育齡婦女年齡別生育率",
 			"source": "都發局/消防局",
 			"time_from": "2023-06-02T00:00:00+08:00",
 			"time_to": null,
