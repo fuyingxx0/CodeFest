@@ -344,7 +344,8 @@ function toggleTriangle(clickedIndex) {
 	}
 }
 .svg-container {
-	min-height: 2000px;
+	padding: 10px;
+	min-height: 500px;
 	overflow: scroll;
 }
 // .rectangles {

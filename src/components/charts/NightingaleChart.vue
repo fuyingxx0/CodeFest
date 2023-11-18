@@ -71,14 +71,15 @@ function updateMouseLocation(e) {
 // Required for charts that support map filtering
 const selectedIndex = ref(null)
 function handleDataSelection(index) {
+	const r = (i / anum.value) | 0;
 	if (!props.chart_config.map_filter) {
 		return;
 	}
-	if (index !== selectedIndex.value) {
-		// mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
-		selectedIndex.value = index;
+	if (r !== selectedIndex.value) {
+		mapStore.addLayerFilter(`${props.map_config[0].r}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][r]);
+		selectedIndex.value = r;
 	} else {
-		// mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		mapStore.clearLayerFilter(`${props.map_config[0].r}-${props.map_config[0].type}`);
 		selectedIndex.value = null;
 	}
 }
