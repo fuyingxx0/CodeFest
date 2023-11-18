@@ -154,7 +154,8 @@ function returnPos(index) {
 		showed: pos.value[index].showed,
 		rotate: pos.value[index].toggled ? 0 : -90,
 		textY: pos.value[index].showed ? pos.value[index].y + hei / 2 : pos.value[index].y + hei / 2,
-		parentY: pos.value[props.series[index].data[2]].y
+		parentY: pos.value[props.series[index].data[2]].y,
+		childrenCount: pos.value[index].childrenCount
 	}
 }
 
@@ -281,7 +282,7 @@ function toggleTriangle(clickedIndex) {
 				/>
 				<text
 					:class="{ [`initial-animation-rect-${num - index - 1}`]: true, 'rectangles-text': true }"
-					:x="returnPos(num - index - 1).x + hei"
+					:x="returnPos(num - index - 1).childrenCount ? returnPos(num - index - 1).x + hei : returnPos(num - index - 1).x + hei / 2"
 					:y="returnPos(num - index - 1).textY" 
 					:height="hei"
 					stroke="none"
@@ -289,7 +290,7 @@ function toggleTriangle(clickedIndex) {
 					alignment-baseline="middle" 
 					:fill="returnPos(num - index - 1).showed ? `#ffffff` : `rgba(255, 255, 255, 0)`" 
 					:opacity="returnPos(num - index - 1).showed ? 1 : 0"
-					font-size="11"
+					font-size="12.5"
 				>
 					{{ returnPos(num - index - 1).name }}
 				</text>
@@ -300,14 +301,14 @@ function toggleTriangle(clickedIndex) {
 					:transform="`rotate(${returnPos(num - index - 1).rotate})`"
 					:style="{ transformOrigin: `${returnPos(num - index - 1).x + hei / 2 + trileft * 0.8}px ${returnPos(num - index - 1).y + hei / 2 + trileft / 4}px` }"
 				/>
-				<rect 
+				<rect
 					:x="returnPos(num - index - 1).x"
 					:y="returnPos(num - index - 1).y" 
 					:width="hei * 1.5"
 					:height="hei" 
 					:fill="`rgba(255, 255, 255, 0)`" 
 					stroke="none"
-					:cursor="returnPos(num - index - 1).showed ? 'pointer' : 'default'"
+					:cursor="returnPos(num - index - 1).childrenCount ? 'pointer' : 'default'"
 					@click="toggleTriangle(num - index - 1)"
 				/>
 			</g>			
