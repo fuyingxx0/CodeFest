@@ -4435,7 +4435,193 @@
 		"4001": {
 			"id": 4001,
 			"index": "4001",
-			"map_config": null,
+			"map_config": [
+				{
+					"index": "newborn_village_border",
+					"paint": {
+						"fill-color": [
+							"case",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								50
+							],
+							"#0C303E",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								100
+							],
+							"#184556",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								150
+							],
+							"#1E4F63",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								200
+							],
+							"#24596F",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								250
+							],
+							"#2A647B",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								300
+							],
+							"#2F6E87",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								350
+							],
+							"#3B829F",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								400
+							],
+							"#4797B7",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								450
+							],
+							"#52ABCF",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								500
+							],
+							"#5EC0E7",
+							"#69D4FF"
+						]
+					},
+					"property": [
+						{
+							"key": "SECT_NAME",
+							"name": "行政區"
+						},
+						{
+							"key": "LIE_NAME",
+							"name": "里名"
+						},
+						{
+							"key": "0歲數量",
+							"name": "0歲人口數"
+						},
+						{
+							"key": "1歲數量",
+							"name": "1歲人口數"
+						},
+						{
+							"key": "2歲數量",
+							"name": "2歲人口數"
+						},
+						{
+							"key": "3歲數量",
+							"name": "3歲人口數"
+						},
+						{
+							"key": "4歲數量",
+							"name": "4歲人口數"
+						},
+						{
+							"key": "5歲數量",
+							"name": "5歲人口數"
+						}
+					],
+					"title": "各里幼兒人數",
+					"type": "fill"
+				}
+			],
 			"history_data": false,
 			"chart_config": {
 				"categories": [
