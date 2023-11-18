@@ -4398,7 +4398,63 @@
 		"4000": {
 			"id": 4000,
 			"index": "4000",
-			"map_config": null,
+			"map_config": [
+				{
+					"index": "4000",
+					"paint": {
+						"line-color": "#888787"
+					},
+					"property": [
+						{
+							"key": "main_type",
+							"name": "主要類別"
+						},
+						{
+							"key": "name",
+							"name": "名稱"
+						},
+						{
+							"key": "address",
+							"name": "地址"
+						}
+					],
+					"type": "voronoi",
+					"title": "婦產科分布",
+
+					"filter_key": ""
+				},
+				{
+					"index": "4000",
+					"paint": {
+						"circle-color": [
+							"match",
+							["get", "main_type"],
+							"診所",
+							"#F65658",
+							"醫院",
+							"#F49F36",
+							"#2F8AB1"
+						]
+					},
+					"property": [
+						{
+							"key": "main_type",
+							"name": "主要類別"
+						},
+						{
+							"key": "name",
+							"name": "名稱"
+						},
+						{
+							"key": "address",
+							"name": "地址"
+						}
+					],
+					"type": "circle",
+					"title": "婦產科分布",
+					"size": "big"
+				}
+			],
 			"history_data": false,
 			"chart_config": {
 				"categories": [
@@ -4623,7 +4679,7 @@
 					"type": "fill"
 				}
 			],
-			"history_data": false,
+			"history_data": "false",
 			"chart_config": {
 				"categories": [
 					"北投區",
@@ -4782,7 +4838,7 @@
 			"chart_config": {
 				"color": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
 				"types": ["HeatmapChart"],
-				"unit": "人",
+				"unit": "‰",
 				"categories": [
 					"15-19歲",
 					"20-24歲",
@@ -4803,6 +4859,37 @@
 			"short_desc": "顯示當前全市建築屋齡分佈情況",
 			"long_desc": "顯示當前全市建築屋齡分佈情況，資料來源為台北市都發局及消防局，不定期更新。",
 			"use_case": "屋齡的計算基準是以建物使用執照生效年份起算，這可以作為了解台北市建築屋齡分佈情況的參考依據。",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"4006": {
+			"id": 4006,
+			"index": "4006",
+			"map_config": null,
+			"history_data": false,
+			"chart_config": {
+				"color": [
+					"#C5E1A5",
+					"#ADED64",
+					"#7BB661",
+					"#479562",
+					"#357664",
+					"#00563F",
+					"#04432C"
+				],
+				"types": ["RadarChart", "BarChart"],
+				"unit": "μg/m³"
+			},
+			"name": "臺北市PM10測量數據",
+			"source": "",
+			"time_from": "2023-05-28T00:00:00+08:00",
+			"time_to": "2023-06-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "day",
+			"short_desc": "顯示近一週從週一起臺北市陳情系統所接收到的陳情案件",
+			"long_desc": "顯示近一週從週一起臺北市陳情系統所接收到的陳情案件，資料來源為臺北市陳情系統內部資料，每天更新，並提供一年內每個月的陳情案件總數資料。",
+			"use_case": "透過陳情案件的統計資訊，我們可以追蹤近一週內台北市各行政區收到的陳情案件，也可了解一年內每個月的陳情案件總數變化。",
 			"links": null,
 			"tags": [],
 			"contributors": ["tuic"]

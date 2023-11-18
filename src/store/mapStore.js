@@ -369,24 +369,24 @@ export const useMapStore = defineStore("map", {
 						return item.properties[map_config.filter_key] === key;
 					});
 
-					// push to source data (points)
-					for (let i = 0; i < cat1.length; i++) {
-						voronoi_source.features.push({
-							type: cat1[i].type,
-							properties: cat1[i].properties,
-							geometry: {
-								type: "LineString",
-								coordinates: angles.map((angle) => {
-									return [
-										cat1[i].geometry.coordinates[0] +
-											angle[0],
-										cat1[i].geometry.coordinates[1] +
-											angle[1],
-									];
-								}),
-							},
-						});
-					}
+					// // push to source data (points)
+					// for (let i = 0; i < cat1.length; i++) {
+					// 	voronoi_source.features.push({
+					// 		type: cat1[i].type,
+					// 		properties: cat1[i].properties,
+					// 		geometry: {
+					// 			type: "LineString",
+					// 			coordinates: angles.map((angle) => {
+					// 				return [
+					// 					cat1[i].geometry.coordinates[0] +
+					// 						angle[0],
+					// 					cat1[i].geometry.coordinates[1] +
+					// 						angle[1],
+					// 				];
+					// 			}),
+					// 		},
+					// 	});
+					// }
 
 					// remove duplicate coordinates (so that it wont't cause problems in the Voronoi algorithm...)
 					cat1 = cat1.filter((val, ind) => {
@@ -555,7 +555,6 @@ export const useMapStore = defineStore("map", {
 
 		AddContourMapLayer(map_config, data) {
 			// Feed data into contour algorithm
-			
 		},
 
 		//  5. Turn on the visibility for a exisiting map layer
