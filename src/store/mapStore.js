@@ -28,6 +28,8 @@ import { calculateGradientSteps } from "../assets/configs/mapbox/arcGradient";
 import MapPopup from "../components/map/MapPopup.vue";
 
 import { voronoi } from "../algorithms/voronoi.js";
+import { interpolation } from "../algorithms/contour_reciprocal.js";
+import { marchingSquare } from "../algorithms/marching_square.js";
 
 const { BASE_URL } = import.meta.env;
 
@@ -172,7 +174,11 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Add the layer data as a source in mapbox
 		addMapLayerSource(map_config, data) {
-			if (map_config.type !== "voronoi" && map_config.type !== "candy") {
+			if (
+				map_config.type !== "voronoi" &&
+				map_config.type !== "candy" &&
+				map_config.type !== "isoline"
+			) {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
 					data: { ...data },
@@ -185,6 +191,8 @@ export const useMapStore = defineStore("map", {
 				this.AddVoronoiMapLayer(map_config, data);
 			} else if (map_config.type === "candy") {
 				this.AddCandyMapLayer(map_config, data);
+			} else if (map_config.type === "isoline") {
+				this.AddIsolineMapLayer(map_config, data);
 			} else if (map_config.type === "contour") {
 				//
 			} else {
@@ -553,12 +561,56 @@ export const useMapStore = defineStore("map", {
 			this.addMapLayer(new_map_config);
 		},
 
-		// AddCandyMapLayer2(map_config, data){
+		AddIsolineMapLayer(map_config, data) {
+			console.log("hi");
+			let dataPoints = data.features.map((item) => {
+				return {
+					x: item.geometry.coordinates[0],
+					y: item.geometry.coordinates[1],
+					value: item.properties.value,
+				};
+			});
 
-		// },
+			let targetPoints = [];
+			let gridSize = 0.001;
 
-		AddContourMapLayer(map_config, data) {
-			// Feed data into contour algorithm
+			let rowN = 0;
+			let columnN = 0;
+			for (
+				let i = 121.4395508;
+				i <= 121.6735101;
+				i += gridSize, rowN += 1
+			) {
+				columnN = 0;
+				for (
+					let j = 24.946791;
+					j <= 25.2181139;
+					j += gridSize, columnN += 1
+				) {
+					targetPoints.push({ x: i, y: j });
+				}
+			}
+
+			let interpolationResult = interpolation(dataPoints, targetPoints);
+
+			console.log(interpolationResult.length);
+
+			discreteData = [];
+			for (let y = 0; y < rowN; y++) {
+				discreteData.push([]);
+				for (let x = 0; x < columnN; x++) {
+					// discreteData[y].push(noise(x / 10, y / 10 + 20));
+					discreteData[y].push(interpolationResult[y * columnN + x]);
+				}
+			}
+
+			let squareMatrix = [];
+			let allLines = [];
+
+			marchingSquare(squareMatrix, discreteData, allLines, 100, gridSize);
+
+			console.log(squareMatrix.length);
+			console.log(squareMatrix[0].length);
 		},
 
 		//  5. Turn on the visibility for a exisiting map layer

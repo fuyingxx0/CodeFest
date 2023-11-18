@@ -1,4 +1,5 @@
-function interpolation(dataPoints, targetPoints) {
+export function interpolation(dataPoints, targetPoints) {
+	// [{x:1,y:2,value:3}]
 	const pointCount = dataPoints.length;
 	var answers = [];
 	for (var k = 0; k < targetPoints.length; k++) {
