@@ -550,8 +550,8 @@ export const useMapStore = defineStore("map", {
 					"match",
 					["get", "service"],
 					"center_point",
-					zoomLv > 13 ? 0 : 5,
-					2 ** (zoomLv - 12),
+					zoomLv > 13 ? 0 : 4,
+					zoomLv < 14 ? 0 : 2 ** (zoomLv - 12),
 				]);
 			}
 
