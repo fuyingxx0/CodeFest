@@ -184,7 +184,7 @@ function toggleTriangle(clickedIndex) {
 	// console.log(clickedIndex, pos.value, newData)
 
 	function dfs(parent, toggledNodeFound, index){
-		console.log(parent.index, clickedIndex, parent.toggled)
+		// console.log(parent.index, clickedIndex, parent.toggled)
 		if(toggledNodeFound){
 			if (parent['children'] && parent['children'].length > 0) {
 				for (let i = 0; i < parent['children'].length; i++) {
@@ -271,7 +271,7 @@ function toggleTriangle(clickedIndex) {
 					:class="{ [`initial-animation-rect-${num - index - 1}`]: true, 'rectangles-rectangle': true }"
 					:x="returnPos(num - index - 1).x"
 					:y="returnPos(num - index - 1).y" 
-					:width="283 - returnPos(num - index - 1).x"
+					:width="253 - returnPos(num - index - 1).x"
 					:height="hei" 
 					:rx="hei / 2" 
 					:ry="hei / 2" 
@@ -342,10 +342,11 @@ function toggleTriangle(clickedIndex) {
 			z-index: 20;
 		}
 	}
+	overflow: scroll;
 }
 .svg-container {
 	padding: 10px;
-	min-height: 500px;
+	min-height: 1500px;
 	overflow: scroll;
 }
 // .rectangles {
