@@ -4,7 +4,8 @@ import { computed, ref, onMounted } from 'vue'
 import '../../assets/styles/globalStyles.css';
 
 // const colors = ['#833ab4', '#8e3978', '#ae445a', '#8b3552', '#ca695a', '#e1875a', '#f39f5a'];
-const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+// const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
+const colors = ['#ed77a5', '#e38e57', '#e3b84f', '#d0ca30', '#afc755', '#7eb88d', '#77cdb6', '#5abee6', '#618eee', '#7d7af1', '#a565e3', '#e064e3', '#d956a2'];
 const colorBG = '#090909'
 
 // register the four required props
@@ -33,6 +34,9 @@ for(let x = 0; x < sortedData.length; x++){
 // console.log(sortedData);
 
 const showedLegend = ref(Array(sortedData[0].data.length).fill(true));
+if(showedLegend.value.length >= 4){
+	for(let i = 4; i < showedLegend.value.length; i++) showedLegend.value[i] = false;
+}
 const activeLegend = ref(null);
 // console.log(showedLegend.value)
 
@@ -59,9 +63,9 @@ const ynum = sortedData[0].data.length;
 
 // characteristics of the chart
 let hei = 100 / totalMax;
-let spcx = 90 / xnum;
+let spcx = 80 / xnum;
 let spcy = 6;
-let rad = 15;
+let rad = 17;
 function calcTotalLen(){
 	let total = [0];
 	for(let j = 0; j < sortedData[0].data.length; j++){
@@ -191,14 +195,6 @@ const rectangles = Array.from({ length: xnum * ynum }, (_, index) => {
 });
 // console.log(rectangles);
 
-const labels = Array.from({ length: xnum }, (_, index) => {	
-	let pos = calcStartPos();
-	return {
-		x: pos[index][0].x + rad,
-		text: sortedData[index].x
-	};
-});
-
 const textwrapper = ref(null);
 onMounted(() => {
 	// Access the DOM element after the component is mounted
@@ -210,6 +206,13 @@ const legends = Array.from({ length: ynum }, (_, index) => {
 	return {
 		color: colors[index],
 		text: props.series[index].name,
+	};
+});
+
+const labels = Array.from({ length: xnum }, (_, index) => {	
+	return {
+		x: index * (2 * rad + spcx) + 20,
+		text: sortedData[index].x
 	};
 });
 
@@ -286,9 +289,9 @@ function returnshowedStartPos(index){
 				>
 					<svg class="svg-legend" style="width: 15px; height: 15px;">
 						<rect width="15" height="15" :fill="legend.color" rx="4" ry="4"/>
-						<rect class="legends-rect-top" width="15" height="15" :fill="colorBG" :opacity="!showedLegend[index] ? 0.45 : 0" rx="4" ry="4"/>
+						<rect class="legends-rect-top" width="15" height="15" :fill="colorBG" :opacity="!showedLegend[index] ? 0.65 : 0" rx="4" ry="4"/>
 					</svg>
-					<div color="#888787"> {{ legend.text }} </div>
+					<h6 :class="{'legend-selected': showedLegend[index] ,'legend-not-selected': !showedLegend[index]}">{{ legend.text }}</h6>
 				</div>
 			</div>
 			<!-- <svg class="svg-container"
@@ -327,13 +330,13 @@ function returnshowedStartPos(index){
 					stroke="none" 
 				/>
 				<text v-for="(rect, index) in rectangles"
-					:class="{ [`initial-animation-text-${rect.k}-${rect.i}`]: true, [`datapoint-${rect.k}`]: true }"
+					:class="{ [`initial-animation-text-${rect.k}-${rect.i}`]: true, [`datapoint-${rect.k}`]: true, 'rect-text': true }"
 					:key="'text-' + index" 
 					:x="returnshowedStartPos(index).x + rect.width / 2 + spcx / 2" 
 					:y="returnshowedStartPos(index).y + rect.height / 2" 
 					text-anchor="middle" 
 					alignment-baseline="middle"
-					:fill="returnshowedStartPos(index).x !== -1 ? '#ffffff' : 'rgba(255, 255, 255, 0)'" 
+					:fill="returnshowedStartPos(index).x !== -1 ? '#090909' : 'rgba(255, 255, 255, 0)'" 
 					:opacity="returnshowedStartPos(index).x !== -1 ? 1 : 0"
 					font-size="12"
 				>
@@ -356,16 +359,16 @@ function returnshowedStartPos(index){
 				/>
 				<line 
 					x1="0" 
-					:y1="totalLenMax + 12" 
+					:y1="totalLenMax" 
 					x2="400px" 
-					:y2="totalLenMax + 12"
+					:y2="totalLenMax"
 					stroke="#888787"
 					stroke-width=".5"
 				/>
 				<text v-for="(label, index) in labels"
 					:key="'text-' + index" 
 					:x="label.x + spcx / 2"
-					:y="totalLenMax + 30"
+					:y="totalLenMax + 20"
 					text-anchor="middle" 
 					alignment-baseline="top" 
 					fill="#888787"
@@ -472,7 +475,9 @@ function returnshowedStartPos(index){
 	}
 }
 .datapoint-front:hover {
-	fill: rgba(255, 255, 255, .35);
+	fill: rgba(255, 255, 255, .55);
+	stroke: rgba(255, 255, 255, .75);
+	stroke-width: 2px;
 }
 
 .ease-all {
@@ -515,6 +520,15 @@ function returnshowedStartPos(index){
 		opacity: 0;
 	}
   }
+}
+
+.legend {
+	&-selected {
+		color: white;
+	}
+	&-not-selected {
+		color: #888787;
+	}
 }
 
 </style>
