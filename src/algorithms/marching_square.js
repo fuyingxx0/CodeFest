@@ -75,32 +75,36 @@ class Square {
 		this.basicLines.forEach((l) => {
 			let newLine = [
 				[
-					(this.column +
-						lineEndPoints[l[0]][0] +
-						(l[0] === 0 || l[0] === 2
-							? interpoValues[l[0]]
-							: 0.5)) *
-						length,
-					(this.row +
-						lineEndPoints[l[0]][1] +
-						(l[0] === 1 || l[0] === 3
-							? interpoValues[l[0]]
-							: 0.5)) *
-						length,
+					121.4395508 +
+						(this.column +
+							lineEndPoints[l[0]][0] +
+							(l[0] === 0 || l[0] === 2
+								? interpoValues[l[0]]
+								: 0.5)) *
+							length,
+					24.946791 +
+						(this.row +
+							lineEndPoints[l[0]][1] +
+							(l[0] === 1 || l[0] === 3
+								? interpoValues[l[0]]
+								: 0.5)) *
+							length,
 				],
 				[
-					(this.column +
-						lineEndPoints[l[1]][0] +
-						(l[1] === 0 || l[1] === 2
-							? interpoValues[l[1]]
-							: 0.5)) *
-						length,
-					(this.row +
-						lineEndPoints[l[1]][1] +
-						(l[1] === 1 || l[1] === 3
-							? interpoValues[l[1]]
-							: 0.5)) *
-						length,
+					121.4395508 +
+						(this.column +
+							lineEndPoints[l[1]][0] +
+							(l[1] === 0 || l[1] === 2
+								? interpoValues[l[1]]
+								: 0.5)) *
+							length,
+					24.946791 +
+						(this.row +
+							lineEndPoints[l[1]][1] +
+							(l[1] === 1 || l[1] === 3
+								? interpoValues[l[1]]
+								: 0.5)) *
+							length,
 				],
 			];
 			allLines.push(newLine);
@@ -167,20 +171,20 @@ let squareCorners = [
 	[0, 0],
 ];
 
-class Point {
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-	}
+// class Point2 {
+// 	constructor(x, y) {
+// 		this.x = x;
+// 		this.y = y;
+// 	}
 
-	add(point) {
-		return new Point(this.x + point.x, this.y + point.y);
-	}
+// 	add(point) {
+// 		return new Point2(this.x + point.x, this.y + point.y);
+// 	}
 
-	multiply(m) {
-		return new Point(this.x * m, this.y * m);
-	}
-}
+// 	multiply(m) {
+// 		return new Point2(this.x * m, this.y * m);
+// 	}
+// }
 
 function pointAverage(p1, p2) {
 	return p1.multiply(0.5).add(p2.multiply(0.5));
@@ -222,7 +226,7 @@ export function marchingSquare(
 			squareMatrix[i][j].getCornerBinary(isoValue);
 			squareMatrix[i][j].getBasicLines(isoValue);
 			squareMatrix[i][j].getActualLines(allLines, gridSize, isoValue);
-			squareMatrix[i][j].setNeedVisit();
+			// squareMatrix[i][j].setNeedVisit();
 		}
 	}
 }

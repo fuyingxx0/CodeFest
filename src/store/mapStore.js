@@ -562,7 +562,7 @@ export const useMapStore = defineStore("map", {
 		},
 
 		AddIsolineMapLayer(map_config, data) {
-			console.log("hi");
+			// console.log("hi");
 			let dataPoints = data.features.map((item) => {
 				return {
 					x: item.geometry.coordinates[0],
@@ -576,26 +576,25 @@ export const useMapStore = defineStore("map", {
 
 			let rowN = 0;
 			let columnN = 0;
-			for (
-				let i = 121.4395508;
-				i <= 121.6735101;
-				i += gridSize, rowN += 1
-			) {
+			for (let i = 24.946791; i <= 25.2181139; i += gridSize, rowN += 1) {
 				columnN = 0;
 				for (
-					let j = 24.946791;
-					j <= 25.2181139;
+					let j = 121.4395508;
+					j <= 121.6735101;
 					j += gridSize, columnN += 1
 				) {
-					targetPoints.push({ x: i, y: j });
+					targetPoints.push({ x: j, y: i });
 				}
 			}
 
+			// console.log(targetPoints);
+
 			let interpolationResult = interpolation(dataPoints, targetPoints);
 
-			console.log(interpolationResult.length);
+			// console.log(interpolationResult);
+			// console.log(interpolationResult.length);
 
-			discreteData = [];
+			let discreteData = [];
 			for (let y = 0; y < rowN; y++) {
 				discreteData.push([]);
 				for (let x = 0; x < columnN; x++) {
@@ -604,13 +603,88 @@ export const useMapStore = defineStore("map", {
 				}
 			}
 
+			// marchingSquare(squareMatrix, discreteData, allLines, 100, gridSize);
+
+			let isoline_data = {
+				type: "FeatureCollection",
+				crs: {
+					type: "name",
+					properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+				},
+				features: [],
+			};
+
 			let squareMatrix = [];
 			let allLines = [];
 
-			marchingSquare(squareMatrix, discreteData, allLines, 100, gridSize);
+			for (let i = 10; i <= 250; i += 7) {
+				allLines = [];
+				squareMatrix = [];
+				marchingSquare(
+					squareMatrix,
+					discreteData,
+					allLines,
+					i,
+					gridSize
+				);
 
-			console.log(squareMatrix.length);
-			console.log(squareMatrix[0].length);
+				isoline_data.features = isoline_data.features.concat(
+					allLines.map((line) => {
+						return {
+							type: "Feature",
+							properties: { value: i },
+							geometry: { type: "LineString", coordinates: line },
+						};
+					})
+				);
+			}
+
+			// squareMatrix = [];
+			// marchingSquare(squareMatrix, discreteData, allLines, 90, gridSize);
+
+			// squareMatrix = [];
+			// marchingSquare(squareMatrix, discreteData, allLines, 80, gridSize);
+
+			// console.log(squareMatrix.length);
+			// console.log(squareMatrix[0].length);
+
+			// let isoline_data = {
+			// 	type: "FeatureCollection",
+			// 	crs: {
+			// 		type: "name",
+			// 		properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+			// 	},
+			// 	features: [
+			// 		{
+			// 			type: "Feature",
+			// 			properties: {},
+			// 			geometry: {
+			// 				type: "Polygon",
+			// 				coordinates: [
+			// 					[
+			// 						[121.4395508, 24.946791],
+			// 						[121.6735101, 25.2181139],
+			// 					],
+			// 				],
+			// 			},
+			// 		},
+			// 	],
+			// };
+
+			// console.log(allLines);
+
+			// console.log(isoline_data);
+
+			this.map.addSource(`${map_config.layerId}-source`, {
+				type: "geojson",
+
+				data: { ...isoline_data },
+			});
+
+			let new_map_config = map_config;
+			new_map_config.type = "line";
+
+			this.addMapLayer(new_map_config);
 		},
 
 		//  5. Turn on the visibility for a exisiting map layer
