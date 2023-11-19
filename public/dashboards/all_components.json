@@ -4435,7 +4435,7 @@
 					"paint": {
 						"line-color": "#D6D1B1",
 						"line-opacity": 0.6,
-						"line-width": 2
+						"line-width": 1.5
 					},
 					"property": [
 						{
