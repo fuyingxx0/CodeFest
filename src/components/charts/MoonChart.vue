@@ -35,7 +35,7 @@ for (let i = 0; i < 6; i++) {
 	posCircle[i + 6].x += Math.sqrt(3) * R * Math.cos(ang2);
 	posCircle[i + 6].y += Math.sqrt(3) * R * Math.sin(ang2);
 }
-// console.log(posCircle)
+console.log(posCircle)
 const circles = Array.from({ length: 12 }, (_, index) => {
 	// console.log(r * props.series[0].data[index] / max)
 	return {
@@ -115,6 +115,7 @@ function handleDataSelection(index) {
 			<svg class="svg-wrapper">
 				<g v-for="(circle, index) in circles">
 					<line
+						:class="{ [`initial-animation-line-${index}`]: true }"
 						:x1="circle.cx"
 						:y1="circle.cy"
 						:x2="centerx"
@@ -123,21 +124,23 @@ function handleDataSelection(index) {
 						stroke-width="2"
 					/>
 					<circle
+						:class="{ [`initial-animation-circle-${index}`]: true }"
 						:cx="circle.cx"
 						:cy="circle.cy"
 						:r="circle.r"
-						:fill="colors[0]"
+						:fill="colors[1]"
 					/>
-					<path :d="circle.d" :fill="colors[1]" />
+					<path :class="{ [`initial-animation-semicircle-${index}`]: true }" :d="circle.d" :fill="colors[0]" />
 					<ellipse
+						:class="{ [`initial-animation-ellipse-${index}`]: true }"
 						:cx="circle.cx"
 						:cy="circle.cy"
 						:rx="circle.rx"
 						:ry="circle.r"
-						:fill="circle.overHalf ? colors[0] : colors[1]"
+						:fill="!circle.overHalf ? colors[1] : colors[0]"
 					/>
 					<circle
-						class="circle-top"
+						:class="{ [`initial-animation-circle-${index}`]: true, 'circle-top': true }"
 						:cx="circle.cx"
 						:cy="circle.cy"
 						:r="circle.r"
@@ -151,7 +154,7 @@ function handleDataSelection(index) {
 						@click="handleDataSelection(index)"
 					/>
 					<text
-						class="label"
+						:class="{ [`initial-animation-label-${index}`]: true, 'label': true }"
 						:x="circle.cx + textMove[index].x"
 						:y="circle.cy + textMove[index].y"
 						text-anchor="middle"
@@ -163,6 +166,7 @@ function handleDataSelection(index) {
 					</text>
 				</g>
 				<circle
+					:class="{ 'initial-animation-center-circle': true }"
 					:cx="centerx"
 					:cy="centery"
 					:r="8"
@@ -225,22 +229,346 @@ function handleDataSelection(index) {
 	stroke-width: 5px;
 }
 /* Animation styles aren't required but recommended */
-@keyframes ease-in {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-@for $i from 0 through 20 {
-	.initial-animation-#{$i} {
-		animation-name: ease-in;
-		animation-duration: 0.3s;
-		animation-delay: 0.1s * $i;
-		animation-timing-function: linear;
-		animation-fill-mode: forwards;
-		opacity: 0;
-	}
-}
+
+// .initial-animation-center-circle {
+// 	@keyframes center-animation {
+// 		0% {
+// 			r: 8;
+// 		}
+// 		10% {
+// 			r: 23;
+// 		}
+// 		11% {
+// 			r: 22;
+// 		}
+// 		79% {
+// 			r: 22;
+// 		}
+// 		80% {
+// 			r: 25;
+// 		}
+// 		100% {
+// 			r: 8;
+// 		}
+// 	}
+// 	animation-name: center-animation;
+// 	animation-duration: 4s;
+// 	animation-delay: 0;
+// 	animation-timing-function: ease;
+// 	animation-fill-mode: forwards;
+// }
+// @for $i from 0 through 11 {
+// 	@keyframes circle-animation-0 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		44% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		50% {
+// 			cx: 246.7653718043597;
+// 			cy: 167;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 246.7653718043597;
+// 			cy: 167;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-1 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		50% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		56% {
+// 			cx: 200;
+// 			cy: 194;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 200;
+// 			cy: 194;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-2 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		56% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		62% {
+// 			cx: 153.2346281956403;
+// 			cy: 167;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 153.2346281956403;
+// 			cy: 167;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-3 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		62% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		68% {
+// 			cx: 153.2346281956403;
+// 			cy: 113;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 153.2346281956403;
+// 			cy: 113;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-4 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		68% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		74% {
+// 			cx: 200;
+// 			cy: 86;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 200;
+// 			cy: 86;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-5 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		74% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		80% {
+// 			cx: 246.7653718043597;
+// 			cy: 113;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 246.7653718043597;
+// 			cy: 113;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-6 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		8% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		14% {
+// 			cx: 293.5307436087194;
+// 			cy: 140;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 293.5307436087194;
+// 			cy: 140;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-7 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		20% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		26% {
+// 			cx: 246.7653718043597;
+// 			cy: 221;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 246.7653718043597;
+// 			cy: 221;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-8 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		26% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		32% {
+// 			cx: 153.23462819564034;
+// 			cy: 221;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 153.23462819564034;
+// 			cy: 221;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-9 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		32% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		40% {
+// 			cx: 106.46925639128064;
+// 			cy: 140;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 106.46925639128064;
+// 			cy: 140;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-10 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		40% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		46% {
+// 			cx: 153.23462819564028;
+// 			cy: 59;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 153.23462819564028;
+// 			cy: 59;
+// 			r: 18;
+// 		}
+// 	}
+// 	@keyframes circle-animation-11 {
+// 		0% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		46% {
+// 			cx: 200;
+// 			cy: 140;
+// 			r: 0;
+// 		}
+// 		52% {
+// 			cx: 246.7653718043597;
+// 			cy: 59;
+// 			r: 18;
+// 		}
+// 		100% {
+// 			cx: 246.7653718043597;
+// 			cy: 59;
+// 			r: 18;
+// 		}
+// 	}
+// 	.initial-animation-circle-#{$i} {
+// 		animation-name: circle-animation-#{$i};
+// 		animation-duration: 4s;
+// 		animation-delay: 0;
+// 		animation-timing-function: ease;
+// 		animation-fill-mode: forwards;
+// 	}
+// 	@keyframes easeIn {
+// 		0%{
+// 			opacity: 0;
+// 		}
+// 		80%{
+// 			opacity: 0;
+// 		}
+// 		100%{
+// 			opacity: 1;
+// 		}
+// 	}
+// 	.initial-animation-semicircle-#{$i} {
+// 		animation-name: easeIn;
+// 		animation-duration: 5s;
+// 		animation-delay: 0s;
+// 		animation-timing-function: ease;
+// 		animation-fill-mode: forwards;
+// 	}
+// 	.initial-animation-ellipse-#{$i} {
+// 		animation-name: easeIn;
+// 		animation-duration: 5s;
+// 		animation-delay: 0s;
+// 		animation-timing-function: ease;
+// 		animation-fill-mode: forwards;
+// 	}
+// 	.initial-animation-line-#{$i} {
+// 		animation-name: easeIn;
+// 		animation-duration: 5s;
+// 		animation-delay: 0s;
+// 		animation-timing-function: ease;
+// 		animation-fill-mode: forwards;
+// 	}
+// 	.initial-animation-circle-top-#{$i} {
+// 		animation-name: easeIn;
+// 		animation-duration: 5s;
+// 		animation-delay: 0s;
+// 		animation-timing-function: ease;
+// 		animation-fill-mode: forwards;
+// 	}
+// }
+
+
 </style>
