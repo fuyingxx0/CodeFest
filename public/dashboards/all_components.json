@@ -4406,10 +4406,10 @@
 							"match",
 							["get", "main_type"],
 							"診所",
-							"#F65658",
+							"#F0B67F",
 							"醫院",
-							"#F49F36",
-							"#2F8AB1"
+							"#C7EFCF",
+							"#D6D1B1"
 						],
 						"circle-radius": 3
 					},
@@ -4433,8 +4433,9 @@
 				{
 					"index": "4000",
 					"paint": {
-						"line-color": "#F57B47",
-						"line-opacity": 0.4
+						"line-color": "#D6D1B1",
+						"line-opacity": 0.6,
+						"line-width": 2
 					},
 					"property": [
 						{
@@ -4786,9 +4787,9 @@
 							"免費衛生用品",
 							"#4CB495",
 							"置物空間",
-							"#569C9A",
+							"#4987B3",
 							"嬰兒車停放空間",
-							"#60819C",
+							"#5A58B8",
 							"center_point",
 							"#FFC0CB",
 							"#FFFFFF"
@@ -4804,11 +4805,19 @@
 							"name": "名稱"
 						},
 						{
-							"key": "services",
-							"name": "服務"
+							"key": "opening_hours",
+							"name": "開放時間"
+						},
+						{
+							"key": "guide",
+							"name": "指引"
+						},
+						{
+							"key": "reminder",
+							"name": "提醒"
 						}
 					],
-					"title": "哺集乳室分佈與提供服務",
+					"title": "哺集乳室資訊",
 					"type": "candy",
 					"size": "big",
 					"icon": null
@@ -4852,8 +4861,8 @@
 			"index": "building_age2",
 			"map_config": null,
 			"chart_config": {
-				"color_backup": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
-				"color": ["#171767", "#19479a", "#107fbc", "#06bee3"],
+				"color_backup": ["#CADA7F", "#b7e28e", "#7febd0", "#8ce8ff"],
+				"color": ["#33486C", "#475D69", "#728670", "#A2B478"],
 				"types": ["HeatmapChart"],
 				"unit": "‰",
 				"categories": [
@@ -4941,15 +4950,7 @@
 			],
 			"history_data": false,
 			"chart_config": {
-				"color": [
-					"#C5E1A5",
-					"#ADED64",
-					"#7BB661",
-					"#479562",
-					"#357664",
-					"#00563F",
-					"#04432C"
-				],
+				"color": ["#FFBC3F"],
 				"types": ["RadarChart", "BarChart"],
 				"unit": "μg/m³"
 			},
