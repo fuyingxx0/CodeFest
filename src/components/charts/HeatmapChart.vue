@@ -63,7 +63,7 @@ const colorScale = computed(() => {
 	ranges.unshift({
 		to: 0,
 		from: 0,
-		color: "#9dbec4",
+		color: "#CADA7F",
 	});
 	return ranges;
 });
