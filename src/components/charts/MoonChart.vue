@@ -230,345 +230,345 @@ function handleDataSelection(index) {
 }
 /* Animation styles aren't required but recommended */
 
-// .initial-animation-center-circle {
-// 	@keyframes center-animation {
-// 		0% {
-// 			r: 8;
-// 		}
-// 		10% {
-// 			r: 23;
-// 		}
-// 		11% {
-// 			r: 22;
-// 		}
-// 		79% {
-// 			r: 22;
-// 		}
-// 		80% {
-// 			r: 25;
-// 		}
-// 		100% {
-// 			r: 8;
-// 		}
-// 	}
-// 	animation-name: center-animation;
-// 	animation-duration: 4s;
-// 	animation-delay: 0;
-// 	animation-timing-function: ease;
-// 	animation-fill-mode: forwards;
-// }
-// @for $i from 0 through 11 {
-// 	@keyframes circle-animation-0 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		44% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		50% {
-// 			cx: 246.7653718043597;
-// 			cy: 167;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 246.7653718043597;
-// 			cy: 167;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-1 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		50% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		56% {
-// 			cx: 200;
-// 			cy: 194;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 200;
-// 			cy: 194;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-2 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		56% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		62% {
-// 			cx: 153.2346281956403;
-// 			cy: 167;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 153.2346281956403;
-// 			cy: 167;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-3 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		62% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		68% {
-// 			cx: 153.2346281956403;
-// 			cy: 113;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 153.2346281956403;
-// 			cy: 113;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-4 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		68% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		74% {
-// 			cx: 200;
-// 			cy: 86;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 200;
-// 			cy: 86;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-5 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		74% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		80% {
-// 			cx: 246.7653718043597;
-// 			cy: 113;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 246.7653718043597;
-// 			cy: 113;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-6 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		8% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		14% {
-// 			cx: 293.5307436087194;
-// 			cy: 140;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 293.5307436087194;
-// 			cy: 140;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-7 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		20% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		26% {
-// 			cx: 246.7653718043597;
-// 			cy: 221;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 246.7653718043597;
-// 			cy: 221;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-8 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		26% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		32% {
-// 			cx: 153.23462819564034;
-// 			cy: 221;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 153.23462819564034;
-// 			cy: 221;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-9 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		32% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		40% {
-// 			cx: 106.46925639128064;
-// 			cy: 140;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 106.46925639128064;
-// 			cy: 140;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-10 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		40% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		46% {
-// 			cx: 153.23462819564028;
-// 			cy: 59;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 153.23462819564028;
-// 			cy: 59;
-// 			r: 18;
-// 		}
-// 	}
-// 	@keyframes circle-animation-11 {
-// 		0% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		46% {
-// 			cx: 200;
-// 			cy: 140;
-// 			r: 0;
-// 		}
-// 		52% {
-// 			cx: 246.7653718043597;
-// 			cy: 59;
-// 			r: 18;
-// 		}
-// 		100% {
-// 			cx: 246.7653718043597;
-// 			cy: 59;
-// 			r: 18;
-// 		}
-// 	}
-// 	.initial-animation-circle-#{$i} {
-// 		animation-name: circle-animation-#{$i};
-// 		animation-duration: 4s;
-// 		animation-delay: 0;
-// 		animation-timing-function: ease;
-// 		animation-fill-mode: forwards;
-// 	}
-// 	@keyframes easeIn {
-// 		0%{
-// 			opacity: 0;
-// 		}
-// 		80%{
-// 			opacity: 0;
-// 		}
-// 		100%{
-// 			opacity: 1;
-// 		}
-// 	}
-// 	.initial-animation-semicircle-#{$i} {
-// 		animation-name: easeIn;
-// 		animation-duration: 5s;
-// 		animation-delay: 0s;
-// 		animation-timing-function: ease;
-// 		animation-fill-mode: forwards;
-// 	}
-// 	.initial-animation-ellipse-#{$i} {
-// 		animation-name: easeIn;
-// 		animation-duration: 5s;
-// 		animation-delay: 0s;
-// 		animation-timing-function: ease;
-// 		animation-fill-mode: forwards;
-// 	}
-// 	.initial-animation-line-#{$i} {
-// 		animation-name: easeIn;
-// 		animation-duration: 5s;
-// 		animation-delay: 0s;
-// 		animation-timing-function: ease;
-// 		animation-fill-mode: forwards;
-// 	}
-// 	.initial-animation-circle-top-#{$i} {
-// 		animation-name: easeIn;
-// 		animation-duration: 5s;
-// 		animation-delay: 0s;
-// 		animation-timing-function: ease;
-// 		animation-fill-mode: forwards;
-// 	}
-// }
+.initial-animation-center-circle {
+	@keyframes center-animation {
+		0% {
+			r: 8;
+		}
+		10% {
+			r: 23;
+		}
+		11% {
+			r: 22;
+		}
+		79% {
+			r: 22;
+		}
+		80% {
+			r: 25;
+		}
+		100% {
+			r: 8;
+		}
+	}
+	animation-name: center-animation;
+	animation-duration: 3s;
+	animation-delay: 0;
+	animation-timing-function: ease;
+	animation-fill-mode: forwards;
+}
+@for $i from 0 through 11 {
+	@keyframes circle-animation-0 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		44% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		50% {
+			cx: 246.7653718043597;
+			cy: 167;
+			r: 18;
+		}
+		100% {
+			cx: 246.7653718043597;
+			cy: 167;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-1 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		50% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		56% {
+			cx: 200;
+			cy: 194;
+			r: 18;
+		}
+		100% {
+			cx: 200;
+			cy: 194;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-2 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		56% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		62% {
+			cx: 153.2346281956403;
+			cy: 167;
+			r: 18;
+		}
+		100% {
+			cx: 153.2346281956403;
+			cy: 167;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-3 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		62% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		68% {
+			cx: 153.2346281956403;
+			cy: 113;
+			r: 18;
+		}
+		100% {
+			cx: 153.2346281956403;
+			cy: 113;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-4 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		68% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		74% {
+			cx: 200;
+			cy: 86;
+			r: 18;
+		}
+		100% {
+			cx: 200;
+			cy: 86;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-5 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		74% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		80% {
+			cx: 246.7653718043597;
+			cy: 113;
+			r: 18;
+		}
+		100% {
+			cx: 246.7653718043597;
+			cy: 113;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-6 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		8% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		14% {
+			cx: 293.5307436087194;
+			cy: 140;
+			r: 18;
+		}
+		100% {
+			cx: 293.5307436087194;
+			cy: 140;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-7 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		20% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		26% {
+			cx: 246.7653718043597;
+			cy: 221;
+			r: 18;
+		}
+		100% {
+			cx: 246.7653718043597;
+			cy: 221;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-8 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		26% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		32% {
+			cx: 153.23462819564034;
+			cy: 221;
+			r: 18;
+		}
+		100% {
+			cx: 153.23462819564034;
+			cy: 221;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-9 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		32% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		40% {
+			cx: 106.46925639128064;
+			cy: 140;
+			r: 18;
+		}
+		100% {
+			cx: 106.46925639128064;
+			cy: 140;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-10 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		40% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		46% {
+			cx: 153.23462819564028;
+			cy: 59;
+			r: 18;
+		}
+		100% {
+			cx: 153.23462819564028;
+			cy: 59;
+			r: 18;
+		}
+	}
+	@keyframes circle-animation-11 {
+		0% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		46% {
+			cx: 200;
+			cy: 140;
+			r: 0;
+		}
+		52% {
+			cx: 246.7653718043597;
+			cy: 59;
+			r: 18;
+		}
+		100% {
+			cx: 246.7653718043597;
+			cy: 59;
+			r: 18;
+		}
+	}
+	.initial-animation-circle-#{$i} {
+		animation-name: circle-animation-#{$i};
+		animation-duration: 3s;
+		animation-delay: 0;
+		animation-timing-function: ease;
+		animation-fill-mode: forwards;
+	}
+	@keyframes easeIn {
+		0%{
+			opacity: 0;
+		}
+		80%{
+			opacity: 0;
+		}
+		100%{
+			opacity: 1;
+		}
+	}
+	.initial-animation-semicircle-#{$i} {
+		animation-name: easeIn;
+		animation-duration: 4s;
+		animation-delay: 0s;
+		animation-timing-function: ease;
+		animation-fill-mode: forwards;
+	}
+	.initial-animation-ellipse-#{$i} {
+		animation-name: easeIn;
+		animation-duration: 4s;
+		animation-delay: 0s;
+		animation-timing-function: ease;
+		animation-fill-mode: forwards;
+	}
+	.initial-animation-line-#{$i} {
+		animation-name: easeIn;
+		animation-duration: 4s;
+		animation-delay: 0s;
+		animation-timing-function: ease;
+		animation-fill-mode: forwards;
+	}
+	.initial-animation-circle-top-#{$i} {
+		animation-name: easeIn;
+		animation-duration: 4s;
+		animation-delay: 0s;
+		animation-timing-function: ease;
+		animation-fill-mode: forwards;
+	}
+}
 
 
 </style>

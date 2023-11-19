@@ -3,15 +3,13 @@ import { computed, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 
 const colors = [
-	"#219c90",
-	"#8eab55",
-	"#f39f5a",
+	"#F5C860",
+	"#4987B3",
+	"#5A58B8",
 	"#e9b824",
 	"#e77727",
 	"#d83f31",
 ];
-// const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
-// const colors = ['#ffffff', '#ff0000', '#00ff00', '#0000ff']
 const colorBG = "#282A2C";
 
 // register the four required props
@@ -53,8 +51,6 @@ for (let j = 0; j < props.series[0].data.length; j++) {
 
 const anumTotal = data.length;
 const rnumTotal = data[0].data.length;
-const anum = ref(data.length);
-const rnum = ref(data[0].data.length);
 const showedData = ref(data);
 const showedMax = ref(dataMax);
 const rShow = ref(Array(data[0].data.length).fill(true));
@@ -80,8 +76,8 @@ function printShowData() {
 const mousePosition = ref({ x: null, y: null });
 function toggleActive(i) {
 	// console.log('toggleActive called, ', i);
-	aHovered.value = i % anum.value;
-	rHovered.value = (i / anum.value) | 0;
+	aHovered.value = i % anumTotal;
+	rHovered.value = (i / anumTotal) | 0;
 }
 function toggleActiveToNull() {
 	// console.log('toggleActiveToNull called, ');
@@ -97,8 +93,8 @@ function updateMouseLocation(e) {
 // Required for charts that support map filtering
 const selectedIndex = ref(null);
 function handleDataSelection(index) {
-	const a = index % anum.value;
-	console.log(index, a);
+	const a = index % anumTotal;
+	// console.log(index, a);
 	if (!props.chart_config.map_filter) {
 		return;
 	}
@@ -111,7 +107,7 @@ function handleDataSelection(index) {
 		selectedIndex.value = a;
 	} else {
 		mapStore.clearLayerFilter(
-			`${props.map_config[0].a}-${props.map_config[0].type}`
+			`${props.map_config[0].index}-${props.map_config[0].type}`
 		);
 		selectedIndex.value = null;
 	}
@@ -183,8 +179,8 @@ const labels = Array.from({ length: anumTotal }, (_, index) => {
 
 // max: showedMax.value, return {radius, startAngle, endAngle}
 function calcSector(a, r) {
-	let awid = (Math.PI * 2) / anum.value - aspc - (rnum.value - 1) * agap;
-	let astart = (a * Math.PI * 2) / anum.value + aspc / 2 + r * agap;
+	let awid = (Math.PI * 2) / anumTotal - aspc - (rnumTotal - 1) * agap;
+	let astart = (a * Math.PI * 2) / anumTotal + aspc / 2 + r * agap;
 	let aend = astart + awid;
 	let maxDataInR = 0;
 	for (let k = 0; k < showedData.value[a].data.length; k++) {
@@ -222,8 +218,8 @@ function getSectorPath(cx, cy, radius, startAngle, endAngle) {
 }
 
 const sectors = Array.from({ length: anumTotal * rnumTotal }, (_, index) => {
-	const a = index % anum.value;
-	const r = (index / anum.value) | 0;
+	const a = index % anumTotal;
+	const r = (index / anumTotal) | 0;
 	let rname = -1;
 	for (let i = 0; i < props.series.length; i++) {
 		if (showedData.value[a].data[r].r === props.series[i].name) {
@@ -241,8 +237,8 @@ const sectors = Array.from({ length: anumTotal * rnumTotal }, (_, index) => {
 });
 
 function sectorD(index) {
-	const a = index % anum.value;
-	const r = (index / anum.value) | 0;
+	const a = index % anumTotal;
+	const r = (index / anumTotal) | 0;
 	const posFac = calcSector(a, r);
 	return getSectorPath(
 		cx,
@@ -253,7 +249,7 @@ function sectorD(index) {
 	);
 }
 
-const legends = Array.from({ length: rnum.value }, (_, index) => {
+const legends = Array.from({ length: rnumTotal }, (_, index) => {
 	// const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
 	return {
 		color: colors[index],
