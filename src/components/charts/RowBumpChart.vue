@@ -5,7 +5,8 @@ import '../../assets/styles/globalStyles.css';
 
 // const colors = ['#833ab4', '#8e3978', '#ae445a', '#8b3552', '#ca695a', '#e1875a', '#f39f5a'];
 // const colors = ['#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a', '#ae445a', '#ca695a', '#f39f5a', '#8e3978', '#8b3552', '#e1875a'];
-const colors = ['#ed77a5', '#e38e57', '#e3b84f', '#d0ca30', '#afc755', '#7eb88d', '#77cdb6', '#5abee6', '#618eee', '#7d7af1', '#a565e3', '#e064e3', '#d956a2'];
+// const colors = ['#ed77a5', '#e38e57', '#e3b84f', '#d0ca30', '#afc755', '#7eb88d', '#77cdb6', '#5abee6', '#618eee', '#7d7af1', '#a565e3', '#e064e3', '#d956a2'];
+const colors = ['#ed77a5', '#e38e57', '#ebaa0d', '#b0ac21', '#afc755', '#7eb88d', '#77cdb6', '#5abee6', '#618eee', '#7d7af1', '#a565e3', '#e064e3', '#d956a2'];
 const colorBG = '#090909'
 
 // register the four required props
@@ -31,7 +32,7 @@ for (let i = 0; i < props.series.length; i++){
 for(let x = 0; x < sortedData.length; x++){
 	sortedData[x].data.sort((a, b) => b.y - a.y);
 }
-// console.log(sortedData);
+console.log(sortedData);
 
 const showedLegend = ref(Array(sortedData[0].data.length).fill(true));
 if(showedLegend.value.length >= 4){
@@ -336,7 +337,7 @@ function returnshowedStartPos(index){
 					:y="returnshowedStartPos(index).y + rect.height / 2" 
 					text-anchor="middle" 
 					alignment-baseline="middle"
-					:fill="returnshowedStartPos(index).x !== -1 ? '#090909' : 'rgba(255, 255, 255, 0)'" 
+					:fill="returnshowedStartPos(index).x !== -1 ? '#e0e0e0' : 'rgba(255, 255, 255, 0)'" 
 					:opacity="returnshowedStartPos(index).x !== -1 ? 1 : 0"
 					font-size="12"
 				>
@@ -383,7 +384,7 @@ function returnshowedStartPos(index){
 		<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
 		<span>{{ targetRect }}</span>
 		<div v-if="targetRect !== null" class="rowbumpchart-chart-info chart-tooltip" :style="tooltipPosition">
-			<h6>{{ sortedData[0].data[targetRect % ynum].name }}</h6>
+			<h6>{{ sortedData[(targetRect / ynum) | 0].data[targetRect % ynum].name }}</h6>
 			<span>{{ sortedData[(targetRect / ynum) | 0].x }} 排名第 {{ targetRect % ynum + 1 }}</span>
 		</div>
 	</Teleport>

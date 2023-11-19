@@ -4852,7 +4852,8 @@
 			"index": "building_age2",
 			"map_config": null,
 			"chart_config": {
-				"color": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
+				"color_backup": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
+				"color": ["#171767", "#19479a", "#107fbc", "#06bee3"],
 				"types": ["HeatmapChart"],
 				"unit": "‰",
 				"categories": [

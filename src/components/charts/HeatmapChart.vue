@@ -1,10 +1,15 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { computed, ref } from 'vue';
-import { useMapStore } from '../../store/mapStore';
+import { computed, ref } from "vue";
+import { useMapStore } from "../../store/mapStore";
 
-const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config']);
+const props = defineProps([
+	"chart_config",
+	"activeChart",
+	"series",
+	"map_config",
+]);
 
 const mapStore = useMapStore();
 
@@ -31,7 +36,10 @@ const heatmapData = computed(() => {
 				if (+serie.data[i] > highest) highest = +serie.data[i];
 			}
 		});
-		sum = Object.values(output).reduce((partialSum, a) => partialSum + a, 0);
+		sum = Object.values(output).reduce(
+			(partialSum, a) => partialSum + a,
+			0
+		);
 	}
 
 	output.highest = highest;
@@ -40,18 +48,22 @@ const heatmapData = computed(() => {
 });
 
 const colorScale = computed(() => {
-	const ranges = props.chart_config.color.map((el, index) => (
-		{
-			to: Math.floor((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index)),
-			from: Math.floor((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index - 1)) + 1,
-			color: el
-		}
-	)
-	);
+	const ranges = props.chart_config.color.map((el, index) => ({
+		to: Math.floor(
+			(heatmapData.value.highest / props.chart_config.color.length) *
+				(props.chart_config.color.length - index)
+		),
+		from:
+			Math.floor(
+				(heatmapData.value.highest / props.chart_config.color.length) *
+					(props.chart_config.color.length - index - 1)
+			) + 1,
+		color: el,
+	}));
 	ranges.unshift({
 		to: 0,
 		from: 0,
-		color: "#444444"
+		color: "#9dbec4",
 	});
 	return ranges;
 });
@@ -66,9 +78,9 @@ const chartOptions = ref({
 	dataLabels: {
 		distributed: true,
 		style: {
-			fontSize: '12px',
-			fontWeight: 'normal'
-		}
+			fontSize: "12px",
+			fontWeight: "normal",
+		},
 	},
 	grid: {
 		show: false,
@@ -86,21 +98,28 @@ const chartOptions = ref({
 			radius: 4,
 			colorScale: {
 				ranges: colorScale.value,
-			}
+			},
 		},
 	},
 	stroke: {
 		show: true,
 		width: 2,
-		colors: ['#282a2c'],
+		colors: ["#282a2c"],
 	},
 	tooltip: {
 		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
-			return '<div class="chart-tooltip">' +
-				'<h6>' + `${w.globals.seriesNames[seriesIndex]}-${w.globals.labels[dataPointIndex]}` + '</h6>' +
-				'<span>' + `${series[seriesIndex][dataPointIndex]}` + `${props.chart_config.unit}` + '</span>' +
-				'</div>';
+			return (
+				'<div class="chart-tooltip">' +
+				"<h6>" +
+				`${w.globals.seriesNames[seriesIndex]}-${w.globals.labels[dataPointIndex]}` +
+				"</h6>" +
+				"<span>" +
+				`${series[seriesIndex][dataPointIndex]}` +
+				`${props.chart_config.unit}` +
+				"</span>" +
+				"</div>"
+			);
 		},
 	},
 	xaxis: {
@@ -110,17 +129,19 @@ const chartOptions = ref({
 		axisTicks: {
 			show: false,
 		},
-		categories: props.chart_config.categories ? props.chart_config.categories : [],
+		categories: props.chart_config.categories
+			? props.chart_config.categories
+			: [],
 		labels: {
 			offsetY: 5,
 			formatter: function (value) {
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
-			}
+			},
 		},
 		tooltip: {
-			enabled: false
+			enabled: false,
 		},
-		type: 'category',
+		type: "category",
 	},
 	yaxis: {
 		max: function (max) {
@@ -129,7 +150,7 @@ const chartOptions = ref({
 			}
 			return heatmapData.value.highest;
 		},
-	}
+	},
 });
 
 const selectedIndex = ref(null);
@@ -140,10 +161,18 @@ function handleDataSelection(e, chartContext, config) {
 	}
 	let toFilter = `${config.dataPointIndex} -${config.seriesIndex}`;
 	if (toFilter !== selectedIndex.value) {
-		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][config.dataPointIndex], props.map_config[0]);
+		mapStore.addLayerFilter(
+			`${props.map_config[0].index}-${props.map_config[0].type}`,
+			props.chart_config.map_filter[0],
+			props.chart_config.map_filter[1][config.dataPointIndex],
+			props.map_config[0]
+		);
 		selectedIndex.value = toFilter;
 	} else {
-		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.map_config[0]);
+		mapStore.clearLayerFilter(
+			`${props.map_config[0].index}-${props.map_config[0].type}`,
+			props.map_config[0]
+		);
 		selectedIndex.value = null;
 	}
 }
@@ -155,14 +184,19 @@ function handleDataSelection(e, chartContext, config) {
 			<h5>總合</h5>
 			<h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
 		</div>
-		<apexchart width="100%" height="360px" type="heatmap" :options="chartOptions" :series="series"
-			@dataPointSelection="handleDataSelection"></apexchart>
+		<apexchart
+			width="100%"
+			height="360px"
+			type="heatmap"
+			:options="chartOptions"
+			:series="series"
+			@dataPointSelection="handleDataSelection"
+		></apexchart>
 	</div>
 </template>
 
 <style scoped lang="scss">
 .heatmapchart {
-
 	&-title {
 		display: flex;
 		justify-content: center;
