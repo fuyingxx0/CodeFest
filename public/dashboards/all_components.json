@@ -4954,7 +4954,7 @@
 				"types": ["RadarChart", "BarChart"],
 				"unit": "μg/m³"
 			},
-			"name": "臺北市PM10測量數據",
+			"name": "臺北市 PM10 測量數據",
 			"source": "環保局",
 			"time_from": "2023-11-18T20:00:00+08:00",
 			"time_to": null,
@@ -5030,7 +5030,7 @@
 				"types": ["RadarChart", "BarChart"],
 				"unit": "μg/m³"
 			},
-			"name": "臺北市PM10測量數據（3D）",
+			"name": "臺北市 PM10 測量數據（3D）",
 			"source": "",
 			"time_from": "2023-05-28T00:00:00+08:00",
 			"time_to": "2023-06-01T00:00:00+08:00",
