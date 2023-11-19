@@ -4470,7 +4470,7 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["MoonChart", "NightingaleChart", "ColumnChart"],
+				"types": ["MoonChart", "ColumnChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "間",
 				"map_filter": [
@@ -4711,7 +4711,7 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["RowBumpChart", "BoxChart", "ColumnChart"],
+				"types": ["RowBumpChart", "BoxChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": "人"
 			},
@@ -4748,7 +4748,7 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["TreeChart", "CircularDendrogram"],
+				"types": ["TreeChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": ""
 			},
@@ -4830,7 +4830,7 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["NightingaleChart", "BarChart"],
+				"types": ["NightingaleChart"],
 				"color": ["#4dd97a", "#0a85f4"],
 				"unit": ""
 			},
