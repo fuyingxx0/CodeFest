@@ -4805,6 +4805,10 @@
 							"name": "名稱"
 						},
 						{
+							"key": "services",
+							"name": "服務"
+						},
+						{
 							"key": "opening_hours",
 							"name": "開放時間"
 						},
@@ -4900,7 +4904,7 @@
 			"update_freq": 1,
 			"update_freq_unit": "year",
 			"short_desc": "",
-			"long_desc": "客製化圖表類型: 熱力圖。此圖列出台北市於各年齡層分布的歷史生育率。為研究者與政府機構設計，每年更新。",
+			"long_desc": "此熱力圖列出台北市於各年齡層分布的歷史生育率。為研究者與政府機構設計，每年更新。",
 			"use_case": "",
 			"links": null,
 			"tags": [],
