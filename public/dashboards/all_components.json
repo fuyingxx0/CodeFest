@@ -4787,9 +4787,9 @@
 							"免費衛生用品",
 							"#4CB495",
 							"置物空間",
-							"#569C9A",
+							"#4987B3",
 							"嬰兒車停放空間",
-							"#60819C",
+							"#5A58B8",
 							"center_point",
 							"#FFC0CB",
 							"#FFFFFF"
@@ -4805,11 +4805,19 @@
 							"name": "名稱"
 						},
 						{
-							"key": "services",
-							"name": "服務"
+							"key": "opening_hours",
+							"name": "開放時間"
+						},
+						{
+							"key": "guide",
+							"name": "指引"
+						},
+						{
+							"key": "reminder",
+							"name": "提醒"
 						}
 					],
-					"title": "哺集乳室分佈與提供服務",
+					"title": "哺集乳室資訊",
 					"type": "candy",
 					"size": "big",
 					"icon": null
