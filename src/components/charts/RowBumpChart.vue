@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-// import { useMapStore } from '../../store/mapStore';
+import { useMapStore } from '../../store/mapStore';
 import '../../assets/styles/globalStyles.css';
 
 // const colors = ['#833ab4', '#8e3978', '#ae445a', '#8b3552', '#ca695a', '#e1875a', '#f39f5a'];
@@ -32,7 +32,7 @@ for (let i = 0; i < props.series.length; i++){
 for(let x = 0; x < sortedData.length; x++){
 	sortedData[x].data.sort((a, b) => b.y - a.y);
 }
-console.log(sortedData);
+// console.log(sortedData);
 
 const showedLegend = ref(Array(sortedData[0].data.length).fill(true));
 if(showedLegend.value.length >= 4){

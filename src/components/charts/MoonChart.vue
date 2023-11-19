@@ -35,7 +35,7 @@ for (let i = 0; i < 6; i++) {
 	posCircle[i + 6].x += Math.sqrt(3) * R * Math.cos(ang2);
 	posCircle[i + 6].y += Math.sqrt(3) * R * Math.sin(ang2);
 }
-console.log(posCircle)
+// console.log(posCircle)
 const circles = Array.from({ length: 12 }, (_, index) => {
 	// console.log(r * props.series[0].data[index] / max)
 	return {
