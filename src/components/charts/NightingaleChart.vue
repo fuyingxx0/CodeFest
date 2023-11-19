@@ -104,7 +104,7 @@ function handleDataSelection(index) {
 	}
 	if (a !== selectedIndex.value) {
 		mapStore.addLayerFilter(
-			`${props.map_config[0].a}-${props.map_config[0].type}`,
+			`${props.map_config[0].index}-${props.map_config[0].type}`,
 			props.chart_config.map_filter[0],
 			props.chart_config.map_filter[1][a]
 		);

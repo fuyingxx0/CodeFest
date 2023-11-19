@@ -141,6 +141,8 @@ export const useMapStore = defineStore("map", {
 		addToMapLayerList(map_config) {
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}`;
+
+				console.log(mapLayerId);
 				// 1-1. If the layer exists, simply turn on the visibility and add it to the visible layers list
 				if (
 					this.currentLayers.find((element) => element === mapLayerId)
