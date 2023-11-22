@@ -11,7 +11,6 @@ class Square {
 
 	getCornerBinary(isoValue) {
 		if (this.cornerValue === null) {
-			console.log("this.cornerValue === null");
 			return;
 		}
 		this.cornerBinary = this.cornerValue.map((val) => {
@@ -21,7 +20,6 @@ class Square {
 
 	getBasicLines(isoValue) {
 		if (this.cornerBinary === null) {
-			console.log("this.cornerBinary === null");
 			return;
 		}
 		let sum = 0;
@@ -164,43 +162,11 @@ let lineEndPoints = [
 	[0, 0.5],
 ];
 
-let squareCorners = [
-	[1, 0],
-	[1, 1],
-	[0, 1],
-	[0, 0],
-];
-
-// class Point2 {
-// 	constructor(x, y) {
-// 		this.x = x;
-// 		this.y = y;
-// 	}
-
-// 	add(point) {
-// 		return new Point2(this.x + point.x, this.y + point.y);
-// 	}
-
-// 	multiply(m) {
-// 		return new Point2(this.x * m, this.y * m);
-// 	}
-// }
-
-function pointAverage(p1, p2) {
-	return p1.multiply(0.5).add(p2.multiply(0.5));
-}
-
 function linearInterpolation(v1, v2, v_iso) {
 	if (v2 === v1) {
 		return Infinity;
 	}
 	return (v_iso - v1) / (v2 - v1);
-}
-
-function bezier2(p1, p2, p3, t) {
-	let p12 = p1.multiply(1 - t).add(p2.multiply(t));
-	let p23 = p2.multiply(1 - t).add(p3.multiply(t));
-	return p12.multiply(1 - t).add(p23.multiply(t));
 }
 
 export function marchingSquare(
@@ -226,76 +192,6 @@ export function marchingSquare(
 			squareMatrix[i][j].getCornerBinary(isoValue);
 			squareMatrix[i][j].getBasicLines(isoValue);
 			squareMatrix[i][j].getActualLines(allLines, gridSize, isoValue);
-			// squareMatrix[i][j].setNeedVisit();
 		}
 	}
 }
-
-// function setup() {
-// 	createCanvas(1000, 600);
-// 	background(100);
-// 	// let l = 10;
-// 	let columnN = 50;
-// 	let rowN = 30;
-// 	let discreteData = [];
-
-// 	noStroke();
-
-// 	for (let y = 0; y < rowN; y++) {
-// 		discreteData.push([]);
-// 		for (let x = 0; x < columnN; x++) {
-// 			discreteData[y].push(noise(x / 10, y / 10 + 20));
-// 			// squareMatrix[y][x].draw();
-
-// 			noStroke();
-// 			fill(noise(x / 10, y / 10 + 20) * 255);
-// 			rect(
-// 				(x * width) / columnN,
-// 				(y * width) / columnN,
-// 				width / columnN,
-// 				width / columnN
-// 			);
-
-// 			stroke(20);
-// 			strokeWeight(2);
-// 			if (noise(x / 10, y / 10 + 20) > 0.5) {
-// 				circle(
-// 					((x + 0.5) * width) / columnN,
-// 					((y + 0.5) * width) / columnN,
-// 					2
-// 				);
-// 			}
-// 		}
-// 	}
-
-// 	strokeWeight(1);
-// 	stroke(80);
-// 	noFill();
-// 	for (let y = 0; y < rowN - 1; y++) {
-// 		for (let x = 0; x < columnN - 1; x++) {
-// 			rect(
-// 				((x + 0.5) * width) / columnN,
-// 				((y + 0.5) * width) / columnN,
-// 				width / columnN,
-// 				width / columnN
-// 			);
-// 		}
-// 	}
-
-// 	let squareMatrix = [];
-// 	let allLines = [];
-// 	let allSmoothLines = [];
-
-// 	marchingSquare(squareMatrix, discreteData, allLines, 0.5);
-
-// 	stroke(20);
-// 	strokeWeight(2);
-// 	allLines.forEach((l) => {
-// 		line(l[0].x, l[0].y, l[1].x, l[1].y);
-// 	});
-
-// 	stroke(220, 0, 0);
-// 	strokeWeight(1);
-// }
-
-// function draw() {}

@@ -20,7 +20,7 @@ const props = defineProps([
 	"map_config",
 ]);
 const mapStore = useMapStore();
-const categories = props.chart_config.categories;
+const { categories } = props.chart_config;
 
 // data
 let data = [];
