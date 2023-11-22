@@ -3,21 +3,8 @@
 		{
 			"name": "祝您好孕",
 			"index": "mom",
-			"components": [
-				"4000",
-				"4001",
-				"4002",
-				"4003",
-				"4005",
-				"4006"
-			],
+			"components": ["4000", "4001", "4002", "4003", "4005", "4006"],
 			"icon": "favorite"
-		},
-		{
-			"name": "test-宜居城市",
-			"index": "living",
-			"components": ["3000", "3003", "3002", "83"],
-			"icon": "pedal_bike"
 		},
 		{
 			"name": "YouBike研究",
@@ -58,7 +45,7 @@
 		{
 			"name": "社會福利",
 			"index": "welfare",
-			"components": ["90", "82", "4444", "29"],
+			"components": ["90", "82", "29"],
 			"icon": "handshake"
 		},
 		{
