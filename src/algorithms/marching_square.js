@@ -109,25 +109,6 @@ class Square {
 			this.lines.push(newLine);
 		});
 	}
-
-	// setNeedVisit() {
-	// 	this.needVisit = [false, false, false, false];
-	// 	this.basicLines.forEach((l) => {
-	// 		this.needVisit[l[0]] = true;
-	// 		this.needVisit[l[1]] = true;
-	// 	});
-	// }
-
-	// getActualPoint(target) {
-	// 	for (let i = 0; i < this.basicLines.length; i++) {
-	// 		let tmp = this.basicLines[i].findIndex((e) => e === target);
-	// 		if (tmp !== -1) {
-	// 			return [i, tmp];
-	// 		}
-	// 	}
-	// 	console.log("error 1");
-	// 	return null;
-	// }
 }
 
 let contourTable = [

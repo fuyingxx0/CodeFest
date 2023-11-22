@@ -148,7 +148,6 @@ class EdgeManager {
 
 		if (node === false) {
 			// the edge is not yet in the BST
-
 			newEdge.t1 = triangle;
 			newEdge.p1.lastLineConnected = newEdge;
 			newEdge.p2.lastLineConnected = newEdge;
@@ -156,7 +155,6 @@ class EdgeManager {
 			return newEdge;
 		} else {
 			// the edge is already in the BST
-
 			if (node.val.t1 === null) {
 				node.val.t1 = triangle;
 			} else if (node.val.t2 === null) {
@@ -217,9 +215,6 @@ class Edge {
 		this.t2 = null;
 
 		this.crossed = false;
-
-		// p1.lastLineConnected = this;
-		// p2.lastLineConnected = this;
 	}
 }
 
