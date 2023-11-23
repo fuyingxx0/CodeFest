@@ -42,9 +42,11 @@ const circles = Array.from({ length: 12 }, (_, index) => {
 		cx: posCircle[index].x,
 		cy: posCircle[index].y,
 		r: r,
-		d: `M ${posCircle[index].x} ${posCircle[index].y + r} A ${r} ${r} 0 0 1 ${posCircle[index].x} ${posCircle[index].y - r}`,
-		rx: Math.abs(props.series[0].data[index] - max / 2) * 2 * r / max,
-		overHalf: props.series[0].data[index] > max / 2
+		d: `M ${posCircle[index].x} ${
+			posCircle[index].y + r
+		} A ${r} ${r} 0 0 1 ${posCircle[index].x} ${posCircle[index].y - r}`,
+		rx: (Math.abs(props.series[0].data[index] - max / 2) * 2 * r) / max,
+		overHalf: props.series[0].data[index] > max / 2,
 	};
 });
 const textMove = [
@@ -86,7 +88,6 @@ function updateMouseLocation(e) {
 // Required for charts that support map filtering
 const selectedIndex = ref(null);
 function handleDataSelection(index) {
-	console.log(index);
 	if (!props.chart_config.map_filter) {
 		return;
 	}
@@ -113,7 +114,7 @@ function handleDataSelection(index) {
 		<!-- Utilize the @click event listener to enable map filtering by data selection -->
 		<div class="boxesoutline">
 			<svg class="svg-wrapper">
-				<g v-for="(circle, index) in circles">
+				<g v-for="(circle, index) in circles" :key="index">
 					<line
 						:class="{ [`initial-animation-line-${index}`]: true }"
 						:x1="circle.cx"
@@ -130,9 +131,17 @@ function handleDataSelection(index) {
 						:r="circle.r"
 						:fill="colors[1]"
 					/>
-					<path :class="{ [`initial-animation-semicircle-${index}`]: true }" :d="circle.d" :fill="colors[0]" />
+					<path
+						:class="{
+							[`initial-animation-semicircle-${index}`]: true,
+						}"
+						:d="circle.d"
+						:fill="colors[0]"
+					/>
 					<ellipse
-						:class="{ [`initial-animation-ellipse-${index}`]: true }"
+						:class="{
+							[`initial-animation-ellipse-${index}`]: true,
+						}"
 						:cx="circle.cx"
 						:cy="circle.cy"
 						:rx="circle.rx"
@@ -140,7 +149,10 @@ function handleDataSelection(index) {
 						:fill="!circle.overHalf ? colors[1] : colors[0]"
 					/>
 					<circle
-						:class="{ [`initial-animation-circle-${index}`]: true, 'circle-top': true }"
+						:class="{
+							[`initial-animation-circle-${index}`]: true,
+							'circle-top': true,
+						}"
 						:cx="circle.cx"
 						:cy="circle.cy"
 						:r="circle.r"
@@ -154,7 +166,10 @@ function handleDataSelection(index) {
 						@click="handleDataSelection(index)"
 					/>
 					<text
-						:class="{ [`initial-animation-label-${index}`]: true, 'label': true }"
+						:class="{
+							[`initial-animation-label-${index}`]: true,
+							label: true,
+						}"
 						:x="circle.cx + textMove[index].x"
 						:y="circle.cy + textMove[index].y"
 						text-anchor="middle"
@@ -530,13 +545,13 @@ function handleDataSelection(index) {
 		animation-fill-mode: forwards;
 	}
 	@keyframes easeIn {
-		0%{
+		0% {
 			opacity: 0;
 		}
-		80%{
+		80% {
 			opacity: 0;
 		}
-		100%{
+		100% {
 			opacity: 1;
 		}
 	}
@@ -569,6 +584,4 @@ function handleDataSelection(index) {
 		animation-fill-mode: forwards;
 	}
 }
-
-
 </style>

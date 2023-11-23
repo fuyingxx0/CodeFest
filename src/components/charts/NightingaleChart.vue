@@ -57,21 +57,21 @@ const rShow = ref(Array(data[0].data.length).fill(true));
 const aHovered = ref(-1);
 const rHovered = ref(-1);
 
-function printShowData() {
-	for (let a = 0; a < showedData.value.length; a++) {
-		console.log(a, showedData.value[a].a);
-		for (let r = 0; r < showedData.value[a].data.length; r++) {
-			console.log(
-				"   ",
-				r,
-				showedData.value[a].data[r].r,
-				showedData.value[a].data[r].value,
-				data[a].data[r].r,
-				data[a].data[r].value
-			);
-		}
-	}
-}
+// function printShowData() {
+// 	for (let a = 0; a < showedData.value.length; a++) {
+// 		console.log(a, showedData.value[a].a);
+// 		for (let r = 0; r < showedData.value[a].data.length; r++) {
+// 			console.log(
+// 				"   ",
+// 				r,
+// 				showedData.value[a].data[r].r,
+// 				showedData.value[a].data[r].value,
+// 				data[a].data[r].r,
+// 				data[a].data[r].value
+// 			);
+// 		}
+// 	}
+// }
 
 const mousePosition = ref({ x: null, y: null });
 function toggleActive(i) {
@@ -191,9 +191,9 @@ function calcSector(a, r) {
 	let rend =
 		aHovered.value === a
 			? (showedData.value[a].data[r].value / maxDataInR) * rselected +
-			  rmin
+				rmin
 			: (showedData.value[a].data[r].value / showedMax.value) * rmax +
-			  rmin;
+				rmin;
 	for (let i = 0; i < props.series.length; i++) {
 		if (props.series[i].name === showedData.value[a].data[r].r) {
 			if (!rShow.value[i]) {

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { useMapStore } from '../../store/mapStore';
+// import { useMapStore } from '../../store/mapStore';
 import '../../assets/styles/globalStyles.css';
 
 // const colors = ['#833ab4', '#8e3978', '#ae445a', '#8b3552', '#ca695a', '#e1875a', '#f39f5a'];

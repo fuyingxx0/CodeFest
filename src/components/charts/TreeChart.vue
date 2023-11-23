@@ -1,31 +1,31 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 // import { useMapStore } from '../../store/mapStore';
 
 const colors = ["#7F3D82", "#7261BD", "#5683C1", "#5e9f8a"];
-function interpolateColor(color1, color2, weight) {
-	const parseColor = (color) => {
-		const hex = color.slice(1);
-		return {
-			r: parseInt(hex.slice(0, 2), 16),
-			g: parseInt(hex.slice(2, 4), 16),
-			b: parseInt(hex.slice(4, 6), 16),
-		};
-	};
-	const interpolate = (c1, c2, weight) => {
-		const interpolateChannel = (c1, c2, weight) =>
-			Math.round(c1 + (c2 - c1) * weight);
-		return {
-			r: interpolateChannel(c1.r, c2.r, weight),
-			g: interpolateChannel(c1.g, c2.g, weight),
-			b: interpolateChannel(c1.b, c2.b, weight),
-		};
-	};
-	const color1RGB = parseColor(color1);
-	const color2RGB = parseColor(color2);
-	const interpolatedColor = interpolate(color1RGB, color2RGB, weight);
-	return `rgb(${interpolatedColor.r},${interpolatedColor.g},${interpolatedColor.b})`;
-}
+// function interpolateColor(color1, color2, weight) {
+// 	const parseColor = (color) => {
+// 		const hex = color.slice(1);
+// 		return {
+// 			r: parseInt(hex.slice(0, 2), 16),
+// 			g: parseInt(hex.slice(2, 4), 16),
+// 			b: parseInt(hex.slice(4, 6), 16),
+// 		};
+// 	};
+// 	const interpolate = (c1, c2, weight) => {
+// 		const interpolateChannel = (c1, c2, weight) =>
+// 			Math.round(c1 + (c2 - c1) * weight);
+// 		return {
+// 			r: interpolateChannel(c1.r, c2.r, weight),
+// 			g: interpolateChannel(c1.g, c2.g, weight),
+// 			b: interpolateChannel(c1.b, c2.b, weight),
+// 		};
+// 	};
+// 	const color1RGB = parseColor(color1);
+// 	const color2RGB = parseColor(color2);
+// 	const interpolatedColor = interpolate(color1RGB, color2RGB, weight);
+// 	return `rgb(${interpolatedColor.r},${interpolatedColor.g},${interpolatedColor.b})`;
+// }
 
 // register the four required props
 const props = defineProps([
@@ -144,7 +144,7 @@ function calcPos(data) {
 // console.log(calcPos(data));
 const pos = ref(calcPos(data));
 
-const rectangles = Array.from({ length: num }, (_, index) => {
+const rectangles = Array.from({ length: num }, () => {
 	return {};
 });
 function returnPos(index) {
@@ -185,35 +185,35 @@ function returnPos(index) {
 	};
 }
 
-const tooltipPosition = computed(() => {
-	return {
-		left: `${mousePosition.value.x - 10}px`,
-		top: `${mousePosition.value.y - 55}px`,
-	};
-});
-const targetBox = ref(null);
-const mousePosition = ref({ x: null, y: null });
-function toggleActive(i) {
-	// console.log('toggleActive called, ', i);
-	targetBox.value = i;
-}
-function toggleActiveToNull() {
-	// console.log('toggleActiveToNull called, ');
-	targetBox.value = null;
-}
-function updateMouseLocation(e) {
-	mousePosition.value.x = e.pageX;
-	mousePosition.value.y = e.pageY;
-}
+// const tooltipPosition = computed(() => {
+// 	return {
+// 		left: `${mousePosition.value.x - 10}px`,
+// 		top: `${mousePosition.value.y - 55}px`,
+// 	};
+// });
+// const targetBox = ref(null);
+// const mousePosition = ref({ x: null, y: null });
+// function toggleActive(i) {
+// 	// console.log('toggleActive called, ', i);
+// 	targetBox.value = i;
+// }
+// function toggleActiveToNull() {
+// 	// console.log('toggleActiveToNull called, ');
+// 	targetBox.value = null;
+// }
+// function updateMouseLocation(e) {
+// 	mousePosition.value.x = e.pageX;
+// 	mousePosition.value.y = e.pageY;
+// }
 
 function toggleTriangle(clickedIndex) {
 	if (clickedIndex === -1) return;
 
-	console.log("clicked", clickedIndex);
+	// console.log("clicked", clickedIndex);
 	let newData = showedData.value;
 	// console.log(clickedIndex, pos.value, newData)
 
-	function dfs(parent, toggledNodeFound, index) {
+	function dfs(parent, toggledNodeFound) {
 		// console.log(parent.index, clickedIndex, parent.toggled)
 		if (toggledNodeFound) {
 			if (parent["children"] && parent["children"].length > 0) {
@@ -269,8 +269,8 @@ function toggleTriangle(clickedIndex) {
 		return parent;
 	}
 
-	newData = dfs(newData, false, 0);
-	console.log(newData);
+	newData = dfs(newData, false);
+	// console.log(newData);
 	showedData.value = newData;
 	pos.value = calcPos(newData);
 }
